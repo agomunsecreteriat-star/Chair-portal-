@@ -104,47 +104,52 @@ addDelegateButton.addEventListener("click", function () {
 
   const country = prompt("Enter country:");
 
-  if (country === null || country.trim() === "") {
-    return;
-  }
+  if (!country || country.trim() === "") return;
 
 
   const delegate = prompt("Enter delegate name:");
 
-  if (delegate === null || delegate.trim() === "") {
-    return;
-  }
+  if (!delegate || delegate.trim() === "") return;
 
 
   const attendance = prompt(
     "Attendance:\n\n1 - Present\n2 - Absent\n3 - Late"
   );
 
-  if (attendance === null) {
-    return;
-  }
+  if (!attendance) return;
 
 
   let attendanceStatus;
 
   if (attendance === "1") {
-
     attendanceStatus = "Present";
-
-  } else if (attendance === "2") {
-
+  } 
+  else if (attendance === "2") {
     attendanceStatus = "Absent";
-
-  } else if (attendance === "3") {
-
+  } 
+  else if (attendance === "3") {
     attendanceStatus = "Late";
-
-  } else {
-
+  } 
+  else {
     alert("Please enter 1, 2 or 3.");
-
     return;
+  }
 
+
+  const score = prompt("Enter delegate score:");
+
+  if (!score || score.trim() === "") return;
+
+
+  const numericScore = Number(score);
+
+  if (
+    isNaN(numericScore) ||
+    numericScore < 0 ||
+    numericScore > 100
+  ) {
+    alert("Score must be between 0 and 100.");
+    return;
   }
 
 
@@ -158,18 +163,12 @@ addDelegateButton.addEventListener("click", function () {
 
   const row = document.createElement("tr");
 
-
   row.innerHTML = `
     <td>${delegateNumber}</td>
-
     <td>${country.trim()}</td>
-
     <td>${delegate.trim()}</td>
-
     <td>${attendanceStatus}</td>
-
-    <td>0</td>
-
+    <td>${numericScore}</td>
     <td>
       <button
         class="deleteDelegate"
