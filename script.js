@@ -72,3 +72,23 @@ logoutButton.addEventListener("click", function() {
   loginMessage.textContent = "";
 
 });
+/* DELEGATES PAGE */
+
+const delegatesButton =
+  document.getElementById("delegatesButton");
+
+const delegatesPage =
+  document.getElementById("delegatesPage");
+
+
+delegatesButton.addEventListener("click", function() {
+
+  document.querySelector(".header").style.display = "none";
+
+  document.querySelector(".cards").style.display = "none";
+
+  document.querySelector(".welcome-box").style.display = "none";
+
+  delegatesPage.style.display = "block";
+
+});
