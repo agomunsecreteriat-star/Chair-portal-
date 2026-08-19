@@ -14,7 +14,7 @@
 
   <!-- LOGIN -->
 
-  <div id="loginPage">
+  <section id="loginPage">
 
     <div class="login-card">
 
@@ -24,7 +24,7 @@
         CHAIR PORTAL
       </div>
 
-      <label>Chair ID</label>
+      <label for="chairID">Chair ID</label>
 
       <input
         id="chairID"
@@ -32,7 +32,7 @@
         placeholder="Enter Chair ID"
       >
 
-      <label>Password</label>
+      <label for="chairPassword">Password</label>
 
       <input
         id="chairPassword"
@@ -48,12 +48,14 @@
 
     </div>
 
-  </div>
+  </section>
 
 
-  <!-- DASHBOARD -->
+  <!-- PORTAL -->
 
-  <div id="dashboard">
+  <section id="portal">
+
+    <!-- SIDEBAR -->
 
     <aside class="sidebar">
 
@@ -61,37 +63,39 @@
         AGOMUN
       </div>
 
-      <div class="portal">
+      <div class="portal-title">
         CHAIR PORTAL
       </div>
 
-      <button class="menu active">
+
+      <button class="menu active" data-page="dashboardPage">
         Dashboard
       </button>
 
-      <button class="menu">
+      <button class="menu" data-page="committeePage">
         Committee
       </button>
 
-      <button class="menu" id="delegatesButton">
-  Delegates
+      <button class="menu" data-page="delegatesPage">
+        Delegates
       </button>
 
-      <button class="menu">
+      <button class="menu" data-page="attendancePage">
         Attendance
       </button>
 
-      <button class="menu">
+      <button class="menu" data-page="scoresPage">
         Scores
       </button>
 
-      <button class="menu">
+      <button class="menu" data-page="speakersPage">
         Speakers List
       </button>
 
-      <button class="menu">
+      <button class="menu" data-page="documentsPage">
         Documents
       </button>
+
 
       <button id="logoutButton" class="logout">
         LOGOUT
@@ -100,121 +104,276 @@
     </aside>
 
 
+    <!-- MAIN -->
+
     <main>
 
-      <div class="header">
 
-        <div>
+      <!-- DASHBOARD -->
 
-          <h1>
-            Chair Dashboard
-          </h1>
+      <section id="dashboardPage" class="page active-page">
+
+        <header>
+
+          <div>
+
+            <h1>Chair Dashboard</h1>
+
+            <p>
+              Welcome back,
+              <strong id="chairName"></strong>
+            </p>
+
+          </div>
+
+          <span class="online">
+            ● ONLINE
+          </span>
+
+        </header>
+
+
+        <div class="cards">
+
+          <div class="card">
+            <span>👥</span>
+            <h3>Delegates</h3>
+            <strong id="delegateCount">0</strong>
+            <small>Registered delegates</small>
+          </div>
+
+
+          <div class="card">
+            <span>🎤</span>
+            <h3>Speakers</h3>
+            <strong>0</strong>
+            <small>On speakers list</small>
+          </div>
+
+
+          <div class="card">
+            <span>📊</span>
+            <h3>Scores</h3>
+            <strong>0</strong>
+            <small>Scores submitted</small>
+          </div>
+
+
+          <div class="card">
+            <span>📋</span>
+            <h3>Attendance</h3>
+            <strong id="attendanceRate">0%</strong>
+            <small>Current attendance</small>
+          </div>
+
+        </div>
+
+
+        <div class="welcome">
+
+          <h2>Committee Overview</h2>
 
           <p>
-            Welcome back,
-            <strong id="chairName"></strong>
+            Welcome to the AGOMUN Chair Portal.
+            Use the navigation menu to manage your committee.
           </p>
 
         </div>
 
-        <span class="online">
-          ● ONLINE
-        </span>
+      </section>
+
+
+      <!-- COMMITTEE -->
+
+      <section id="committeePage" class="page">
+
+        <h1>Committee</h1>
+
+        <div class="content-card">
+
+          <h2>Committee Information</h2>
+
+          <p>
+            Conference: <strong>AGOMUN</strong>
+          </p>
+
+          <p>
+            Chair: <strong id="committeeChair"></strong>
+          </p>
+
+          <p>
+            Status:
+            <strong class="green">
+              Active
+            </strong>
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- DELEGATES -->
+
+      <section id="delegatesPage" class="page">
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>Delegates</h1>
+
+            <p>
+              Manage your committee delegates.
+            </p>
+
+          </div>
+
+          <button id="addDelegateButton" class="primary">
+            + Add Delegate
+          </button>
+
+        </div>
+
+
+        <div class="content-card">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>#</th>
+                <th>Country</th>
+                <th>Delegate</th>
+                <th>Attendance</th>
+                <th>Score</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="delegateList">
+
+              <tr>
+
+                <td colspan="6" class="empty">
+                  No delegates added yet.
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- ATTENDANCE -->
+
+      <section id="attendancePage" class="page">
+
+        <h1>Attendance</h1>
+
+        <div id="attendanceList" class="list"></div>
+
+      </section>
+
+
+      <!-- SCORES -->
+
+      <section id="scoresPage" class="page">
+
+        <h1>Scores</h1>
+
+        <div id="scoreList" class="list"></div>
+
+      </section>
+
+
+      <!-- SPEAKERS -->
+
+      <section id="speakersPage" class="page">
+
+        <h1>Speakers List</h1>
+
+        <div class="content-card">
+
+          <p class="empty">
+            No speakers added yet.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- DOCUMENTS -->
+
+      <section id="documentsPage" class="page">
+
+        <h1>Documents</h1>
+
+        <div class="content-card">
+
+          <h2>Committee Documents</h2>
+
+          <p class="empty">
+            No documents uploaded yet.
+          </p>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+  </section>
+
+
+  <!-- ADD DELEGATE MODAL -->
+
+  <div id="delegateModal" class="modal">
+
+    <div class="modal-box">
+
+      <h2>Add Delegate</h2>
+
+      <input
+        id="countryInput"
+        type="text"
+        placeholder="Country"
+      >
+
+      <input
+        id="delegateNameInput"
+        type="text"
+        placeholder="Delegate name"
+      >
+
+      <div class="modal-buttons">
+
+        <button id="saveDelegateButton" class="primary">
+          Save
+        </button>
+
+        <button id="closeModalButton" class="secondary">
+          Cancel
+        </button>
 
       </div>
 
+    </div>
 
-      <div class="cards">
-
-        <div class="card">
-
-          <span class="icon">👥</span>
-
-          <h3>
-            Delegates
-          </h3>
-
-          <b>
-            0
-          </b>
-
-          <small>
-            Registered delegates
-          </small>
-
-        </div>
+  </div>
 
 
-        <div class="card">
+  <script src="script.js"></script>
 
-          <span class="icon">🎤</span>
+</body>
 
-          <h3>
-            Speakers
-          </h3>
-
-          <b>
-            0
-          </b>
-
-          <small>
-            Speakers list
-          </small>
-
-        </div>
-
-
-        <div class="card">
-
-          <span class="icon">📊</span>
-
-          <h3>
-            Scores
-          </h3>
-
-          <b>
-            0
-          </b>
-
-          <small>
-            Scores submitted
-          </small>
-
-        </div>
-
-
-        <div class="card">
-
-          <span class="icon">📋</span>
-
-          <h3>
-            Attendance
-          </h3>
-
-          <b>
-            0%
-          </b>
-
-          <small>
-            Current attendance
-          </small>
-
-        </div>
-
-      </div>
-
-
-      <div class="welcome-box">
-
-        <h2>
-          Committee Overview
-        </h2>
-
-        <p>
-          Welcome to the AGOMUN Chair Portal.
-          Your committee management tools will appear here.
-        </p>
-
-      </div>
-
-    
+</html>
