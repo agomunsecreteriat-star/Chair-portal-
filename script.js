@@ -5,18 +5,22 @@ const chairs = {
 };
 
 
-/* STORAGE */
+/* =========================
+   SAVED DATA
+========================= */
 
 let delegates =
   JSON.parse(
-    localStorage.getItem("agomunDelegates")
-  ) || [];
+    localStorage.getItem("agomunDelegates") || "[]"
+  );
 
 let loggedInChair =
   localStorage.getItem("agomunChair");
 
 
-/* ELEMENTS */
+/* =========================
+   ELEMENTS
+========================= */
 
 const loginPage =
   document.getElementById("loginPage");
@@ -58,7 +62,9 @@ const delegateCount =
   document.getElementById("delegateCount");
 
 
-/* SHOW DASHBOARD */
+/* =========================
+   DASHBOARD
+========================= */
 
 function showDashboard() {
 
@@ -73,7 +79,9 @@ function showDashboard() {
 }
 
 
-/* SHOW DELEGATES */
+/* =========================
+   DELEGATES PAGE
+========================= */
 
 function showDelegates() {
 
@@ -90,64 +98,58 @@ function showDelegates() {
 }
 
 
-/* LOGIN */
+/* =========================
+   LOGIN
+========================= */
 
 loginButton.addEventListener(
   "click",
   function () {
 
     const id =
-      document.getElementById(
-        "chairID"
-      ).value.trim();
+      document.getElementById("chairID")
+        .value
+        .trim();
 
     const password =
-      document.getElementById(
-        "chairPassword"
-      ).value;
+      document.getElementById("chairPassword")
+        .value;
 
 
-    if (chairs[id] === password) {
-
-      loggedInChair = id;
-
-      localStorage.setItem(
-        "agomunChair",
-        id
-      );
-
-
-      loginPage.style.display =
-        "none";
-
-      dashboard.style.display =
-        "flex";
-
-
-      chairName.textContent =
-        id;
-
-
-      loginMessage.textContent =
-        "";
-
-
-      showDashboard();
-
-    }
-
-    else {
+    if (chairs[id] !== password) {
 
       loginMessage.textContent =
         "Invalid Chair ID or password.";
 
+      return;
     }
+
+
+    loggedInChair = id;
+
+    localStorage.setItem(
+      "agomunChair",
+      id
+    );
+
+
+    loginPage.style.display = "none";
+
+    dashboard.style.display = "flex";
+
+    chairName.textContent = id;
+
+    loginMessage.textContent = "";
+
+    showDashboard();
 
   }
 );
 
 
-/* LOGOUT */
+/* =========================
+   LOGOUT
+========================= */
 
 logoutButton.addEventListener(
   "click",
@@ -159,13 +161,9 @@ logoutButton.addEventListener(
 
     loggedInChair = null;
 
+    dashboard.style.display = "none";
 
-    dashboard.style.display =
-      "none";
-
-    loginPage.style.display =
-      "flex";
-
+    loginPage.style.display = "flex";
 
     document.getElementById(
       "chairID"
@@ -175,49 +173,40 @@ logoutButton.addEventListener(
       "chairPassword"
     ).value = "";
 
-    loginMessage.textContent =
-      "";
+    loginMessage.textContent = "";
 
   }
 );
 
 
-/* DASHBOARD */
+/* =========================
+   NAVIGATION
+========================= */
 
 dashboardButton.addEventListener(
   "click",
-  function () {
-
-    showDashboard();
-
-  }
+  showDashboard
 );
-
-
-/* DELEGATES */
 
 delegatesButton.addEventListener(
   "click",
-  function () {
-
-    showDelegates();
-
-  }
+  showDelegates
 );
 
 
-/* ADD DELEGATE */
+/* =========================
+   ADD DELEGATE
+========================= */
 
 addDelegateButton.addEventListener(
   "click",
   function () {
 
-
     const country =
       prompt("Enter country:");
 
     if (
-      !country ||
+      country === null ||
       country.trim() === ""
     ) {
       return;
@@ -228,7 +217,7 @@ addDelegateButton.addEventListener(
       prompt("Enter delegate name:");
 
     if (
-      !name ||
+      name === null ||
       name.trim() === ""
     ) {
       return;
@@ -243,8 +232,7 @@ addDelegateButton.addEventListener(
         "3 = Late"
       );
 
-
-    if (!attendance) {
+    if (attendance === null) {
       return;
     }
 
@@ -254,33 +242,23 @@ addDelegateButton.addEventListener(
 
     if (attendance === "1") {
 
-      attendanceStatus =
-        "Present";
+      attendanceStatus = "Present";
 
-    }
+    } else if (attendance === "2") {
 
-    else if (attendance === "2") {
+      attendanceStatus = "Absent";
 
-      attendanceStatus =
-        "Absent";
+    } else if (attendance === "3") {
 
-    }
+      attendanceStatus = "Late";
 
-    else if (attendance === "3") {
-
-      attendanceStatus =
-        "Late";
-
-    }
-
-    else {
+    } else {
 
       alert(
-        "Enter 1, 2 or 3."
+        "Please enter 1, 2 or 3."
       );
 
       return;
-
     }
 
 
@@ -288,7 +266,6 @@ addDelegateButton.addEventListener(
       prompt(
         "Enter starting score (0-100):"
       );
-
 
     if (
       score === null ||
@@ -303,7 +280,7 @@ addDelegateButton.addEventListener(
 
 
     if (
-      isNaN(numericScore) ||
+      !Number.isFinite(numericScore) ||
       numericScore < 0 ||
       numericScore > 100
     ) {
@@ -313,11 +290,10 @@ addDelegateButton.addEventListener(
       );
 
       return;
-
     }
 
 
-    const newDelegate = {
+    delegates.push({
 
       country:
         country.trim(),
@@ -331,19 +307,10 @@ addDelegateButton.addEventListener(
       score:
         numericScore
 
-    };
+    });
 
 
-    delegates.push(
-      newDelegate
-    );
-
-
-    localStorage.setItem(
-      "agomunDelegates",
-      JSON.stringify(delegates)
-    );
-
+    saveDelegates();
 
     renderDelegates();
 
@@ -351,7 +318,23 @@ addDelegateButton.addEventListener(
 );
 
 
-/* RENDER */
+/* =========================
+   SAVE
+========================= */
+
+function saveDelegates() {
+
+  localStorage.setItem(
+    "agomunDelegates",
+    JSON.stringify(delegates)
+  );
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
 
 function renderDelegates() {
 
@@ -359,9 +342,7 @@ function renderDelegates() {
     delegates.length;
 
 
-  if (
-    delegates.length === 0
-  ) {
+  if (delegates.length === 0) {
 
     delegateList.innerHTML = `
       <tr>
@@ -372,7 +353,6 @@ function renderDelegates() {
     `;
 
     return;
-
   }
 
 
@@ -389,9 +369,9 @@ function renderDelegates() {
       row.innerHTML = `
         <td>${index + 1}</td>
 
-        <td>${delegate.country}</td>
+        <td>${escapeHTML(delegate.country)}</td>
 
-        <td>${delegate.name}</td>
+        <td>${escapeHTML(delegate.name)}</td>
 
         <td>${delegate.attendance}</td>
 
@@ -400,17 +380,15 @@ function renderDelegates() {
         <td>
           <button
             class="deleteDelegate"
-            data-index="${index}"
-            type="button">
+            type="button"
+            data-index="${index}">
             Delete
           </button>
         </td>
       `;
 
 
-      delegateList.appendChild(
-        row
-      );
+      delegateList.appendChild(row);
 
     }
   );
@@ -418,7 +396,9 @@ function renderDelegates() {
 }
 
 
-/* DELETE */
+/* =========================
+   DELETE
+========================= */
 
 delegateList.addEventListener(
   "click",
@@ -439,36 +419,30 @@ delegateList.addEventListener(
       );
 
 
-    const delegate =
-      delegates[index];
-
-
-    const confirmDelete =
-      confirm(
-        "Delete " +
-        delegate.name +
-        " (" +
-        delegate.country +
-        ")?"
-      );
-
-
-    if (!confirmDelete) {
+    if (
+      !Number.isInteger(index) ||
+      !delegates[index]
+    ) {
       return;
     }
 
 
-    delegates.splice(
-      index,
-      1
-    );
+    const delegate =
+      delegates[index];
 
 
-    localStorage.setItem(
-      "agomunDelegates",
-      JSON.stringify(delegates)
-    );
+    if (
+      !confirm(
+        `Delete ${delegate.name} (${delegate.country})?`
+      )
+    ) {
+      return;
+    }
 
+
+    delegates.splice(index, 1);
+
+    saveDelegates();
 
     renderDelegates();
 
@@ -476,18 +450,34 @@ delegateList.addEventListener(
 );
 
 
-/* RESTORE SESSION */
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================
+   RESTORE SESSION
+========================= */
 
 if (
   loggedInChair &&
   chairs[loggedInChair]
 ) {
 
-  loginPage.style.display =
-    "none";
+  loginPage.style.display = "none";
 
-  dashboard.style.display =
-    "flex";
+  dashboard.style.display = "flex";
 
   chairName.textContent =
     loggedInChair;
@@ -497,6 +487,8 @@ if (
 }
 
 
-/* INITIAL DATA */
+/* =========================
+   LOAD SAVED DELEGATES
+========================= */
 
 renderDelegates();
