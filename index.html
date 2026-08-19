@@ -45,46 +45,99 @@
             </section>
         </div>
     </div>
+<script>
+    // Kullanıcı adı ve şifre listesi (Tamamı küçük harf)
+    const chairCredentials = {
+        "chair1": "mun2026",
+        "disec_chair": "disecpass",
+        "sochum_chair": "sochumpass",
+        "admin": "chairportal123"
+    };
 
-    <script>
-        // İzin verilen Chair kullanıcı adı ve şifreleri
-        const chairCredentials = {
-            "chair1": "mun2026pass",
-            "chair2": "secgenSecret",
-            "disec_chair": "disec123"
-        };
+    // Sayfa yüklendiğinde oturum durumunu kontrol et
+    window.addEventListener("DOMContentLoaded", function() {
+        if (sessionStorage.getItem("isLoggedIn") === "true") {
+            showPortal();
+        }
+    });
 
-        // Sayfa yüklendiğinde oturum durumunu kontrol et
-        window.onload = function() {
-            if (sessionStorage.getItem("isLoggedIn") === "true") {
-                showPortal();
+    function login() {
+        // Kullanıcı adını otomatik olarak küçük harfe çevirip boşlukları temizler
+        const user = document.getElementById("username").value.trim().toLowerCase();
+        const pass = document.getElementById("password").value.trim();
+        const errorMsg = document.getElementById("error-msg");
+
+        if (chairCredentials[user] && chairCredentials[user] === pass) {
+            sessionStorage.setItem("isLoggedIn", "true");
+            errorMsg.style.display = "none";
+            showPortal();
+        } else {
+            errorMsg.style.display = "block";
+        }
+    }
+
+    function logout() {
+        sessionStorage.removeItem("isLoggedIn");
+        location.reload();
+    }
+
+    function showPortal() {
+        document.getElementById("login-overlay").style.display = "none";
+        document.getElementById("portal-content").style.display = "block";
+    }
+
+    // Enter tuşuna basıldığında giriş yapmayı sağlar
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            const overlay = document.getElementById("login-overlay");
+            if (overlay && overlay.style.display !== "none") {
+                login();
             }
-        };
+        }
+    });
 
-        function login() {
-            const user = document.getElementById("username").value;
-            const pass = document.getElementById("password").value;
+    // Timer İşlemleri
+    let timer;
+    let timeLeft = 0;
 
-            if (chairCredentials[user] && chairCredentials[user] === pass) {
-                sessionStorage.setItem("isLoggedIn", "true");
-                showPortal();
+    function startTimer(seconds) {
+        clearInterval(timer);
+        timeLeft = seconds;
+        updateDisplay();
+        timer = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateDisplay();
             } else {
-                document.getElementById("error-msg").style.display = "block";
+                clearInterval(timer);
+                alert("Time is up!");
             }
-        }
+        }, 1000);
+    }
 
-        function logout() {
-            sessionStorage.removeItem("isLoggedIn");
-            location.reload();
-        }
+    function resetTimer() {
+        clearInterval(timer);
+        timeLeft = 0;
+        updateDisplay();
+    }
 
-        function showPortal() {
-            document.getElementById("login-overlay").style.display = "none";
-            document.getElementById("portal-content").style.display = "block";
-        }
+    function updateDisplay() {
+        const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const secs = (timeLeft % 60).toString().padStart(2, '0');
+        document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+    }
 
-        // Timer ve Speaker işlemleri kodları buraya devam eder...
-    </script>
+    // GSL İşlemleri
+    function addSpeaker() {
+        const input = document.getElementById('delegateInput');
+        if (input.value.trim() !== '') {
+            const li = document.createElement('li');
+            li.innerHTML = `${input.value} <button onclick="this.parentElement.remove()" class="remove-btn">✓ Done</button>`;
+            document.getElementById('speakerList').appendChild(li);
+            input.value = '';
+        }
+    }
+</script>
 </body>
 </html>
 
