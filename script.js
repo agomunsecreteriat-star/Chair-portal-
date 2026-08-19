@@ -4,29 +4,57 @@ const chairs = {
   "CHAIR003": "MUN789"
 };
 
-const loginButton = document.getElementById("loginButton");
-const logoutButton = document.getElementById("logoutButton");
 
-const loginPage = document.getElementById("loginPage");
-const dashboard = document.getElementById("dashboard");
+const loginButton =
+  document.getElementById("loginButton");
 
-const loginMessage = document.getElementById("loginMessage");
-const chairName = document.getElementById("chairName");
 
-loginButton.addEventListener("click", function () {
+const logoutButton =
+  document.getElementById("logoutButton");
 
-  const chairID = document.getElementById("chairID").value.trim();
-  const password = document.getElementById("chairPassword").value;
 
-  if (chairs[chairID] === password) {
+const loginPage =
+  document.getElementById("loginPage");
+
+
+const dashboard =
+  document.getElementById("dashboard");
+
+
+const loginMessage =
+  document.getElementById("loginMessage");
+
+
+const chairName =
+  document.getElementById("chairName");
+
+
+
+/* LOGIN */
+
+loginButton.addEventListener("click", function() {
+
+  const id =
+    document.getElementById("chairID").value.trim();
+
+
+  const password =
+    document.getElementById("chairPassword").value;
+
+
+  if (chairs[id] === password) {
 
     loginPage.style.display = "none";
+
     dashboard.style.display = "flex";
 
-    chairName.textContent = chairID;
+    chairName.textContent = id;
+
     loginMessage.textContent = "";
 
-  } else {
+  }
+
+  else {
 
     loginMessage.textContent =
       "Invalid Chair ID or password.";
@@ -35,12 +63,20 @@ loginButton.addEventListener("click", function () {
 
 });
 
-logoutButton.addEventListener("click", function () {
+
+
+/* LOGOUT */
+
+logoutButton.addEventListener("click", function() {
 
   dashboard.style.display = "none";
+
   loginPage.style.display = "flex";
 
   document.getElementById("chairID").value = "";
+
   document.getElementById("chairPassword").value = "";
+
+  loginMessage.textContent = "";
 
 });
