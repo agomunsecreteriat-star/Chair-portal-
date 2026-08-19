@@ -115,6 +115,22 @@ addDelegateButton.addEventListener("click", function () {
   const attendance = prompt(
     "Attendance:\n\n1 - Present\n2 - Absent\n3 - Late"
   );
+  const score = prompt("Enter delegate score:");
+
+if (score === null || score.trim() === "") {
+  return;
+}
+
+const numericScore = Number(score);
+
+if (
+  isNaN(numericScore) ||
+  numericScore < 0 ||
+  numericScore > 100
+) {
+  alert("Score must be between 0 and 100.");
+  return;
+}
 
   if (!attendance) return;
 
