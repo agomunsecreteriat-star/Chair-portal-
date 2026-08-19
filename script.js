@@ -80,3 +80,17 @@ logoutButton.addEventListener("click", function() {
   loginMessage.textContent = "";
 
 });
+// DELEGATES BUTTON
+
+const delegatesButton =
+  document.getElementById("delegatesButton");
+
+const delegatesPanel =
+  document.getElementById("delegatesPanel");
+
+
+delegatesButton.addEventListener("click", function() {
+
+  delegatesPanel.style.display = "block";
+
+});
