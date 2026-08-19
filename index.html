@@ -3,86 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUN Chair Dashboard</title>
+    <title>MUN Chair Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>🏛️ MUN Chair Portal</h1>
-        <p>Committee Dashboard & Desk Tools</p>
-    </header>
 
-    <div class="container">
-        <!-- Committee Info & Timer -->
-        <section class="card">
-            <h2>⏱️ General Timer</h2>
-            <div id="timer-display">00:00</div>
-            <button onclick="startTimer(60)">1 Min</button>
-            <button onclick="startTimer(90)">90 Sec</button>
-            <button onclick="resetTimer()">Reset</button>
-        </section>
+    <!-- GİRİŞ EKRANI -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2>🔐 Chair Access Only</h2>
+            <p>Please enter your committee credentials</p>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <p id="error-msg" style="color: #e07a5f; display: none; margin-top: 10px;">Invalid username or password!</p>
+        </div>
+    </div>
 
-        <!-- General Speakers List -->
-        <section class="card">
-            <h2>📜 General Speakers List (GSL)</h2>
-            <input type="text" id="delegateInput" placeholder="Delegate name / Country...">
-            <button onclick="addSpeaker()">Add Speaker</button>
-            <ol id="speakerList"></ol>
-        </section>
+    <!-- PORTAL İÇERİĞİ (Giriş yapılana kadar gizli) -->
+    <div id="portal-content" style="display: none;">
+        <header>
+            <h1>🏛️ MUN Chair Portal</h1>
+            <p>Committee Dashboard & Desk Tools</p>
+            <button onclick="logout()" class="logout-btn">Logout</button>
+        </header>
 
-        <!-- Quick Motions Checklist -->
-        <section class="card">
-            <h2>📌 Motion Quick-Check</h2>
-            <ul>
-                <li><strong>Moderated Caucus:</strong> Total time & Speaking time divisible?</li>
-                <li><strong>Unmoderated Caucus:</strong> Purpose stated clearly?</li>
-                <li><strong>Voting Majority:</strong> Simple (1/2 + 1) or Two-Thirds (2/3)?</li>
-            </ul>
-        </section>
+        <div class="container">
+            <section class="card">
+                <h2>⏱️ General Timer</h2>
+                <div id="timer-display">00:00</div>
+                <button onclick="startTimer(60)">1 Min</button>
+                <button onclick="startTimer(90)">90 Sec</button>
+                <button onclick="resetTimer()">Reset</button>
+            </section>
+
+            <section class="card">
+                <h2>📜 General Speakers List (GSL)</h2>
+                <input type="text" id="delegateInput" placeholder="Delegate name / Country...">
+                <button onclick="addSpeaker()">Add Speaker</button>
+                <ol id="speakerList"></ol>
+            </section>
+        </div>
     </div>
 
     <script>
-        // Simple Timer Logic
-        let timer;
-        let timeLeft = 0;
+        // İzin verilen Chair kullanıcı adı ve şifreleri
+        const chairCredentials = {
+            "chair1": "mun2026pass",
+            "chair2": "secgenSecret",
+            "disec_chair": "disec123"
+        };
 
-        function startTimer(seconds) {
-            clearInterval(timer);
-            timeLeft = seconds;
-            updateDisplay();
-            timer = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateDisplay();
-                } else {
-                    clearInterval(timer);
-                    alert("Time is up!");
-                }
-            }, 1000);
-        }
+        // Sayfa yüklendiğinde oturum durumunu kontrol et
+        window.onload = function() {
+            if (sessionStorage.getItem("isLoggedIn") === "true") {
+                showPortal();
+            }
+        };
 
-        function resetTimer() {
-            clearInterval(timer);
-            timeLeft = 0;
-            updateDisplay();
-        }
+        function login() {
+            const user = document.getElementById("username").value;
+            const pass = document.getElementById("password").value;
 
-        function updateDisplay() {
-            const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-            const secs = (timeLeft % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
-        }
-
-        // Speaker List Logic
-        function addSpeaker() {
-            const input = document.getElementById('delegateInput');
-            if (input.value.trim() !== '') {
-                const li = document.createElement('li');
-                li.innerHTML = `${input.value} <button onclick="this.parentElement.remove()" class="remove-btn">✓ Done</button>`;
-                document.getElementById('speakerList').appendChild(li);
-                input.value = '';
+            if (chairCredentials[user] && chairCredentials[user] === pass) {
+                sessionStorage.setItem("isLoggedIn", "true");
+                showPortal();
+            } else {
+                document.getElementById("error-msg").style.display = "block";
             }
         }
+
+        function logout() {
+            sessionStorage.removeItem("isLoggedIn");
+            location.reload();
+        }
+
+        function showPortal() {
+            document.getElementById("login-overlay").style.display = "none";
+            document.getElementById("portal-content").style.display = "block";
+        }
+
+        // Timer ve Speaker işlemleri kodları buraya devam eder...
     </script>
 </body>
 </html>
+
