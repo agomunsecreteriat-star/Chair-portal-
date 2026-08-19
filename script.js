@@ -26,7 +26,9 @@ const delegateList =
   document.getElementById("delegateList");
 
 
-/* LOGIN */
+/* =========================
+   LOGIN
+========================= */
 
 loginButton.addEventListener("click", function () {
 
@@ -56,7 +58,9 @@ loginButton.addEventListener("click", function () {
 });
 
 
-/* LOGOUT */
+/* =========================
+   LOGOUT
+========================= */
 
 logoutButton.addEventListener("click", function () {
 
@@ -73,7 +77,9 @@ logoutButton.addEventListener("click", function () {
 });
 
 
-/* DELEGATES */
+/* =========================
+   DELEGATES PAGE
+========================= */
 
 delegatesButton.addEventListener("click", function () {
 
@@ -88,7 +94,9 @@ delegatesButton.addEventListener("click", function () {
 });
 
 
-/* ADD DELEGATE */
+/* =========================
+   ADD DELEGATE
+========================= */
 
 let delegateNumber = 0;
 
@@ -96,61 +104,90 @@ addDelegateButton.addEventListener("click", function () {
 
   const country = prompt("Enter country:");
 
-  if (!country) return;
+  if (country === null || country.trim() === "") {
+    return;
+  }
+
 
   const delegate = prompt("Enter delegate name:");
 
-  if (!delegate) return;
+  if (delegate === null || delegate.trim() === "") {
+    return;
+  }
+
 
   const attendance = prompt(
-    "Attendance status:\n\n1 = Present\n2 = Absent\n3 = Late"
+    "Attendance:\n\n1 - Present\n2 - Absent\n3 - Late"
   );
 
-  if (!attendance) return;
+  if (attendance === null) {
+    return;
+  }
+
 
   let attendanceStatus;
 
   if (attendance === "1") {
+
     attendanceStatus = "Present";
-  } 
-  else if (attendance === "2") {
+
+  } else if (attendance === "2") {
+
     attendanceStatus = "Absent";
-  } 
-  else if (attendance === "3") {
+
+  } else if (attendance === "3") {
+
     attendanceStatus = "Late";
-  } 
-  else {
+
+  } else {
+
     alert("Please enter 1, 2 or 3.");
+
     return;
+
   }
 
+
   delegateNumber++;
+
 
   if (delegateNumber === 1) {
     delegateList.innerHTML = "";
   }
 
+
   const row = document.createElement("tr");
+
 
   row.innerHTML = `
     <td>${delegateNumber}</td>
-    <td>${country}</td>
-    <td>${delegate}</td>
+
+    <td>${country.trim()}</td>
+
+    <td>${delegate.trim()}</td>
+
     <td>${attendanceStatus}</td>
+
     <td>0</td>
+
     <td>
-      <button class="deleteDelegate">
+      <button
+        class="deleteDelegate"
+        type="button">
         Delete
       </button>
     </td>
   `;
+
 
   delegateList.appendChild(row);
 
 });
 
 
-/* DELETE DELEGATE */
+/* =========================
+   DELETE DELEGATE
+========================= */
 
 delegateList.addEventListener("click", function (event) {
 
@@ -158,22 +195,29 @@ delegateList.addEventListener("click", function (event) {
     return;
   }
 
-  const row = event.target.closest("tr");
+
+  const row =
+    event.target.closest("tr");
+
+
+  const delegateName =
+    row.children[2].textContent;
+
 
   const country =
     row.children[1].textContent;
 
-  const delegate =
-    row.children[2].textContent;
 
-  const confirmDelete = confirm(
-    `Delete ${delegate} (${country})?`
+  const confirmation = confirm(
+    "Delete " + delegateName +
+    " (" + country + ")?"
   );
 
-  if (!confirmDelete) {
-    return;
-  }
 
-  row.remove();
+  if (confirmation) {
+
+    row.remove();
+
+  }
 
 });
