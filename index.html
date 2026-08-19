@@ -35,16 +35,53 @@
         </header>
 
         <div class="container">
-            <!-- Committee Timer -->
+            
+            <!-- MANUEL ZAMANLAYICI -->
             <section class="card">
                 <h2>⏱️ Committee Timer</h2>
                 <div id="timer-display">00:00</div>
-                <button onclick="startTimer(60)">1 Min</button>
-                <button onclick="startTimer(90)">90 Sec</button>
-                <button onclick="resetTimer()">Reset</button>
+                
+                <div class="custom-timer-inputs">
+                    <input type="number" id="custom-min" placeholder="Min" min="0" max="180">
+                    <span>:</span>
+                    <input type="number" id="custom-sec" placeholder="Sec" min="0" max="59">
+                    <button onclick="startCustomTimer()">Set & Start</button>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <button onclick="startTimer(60)">1 Min</button>
+                    <button onclick="startTimer(90)">90 Sec</button>
+                    <button onclick="pauseTimer()">Pause</button>
+                    <button onclick="resetTimer()">Reset</button>
+                </div>
             </section>
 
-            <!-- GSL -->
+            <!-- MOTION (ÖNERGE) TAKİP MODÜLÜ -->
+            <section class="card motion-card">
+                <h2>📜 Motion Log</h2>
+                <div class="motion-form">
+                    <input type="text" id="motion-delegate" placeholder="Proposing Country (e.g. Canada)">
+                    <select id="motion-type">
+                        <option value="Moderated Caucus">Moderated Caucus</option>
+                        <option value="Unmoderated Caucus">Unmoderated Caucus</option>
+                        <option value="Consultation of Whole">Consultation of Whole</option>
+                        <option value="Closure of Debate">Closure of Debate</option>
+                    </select>
+                    <div class="motion-times">
+                        <input type="text" id="motion-total" placeholder="Total Time (e.g. 10m)">
+                        <input type="text" id="motion-speaking" placeholder="Speaking Time (e.g. 60s)">
+                    </div>
+                    <input type="text" id="motion-topic" placeholder="Topic / Purpose">
+                    <button onclick="addMotion()">Add Motion</button>
+                </div>
+
+                <div class="motion-list-container">
+                    <h3>Raised Motions</h3>
+                    <ul id="motionList" class="motion-list"></ul>
+                </div>
+            </section>
+
+            <!-- GENERAL SPEAKERS LIST (GSL) -->
             <section class="card">
                 <h2>📜 General Speakers List (GSL)</h2>
                 <div class="input-group">
@@ -54,15 +91,6 @@
                 <ol id="speakerList"></ol>
             </section>
 
-            <!-- Quick Motions -->
-            <section class="card">
-                <h2>📌 Motion Quick-Check</h2>
-                <ul>
-                    <li><strong>Moderated Caucus:</strong> Total time & speaking time divisible?</li>
-                    <li><strong>Unmoderated Caucus:</strong> Purpose stated clearly?</li>
-                    <li><strong>Voting Majority:</strong> Simple (1/2 + 1) or Two-Thirds (2/3)?</li>
-                </ul>
-            </section>
         </div>
     </div>
 
@@ -83,14 +111,12 @@
 
         // Giriş Mantığı
         function handleLogin(event) {
-            // Sayfanın yenilenmesini kesin olarak engeller
             event.preventDefault();
 
             const userEntered = document.getElementById("username").value.trim().toLowerCase();
             const passEntered = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("error-msg");
 
-            // Doğrudan kontrol
             const isChair = (userEntered === CHAIR_USER && passEntered === CHAIR_PASS);
             const isAdmin = (userEntered === ADMIN_USER && passEntered === ADMIN_PASS);
 
@@ -113,13 +139,35 @@
             document.getElementById("portal-content").style.display = "block";
         }
 
-        // TIMER KODLARI
+        // --------------------------------------------------
+        // ZAMANLAYICI MANTIĞI
+        // --------------------------------------------------
         let timer;
         let timeLeft = 0;
+        let isPaused = false;
 
         function startTimer(seconds) {
             clearInterval(timer);
             timeLeft = seconds;
+            isPaused = false;
+            runTimer();
+        }
+
+        function startCustomTimer() {
+            const minInput = parseInt(document.getElementById('custom-min').value) || 0;
+            const secInput = parseInt(document.getElementById('custom-sec').value) || 0;
+            
+            const totalSeconds = (minInput * 60) + secInput;
+            if (totalSeconds > 0) {
+                startTimer(totalSeconds);
+                document.getElementById('custom-min').value = '';
+                document.getElementById('custom-sec').value = '';
+            } else {
+                alert("Please enter a valid time!");
+            }
+        }
+
+        function runTimer() {
             updateDisplay();
             timer = setInterval(() => {
                 if (timeLeft > 0) {
@@ -132,9 +180,20 @@
             }, 1000);
         }
 
+        function pauseTimer() {
+            if (!isPaused && timeLeft > 0) {
+                clearInterval(timer);
+                isPaused = true;
+            } else if (isPaused && timeLeft > 0) {
+                isPaused = false;
+                runTimer();
+            }
+        }
+
         function resetTimer() {
             clearInterval(timer);
             timeLeft = 0;
+            isPaused = false;
             updateDisplay();
         }
 
@@ -144,7 +203,61 @@
             document.getElementById('timer-display').innerText = `${mins}:${secs}`;
         }
 
-        // GSL KODLARI
+        // --------------------------------------------------
+        // MOTION (ÖNERGE) MANTIĞI
+        // --------------------------------------------------
+        function addMotion() {
+            const delegate = document.getElementById('motion-delegate').value.trim();
+            const type = document.getElementById('motion-type').value;
+            const total = document.getElementById('motion-total').value.trim();
+            const speaking = document.getElementById('motion-speaking').value.trim();
+            const topic = document.getElementById('motion-topic').value.trim();
+
+            if (!delegate || !topic) {
+                alert("Please fill in at least the Country and Topic fields!");
+                return;
+            }
+
+            const motionList = document.getElementById('motionList');
+            const li = document.createElement('li');
+            li.className = 'motion-item';
+
+            let timeDetails = total ? ` (${total}${speaking ? ' - ' + speaking + '/sp' : ''})` : '';
+
+            li.innerHTML = `
+                <div class="motion-info">
+                    <strong>${delegate}</strong>: ${type}${timeDetails}
+                    <br><small><em>"${topic}"</em></small>
+                </div>
+                <div class="motion-actions">
+                    <button onclick="markStatus(this, 'passed')" class="pass-btn">Pass</button>
+                    <button onclick="markStatus(this, 'failed')" class="fail-btn">Fail</button>
+                    <button onclick="this.parentElement.parentElement.remove()" class="remove-btn">✕</button>
+                </div>
+            `;
+
+            motionList.appendChild(li);
+
+            // Form alanlarını temizle
+            document.getElementById('motion-delegate').value = '';
+            document.getElementById('motion-total').value = '';
+            document.getElementById('motion-speaking').value = '';
+            document.getElementById('motion-topic').value = '';
+        }
+
+        function markStatus(btn, status) {
+            const item = btn.parentElement.parentElement;
+            item.classList.remove('status-passed', 'status-failed');
+            if (status === 'passed') {
+                item.classList.add('status-passed');
+            } else if (status === 'failed') {
+                item.classList.add('status-failed');
+            }
+        }
+
+        // --------------------------------------------------
+        // GSL MANTIĞI
+        // --------------------------------------------------
         function addSpeaker() {
             const input = document.getElementById('delegateInput');
             if (input.value.trim() !== '') {
