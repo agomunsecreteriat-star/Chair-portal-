@@ -5,9 +5,7 @@ const chairs = {
 };
 
 
-/* =========================
-   STORAGE
-========================= */
+/* STORAGE */
 
 let delegates =
   JSON.parse(
@@ -18,9 +16,7 @@ let loggedInChair =
   localStorage.getItem("agomunChair");
 
 
-/* =========================
-   ELEMENTS
-========================= */
+/* ELEMENTS */
 
 const loginPage =
   document.getElementById("loginPage");
@@ -62,9 +58,7 @@ const delegateCount =
   document.getElementById("delegateCount");
 
 
-/* =========================
-   SHOW DASHBOARD
-========================= */
+/* SHOW DASHBOARD */
 
 function showDashboard() {
 
@@ -79,9 +73,7 @@ function showDashboard() {
 }
 
 
-/* =========================
-   SHOW DELEGATES
-========================= */
+/* SHOW DELEGATES */
 
 function showDelegates() {
 
@@ -98,22 +90,21 @@ function showDelegates() {
 }
 
 
-/* =========================
-   LOGIN
-========================= */
+/* LOGIN */
 
 loginButton.addEventListener(
   "click",
   function () {
 
     const id =
-      document.getElementById("chairID")
-      .value
-      .trim();
+      document.getElementById(
+        "chairID"
+      ).value.trim();
 
     const password =
-      document.getElementById("chairPassword")
-      .value;
+      document.getElementById(
+        "chairPassword"
+      ).value;
 
 
     if (chairs[id] === password) {
@@ -141,7 +132,7 @@ loginButton.addEventListener(
         "";
 
 
-      renderDelegates();
+      showDashboard();
 
     }
 
@@ -156,35 +147,42 @@ loginButton.addEventListener(
 );
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* LOGOUT */
 
 logoutButton.addEventListener(
   "click",
   function () {
 
-    localStorage.removeItem("agomunChair");
+    localStorage.removeItem(
+      "agomunChair"
+    );
 
     loggedInChair = null;
 
-    dashboard.style.display = "none";
 
-    loginPage.style.display = "flex";
+    dashboard.style.display =
+      "none";
 
-    document.getElementById("chairID").value = "";
+    loginPage.style.display =
+      "flex";
 
-    document.getElementById("chairPassword").value = "";
 
-    loginMessage.textContent = "";
+    document.getElementById(
+      "chairID"
+    ).value = "";
+
+    document.getElementById(
+      "chairPassword"
+    ).value = "";
+
+    loginMessage.textContent =
+      "";
 
   }
 );
 
 
-/* =========================
-   DASHBOARD BUTTON
-========================= */
+/* DASHBOARD */
 
 dashboardButton.addEventListener(
   "click",
@@ -196,9 +194,7 @@ dashboardButton.addEventListener(
 );
 
 
-/* =========================
-   DELEGATES BUTTON
-========================= */
+/* DELEGATES */
 
 delegatesButton.addEventListener(
   "click",
@@ -210,42 +206,34 @@ delegatesButton.addEventListener(
 );
 
 
-/* =========================
-   ADD DELEGATE
-========================= */
+/* ADD DELEGATE */
 
 addDelegateButton.addEventListener(
   "click",
   function () {
 
 
-    /* COUNTRY */
-
     const country =
       prompt("Enter country:");
 
     if (
-      country === null ||
+      !country ||
       country.trim() === ""
     ) {
       return;
     }
 
 
-    /* NAME */
-
     const name =
       prompt("Enter delegate name:");
 
     if (
-      name === null ||
+      !name ||
       name.trim() === ""
     ) {
       return;
     }
 
-
-    /* ATTENDANCE */
 
     const attendance =
       prompt(
@@ -255,7 +243,8 @@ addDelegateButton.addEventListener(
         "3 = Late"
       );
 
-    if (attendance === null) {
+
+    if (!attendance) {
       return;
     }
 
@@ -287,15 +276,13 @@ addDelegateButton.addEventListener(
     else {
 
       alert(
-        "Please enter 1, 2 or 3."
+        "Enter 1, 2 or 3."
       );
 
       return;
 
     }
 
-
-    /* SCORE */
 
     const score =
       prompt(
@@ -307,9 +294,7 @@ addDelegateButton.addEventListener(
       score === null ||
       score.trim() === ""
     ) {
-
       return;
-
     }
 
 
@@ -332,8 +317,6 @@ addDelegateButton.addEventListener(
     }
 
 
-    /* CREATE */
-
     const newDelegate = {
 
       country:
@@ -351,8 +334,6 @@ addDelegateButton.addEventListener(
     };
 
 
-    /* SAVE */
-
     delegates.push(
       newDelegate
     );
@@ -364,17 +345,13 @@ addDelegateButton.addEventListener(
     );
 
 
-    /* DISPLAY */
-
     renderDelegates();
 
   }
 );
 
 
-/* =========================
-   RENDER DELEGATES
-========================= */
+/* RENDER */
 
 function renderDelegates() {
 
@@ -382,7 +359,9 @@ function renderDelegates() {
     delegates.length;
 
 
-  if (delegates.length === 0) {
+  if (
+    delegates.length === 0
+  ) {
 
     delegateList.innerHTML = `
       <tr>
@@ -408,40 +387,24 @@ function renderDelegates() {
 
 
       row.innerHTML = `
+        <td>${index + 1}</td>
+
+        <td>${delegate.country}</td>
+
+        <td>${delegate.name}</td>
+
+        <td>${delegate.attendance}</td>
+
+        <td>${delegate.score}</td>
 
         <td>
-          ${index + 1}
-        </td>
-
-        <td>
-          ${delegate.country}
-        </td>
-
-        <td>
-          ${delegate.name}
-        </td>
-
-        <td>
-          ${delegate.attendance}
-        </td>
-
-        <td>
-          ${delegate.score}
-        </td>
-
-        <td>
-
           <button
             class="deleteDelegate"
-            type="button"
-            data-index="${index}">
-
+            data-index="${index}"
+            type="button">
             Delete
-
           </button>
-
         </td>
-
       `;
 
 
@@ -455,17 +418,16 @@ function renderDelegates() {
 }
 
 
-/* =========================
-   DELETE
-========================= */
+/* DELETE */
 
 delegateList.addEventListener(
   "click",
   function (event) {
 
     if (
-      !event.target.classList
-        .contains("deleteDelegate")
+      !event.target.classList.contains(
+        "deleteDelegate"
+      )
     ) {
       return;
     }
@@ -481,7 +443,7 @@ delegateList.addEventListener(
       delegates[index];
 
 
-    const confirmation =
+    const confirmDelete =
       confirm(
         "Delete " +
         delegate.name +
@@ -491,7 +453,7 @@ delegateList.addEventListener(
       );
 
 
-    if (!confirmation) {
+    if (!confirmDelete) {
       return;
     }
 
@@ -514,29 +476,27 @@ delegateList.addEventListener(
 );
 
 
-/* =========================
-   RESTORE SESSION
-========================= */
+/* RESTORE SESSION */
 
 if (
   loggedInChair &&
   chairs[loggedInChair]
 ) {
 
-  loginPage.style.display = "none";
+  loginPage.style.display =
+    "none";
 
-  dashboard.style.display = "flex";
+  dashboard.style.display =
+    "flex";
 
-  chairName.textContent = loggedInChair;
+  chairName.textContent =
+    loggedInChair;
+
+  showDashboard();
 
 }
 
-renderDelegates();
 
-
-
-/* =========================
-   INITIAL LOAD
-========================= */
+/* INITIAL DATA */
 
 renderDelegates();
