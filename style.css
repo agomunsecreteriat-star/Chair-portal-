@@ -15,127 +15,80 @@ body {
 
 #loginPage {
   min-height: 100vh;
-
   display: flex;
-
   justify-content: center;
   align-items: center;
-
   padding: 20px;
 }
-
 
 .login-card {
   width: 100%;
   max-width: 420px;
-
   padding: 45px;
-
   background: #151c32;
-
   border-radius: 20px;
-
-  box-shadow:
-    0 20px 50px rgba(0,0,0,.4);
+  box-shadow: 0 20px 50px rgba(0,0,0,.4);
 }
-
 
 .logo {
   text-align: center;
-
   font-size: 38px;
-
   font-weight: bold;
-
   letter-spacing: 6px;
 }
 
-
 .subtitle {
   text-align: center;
-
   color: #8994ad;
-
   font-size: 13px;
-
   letter-spacing: 3px;
-
-  margin-top: 8px;
-
-  margin-bottom: 35px;
+  margin: 8px 0 35px;
 }
-
 
 label {
   display: block;
-
   margin-bottom: 8px;
-
   font-size: 14px;
-
   font-weight: bold;
 }
 
-
 input {
   width: 100%;
-
   padding: 14px;
-
   margin-bottom: 20px;
-
   border: 1px solid #303a55;
-
   border-radius: 10px;
-
   background: #0d1325;
-
   color: white;
-
   outline: none;
 }
-
 
 input:focus {
   border-color: #5865f2;
 }
 
-
 #loginButton {
   width: 100%;
-
   padding: 14px;
-
   border: none;
-
   border-radius: 10px;
-
   background: #5865f2;
-
   color: white;
-
   font-weight: bold;
-
   cursor: pointer;
 }
 
-
 #loginMessage {
-  margin-top: 15px;
-
   text-align: center;
-
+  margin-top: 15px;
   color: #ff6b6b;
-
-  font-size: 13px;
 }
 
 
-/* DASHBOARD */
+/* PORTAL */
 
-#dashboard {
+#portal {
   display: none;
-
   min-height: 100vh;
 }
 
@@ -144,92 +97,56 @@ input:focus {
 
 .sidebar {
   width: 250px;
-
   min-height: 100vh;
-
   position: fixed;
-
   left: 0;
   top: 0;
-
   background: #11182d;
-
   padding: 30px 20px;
-
   display: flex;
-
   flex-direction: column;
 }
 
-
 .brand {
   text-align: center;
-
   font-size: 25px;
-
   font-weight: bold;
-
   letter-spacing: 4px;
 }
 
-
-.portal {
+.portal-title {
   text-align: center;
-
   color: #7f8aa8;
-
   font-size: 11px;
-
   letter-spacing: 2px;
-
-  margin-top: 6px;
-
-  margin-bottom: 35px;
+  margin: 6px 0 35px;
 }
-
 
 .menu {
   width: 100%;
-
   padding: 13px 15px;
-
   margin-bottom: 8px;
-
   border: none;
-
   border-radius: 9px;
-
   background: transparent;
-
   color: #aab3c8;
-
   text-align: left;
-
   cursor: pointer;
 }
-
 
 .menu:hover,
 .menu.active {
   background: #5865f2;
-
   color: white;
 }
 
-
 .logout {
   margin-top: auto;
-
   padding: 12px;
-
   border: 1px solid #303a55;
-
   border-radius: 9px;
-
   background: transparent;
-
   color: #ff7777;
-
   cursor: pointer;
 }
 
@@ -238,127 +155,194 @@ input:focus {
 
 main {
   margin-left: 250px;
-
   padding: 40px;
+  width: calc(100% - 250px);
 }
 
 
-.header {
+/* PAGES */
+
+.page {
+  display: none;
+}
+
+.active-page {
+  display: block;
+}
+
+header,
+.page-header {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   margin-bottom: 35px;
 }
 
-
-.header h1 {
+h1 {
   font-size: 30px;
-
   margin-bottom: 8px;
 }
 
-
-.header p {
+header p,
+.page-header p {
   color: #8994ad;
 }
-
 
 #chairName {
   color: white;
 }
 
-
 .online {
   color: #6ee7b7;
-
   font-size: 13px;
-
   font-weight: bold;
 }
 
 
-/* CARDS */
+/* DASHBOARD CARDS */
 
 .cards {
   display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
 }
 
-
-.card {
+.card,
+.content-card,
+.welcome {
   background: #151c32;
-
   border: 1px solid #222c47;
-
   border-radius: 15px;
-
   padding: 25px;
 }
 
-
-.icon {
+.card > span {
   font-size: 25px;
 }
 
-
 .card h3 {
   margin-top: 18px;
-
   color: #aab3c8;
-
   font-size: 14px;
 }
 
-
-.card b {
+.card strong {
   display: block;
-
   font-size: 30px;
-
   margin-top: 8px;
 }
 
-
 .card small {
-  display: block;
-
   color: #6f7a94;
-
-  margin-top: 5px;
 }
 
-
-/* WELCOME */
-
-.welcome-box {
+.welcome {
   margin-top: 25px;
-
-  padding: 30px;
-
-  background: #151c32;
-
-  border: 1px solid #222c47;
-
-  border-radius: 15px;
 }
 
-
-.welcome-box h2 {
+.welcome h2 {
   margin-bottom: 10px;
 }
 
-
-.welcome-box p {
+.welcome p {
   color: #8994ad;
-
   line-height: 1.6;
+}
+
+
+/* BUTTONS */
+
+.primary {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #5865f2;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.secondary {
+  padding: 12px 18px;
+  border: 1px solid #303a55;
+  border-radius: 9px;
+  background: transparent;
+  color: #aab3c8;
+  cursor: pointer;
+}
+
+
+/* TABLE */
+
+.content-card {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #222c47;
+}
+
+th {
+  color: #8994ad;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.empty {
+  text-align: center;
+  color: #6f7a94;
+  padding: 30px;
+}
+
+
+/* LIST */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-box {
+  width: 90%;
+  max-width: 420px;
+  background: #151c32;
+  border-radius: 16px;
+  padding: 30px;
+}
+
+.modal-box h2 {
+  margin-bottom: 25px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  flex: 1;
 }
 
 
@@ -367,41 +351,33 @@ main {
 @media (max-width: 900px) {
 
   .cards {
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
 }
 
-
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
   .sidebar {
     position: relative;
-
     width: 100%;
-
     min-height: auto;
   }
 
-
   main {
     margin-left: 0;
-
+    width: 100%;
     padding: 25px;
   }
-
 
   .cards {
     grid-template-columns: 1fr;
   }
 
-
-  .header {
+  header,
+  .page-header {
     flex-direction: column;
-
     align-items: flex-start;
-
     gap: 15px;
   }
 
