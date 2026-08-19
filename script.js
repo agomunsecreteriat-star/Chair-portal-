@@ -81,3 +81,31 @@ navButtons.forEach(function (button) {
   });
 
 });
+const navButtons = document.querySelectorAll(".nav-button");
+const sections = document.querySelectorAll(".portal-section");
+
+navButtons.forEach(function(button) {
+  button.addEventListener("click", function() {
+
+    const target = button.getAttribute("data-section");
+
+    if (!target) return;
+
+    navButtons.forEach(function(btn) {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    sections.forEach(function(section) {
+      section.classList.remove("active-section");
+    });
+
+    const targetSection = document.getElementById(target);
+
+    if (targetSection) {
+      targetSection.classList.add("active-section");
+    }
+
+  });
+});
