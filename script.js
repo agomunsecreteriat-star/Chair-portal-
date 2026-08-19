@@ -92,3 +92,56 @@ delegatesButton.addEventListener("click", function() {
   delegatesPage.style.display = "block";
 
 });
+/* ADD DELEGATE */
+
+const addDelegateButton =
+  document.getElementById("addDelegateButton");
+
+const delegateList =
+  document.getElementById("delegateList");
+
+let delegateNumber = 0;
+
+
+addDelegateButton.addEventListener("click", function() {
+
+  const country =
+    prompt("Enter the country:");
+
+  if (!country) {
+    return;
+  }
+
+
+  const delegate =
+    prompt("Enter the delegate name:");
+
+  if (!delegate) {
+    return;
+  }
+
+
+  delegateNumber++;
+
+
+  const row =
+    document.createElement("tr");
+
+
+  row.innerHTML = `
+    <td>${delegateNumber}</td>
+    <td>${country}</td>
+    <td>${delegate}</td>
+    <td>Present</td>
+    <td>0</td>
+  `;
+
+
+  if (delegateNumber === 1) {
+    delegateList.innerHTML = "";
+  }
+
+
+  delegateList.appendChild(row);
+
+});
