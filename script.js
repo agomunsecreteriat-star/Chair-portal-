@@ -164,31 +164,19 @@ logoutButton.addEventListener(
   "click",
   function () {
 
-    localStorage.removeItem(
-      "agomunChair"
-    );
+    localStorage.removeItem("agomunChair");
 
     loggedInChair = null;
 
+    dashboard.style.display = "none";
 
-    dashboard.style.display =
-      "none";
+    loginPage.style.display = "flex";
 
-    loginPage.style.display =
-      "flex";
+    document.getElementById("chairID").value = "";
 
+    document.getElementById("chairPassword").value = "";
 
-    document.getElementById(
-      "chairID"
-    ).value = "";
-
-    document.getElementById(
-      "chairPassword"
-    ).value = "";
-
-
-    loginMessage.textContent =
-      "";
+    loginMessage.textContent = "";
 
   }
 );
@@ -535,16 +523,16 @@ if (
   chairs[loggedInChair]
 ) {
 
-  loginPage.style.display =
-    "none";
+  loginPage.style.display = "none";
 
-  dashboard.style.display =
-    "flex";
+  dashboard.style.display = "flex";
 
-  chairName.textContent =
-    loggedInChair;
+  chairName.textContent = loggedInChair;
 
 }
+
+renderDelegates();
+
 
 
 /* =========================
