@@ -12,15 +12,21 @@
     <div id="login-overlay">
         <div class="login-card">
             <h2>🔐 Chair Access Only</h2>
-            <p>Please enter your committee credentials</p>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <button onclick="login()">Login</button>
-            <p id="error-msg" style="color: #e07a5f; display: none; margin-top: 10px;">Invalid username or password!</p>
+            <p>Please enter your credentials</p>
+            
+            <form onsubmit="handleLogin(event)">
+                <input type="text" id="username" placeholder="Username" required autocomplete="off"><br>
+                <input type="password" id="password" placeholder="Password" required><br>
+                <button type="submit">Login</button>
+            </form>
+
+            <p id="error-msg" style="color: #ff6b6b; display: none; margin-top: 15px; font-weight: bold;">
+                Invalid username or password!
+            </p>
         </div>
     </div>
 
-    <!-- PORTAL İÇERİĞİ (Giriş yapılana kadar gizli) -->
+    <!-- PORTAL İÇERİĞİ -->
     <div id="portal-content" style="display: none;">
         <header>
             <h1>🏛️ MUN Chair Portal</h1>
@@ -29,132 +35,125 @@
         </header>
 
         <div class="container">
+            <!-- Committee Timer -->
             <section class="card">
-                <h2>⏱️ General Timer</h2>
+                <h2>⏱️ Committee Timer</h2>
                 <div id="timer-display">00:00</div>
                 <button onclick="startTimer(60)">1 Min</button>
                 <button onclick="startTimer(90)">90 Sec</button>
                 <button onclick="resetTimer()">Reset</button>
             </section>
 
+            <!-- GSL -->
             <section class="card">
                 <h2>📜 General Speakers List (GSL)</h2>
-                <input type="text" id="delegateInput" placeholder="Delegate name / Country...">
-                <button onclick="addSpeaker()">Add Speaker</button>
+                <div class="input-group">
+                    <input type="text" id="delegateInput" placeholder="Delegate name / Country...">
+                    <button onclick="addSpeaker()">Add</button>
+                </div>
                 <ol id="speakerList"></ol>
+            </section>
+
+            <!-- Quick Motions -->
+            <section class="card">
+                <h2>📌 Motion Quick-Check</h2>
+                <ul>
+                    <li><strong>Moderated Caucus:</strong> Total time & speaking time divisible?</li>
+                    <li><strong>Unmoderated Caucus:</strong> Purpose stated clearly?</li>
+                    <li><strong>Voting Majority:</strong> Simple (1/2 + 1) or Two-Thirds (2/3)?</li>
+                </ul>
             </section>
         </div>
     </div>
+
     <script>
-    // Kullanıcı adları ve şifreleri tek tek ayrı diziler halinde tanımlıyoruz
-    const validUsers = [
-        { user: "chair1", pass: "mun2026" },
-        { user: "disec_chair", pass: "disecpass" },
-        { user: "sochum_chair", pass: "sochumpass" },
-        { user: "admin", pass: "chairportal123" }
-    ];
+        // 1. KULLANICI ADI VE ŞİFRE TANIMLARI
+        const CHAIR_USER = "chair1";
+        const CHAIR_PASS = "mun2026";
 
-    // Sayfa açıldığında daha önce giriş yapılmış mı kontrol et
-    window.addEventListener("load", function() {
-        if (sessionStorage.getItem("isLoggedIn") === "true") {
-            showPortal();
-        }
-    });
+        const ADMIN_USER = "admin";
+        const ADMIN_PASS = "chairportal123";
 
-    function login(e) {
-        if (e) e.preventDefault(); // Sayfanın yenilenmesini engeller
-
-        // Inputlardan gelen değerleri al ve temizle
-        const userInput = document.getElementById("username").value.trim().toLowerCase();
-        const passInput = document.getElementById("password").value.trim();
-        const errorMsg = document.getElementById("error-msg");
-
-        // Kullanıcı adı ve şifreyi listede eşleştir
-        let isAuthenticated = false;
-
-        for (let i = 0; i < validUsers.length; i++) {
-            if (validUsers[i].user === userInput && validUsers[i].pass === passInput) {
-                isAuthenticated = true;
-                break;
+        // Sayfa yüklendiğinde oturum açık mı kontrol et
+        document.addEventListener("DOMContentLoaded", function() {
+            if (sessionStorage.getItem("isLoggedIn") === "true") {
+                showPortal();
             }
-        }
+        });
 
-        if (isAuthenticated) {
-            sessionStorage.setItem("isLoggedIn", "true");
-            errorMsg.style.display = "none";
-            showPortal();
-        } else {
-            errorMsg.style.display = "block";
-        }
-    }
+        // Giriş Mantığı
+        function handleLogin(event) {
+            // Sayfanın yenilenmesini kesin olarak engeller
+            event.preventDefault();
 
-    function logout() {
-        sessionStorage.removeItem("isLoggedIn");
-        location.reload();
-    }
+            const userEntered = document.getElementById("username").value.trim().toLowerCase();
+            const passEntered = document.getElementById("password").value.trim();
+            const errorMsg = document.getElementById("error-msg");
 
-    function showPortal() {
-        document.getElementById("login-overlay").style.display = "none";
-        document.getElementById("portal-content").style.display = "block";
-    }
+            // Doğrudan kontrol
+            const isChair = (userEntered === CHAIR_USER && passEntered === CHAIR_PASS);
+            const isAdmin = (userEntered === ADMIN_USER && passEntered === ADMIN_PASS);
 
-    // Enter tuşu ile giriş yapılmasını sağlama
-    document.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            const overlay = document.getElementById("login-overlay");
-            if (overlay && overlay.style.display !== "none") {
-                login();
-            }
-        }
-    });
-
-    // --------------------------------------------------
-    // TIMER LOGIC
-    // --------------------------------------------------
-    let timer;
-    let timeLeft = 0;
-
-    function startTimer(seconds) {
-        clearInterval(timer);
-        timeLeft = seconds;
-        updateDisplay();
-        timer = setInterval(() => {
-            if (timeLeft > 0) {
-                timeLeft--;
-                updateDisplay();
+            if (isChair || isAdmin) {
+                sessionStorage.setItem("isLoggedIn", "true");
+                errorMsg.style.display = "none";
+                showPortal();
             } else {
-                clearInterval(timer);
-                alert("Time is up!");
+                errorMsg.style.display = "block";
             }
-        }, 1000);
-    }
-
-    function resetTimer() {
-        clearInterval(timer);
-        timeLeft = 0;
-        updateDisplay();
-    }
-
-    function updateDisplay() {
-        const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-        const secs = (timeLeft % 60).toString().padStart(2, '0');
-        document.getElementById('timer-display').innerText = `${mins}:${secs}`;
-    }
-
-    // --------------------------------------------------
-    // GSL LOGIC
-    // --------------------------------------------------
-    function addSpeaker() {
-        const input = document.getElementById('delegateInput');
-        if (input.value.trim() !== '') {
-            const li = document.createElement('li');
-            li.innerHTML = `${input.value} <button onclick="this.parentElement.remove()" class="remove-btn">✓ Done</button>`;
-            document.getElementById('speakerList').appendChild(li);
-            input.value = '';
         }
-    }
+
+        function logout() {
+            sessionStorage.removeItem("isLoggedIn");
+            location.reload();
+        }
+
+        function showPortal() {
+            document.getElementById("login-overlay").style.display = "none";
+            document.getElementById("portal-content").style.display = "block";
+        }
+
+        // TIMER KODLARI
+        let timer;
+        let timeLeft = 0;
+
+        function startTimer(seconds) {
+            clearInterval(timer);
+            timeLeft = seconds;
+            updateDisplay();
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timer);
+                    alert("Time is up!");
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = 0;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const secs = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+        }
+
+        // GSL KODLARI
+        function addSpeaker() {
+            const input = document.getElementById('delegateInput');
+            if (input.value.trim() !== '') {
+                const li = document.createElement('li');
+                li.innerHTML = `${input.value} <button onclick="this.parentElement.remove()" class="remove-btn">✓ Done</button>`;
+                document.getElementById('speakerList').appendChild(li);
+                input.value = '';
+            }
+        }
     </script>
-    
 </body>
 </html>
-
