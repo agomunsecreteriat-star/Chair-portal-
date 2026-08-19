@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGOMUN Chair Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section id="loginPage" class="login-page">
+
+  <div class="login-card">
+
+    <div class="logo">AGOMUN</div>
+    <div class="portal-name">CHAIR PORTAL</div>
+
+    <label for="chairID">Chair ID</label>
+    <input type="text" id="chairID" placeholder="Enter your Chair ID">
+
+    <label for="chairPassword">Password</label>
+    <input type="password" id="chairPassword" placeholder="Enter your password">
+
+    <button id="loginButton">LOGIN</button>
+
+    <p id="loginMessage"></p>
+
+  </div>
+
+</section>
+
+
+<section id="dashboard" class="dashboard">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-logo">AGOMUN</div>
+    <div class="sidebar-title">CHAIR PORTAL</div>
+
+    <nav>
+
+      <button class="nav-button active">Dashboard</button>
+      <button class="nav-button">Committee</button>
+      <button class="nav-button">Delegates</button>
+      <button class="nav-button">Attendance</button>
+      <button class="nav-button">Scores</button>
+      <button class="nav-button">Speakers List</button>
+      <button class="nav-button">Documents</button>
+
+    </nav>
+
+    <button id="logoutButton" class="logout-button">
+      LOGOUT
+    </button>
+
+  </aside>
+
+
+  <main class="main-content">
+
+    <header class="topbar">
+
+      <div>
+        <h1>Chair Dashboard</h1>
+
+        <p>
+          Welcome back,
+          <span id="chairName"></span>
+        </p>
+      </div>
+
+      <div class="online">
+        ● ONLINE
+      </div>
+
+    </header>
+
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-icon">👥</div>
+        <h3>Delegates</h3>
+        <strong>0</strong>
+        <p>Registered delegates</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎤</div>
+        <h3>Speakers</h3>
+        <strong>0</strong>
+        <p>On speakers list</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Scores</h3>
+        <strong>0</strong>
+        <p>Scores submitted</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>Attendance</h3>
+        <strong>0%</strong>
+        <p>Current attendance</p>
+      </div>
+
+    </div>
+
+
+    <div class="overview">
+
+      <h2>Committee Overview</h2>
+
+      <p>
+        Welcome to the AGOMUN Chair Portal.
+        Use the navigation menu to manage your committee.
+      </p>
+
+    </div>
+
+  </main>
+
+</section>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
