@@ -44,6 +44,7 @@ loginButton.addEventListener("click", function () {
     document.getElementById("chairPassword").value;
 
   if (chairs[id] === password) {
+    localStorage.setItem("agomunChair", id);
 
     loginPage.style.display = "none";
 
@@ -256,3 +257,12 @@ delegateList.addEventListener("click", function (event) {
   }
 
 });
+if (loggedInChair && chairs[loggedInChair]) {
+
+  loginPage.style.display = "none";
+
+  dashboard.style.display = "flex";
+
+  chairName.textContent = loggedInChair;
+
+}
