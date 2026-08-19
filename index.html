@@ -203,16 +203,19 @@
             input.value = '';
         }
 
-        function setStatus(btn, status) {
-            const item = btn.parentElement.parentElement;
+                function setStatus(btn, status) {
+            const item = btn.closest('.motion-item');
+            if (!item) return;
+
             item.classList.remove('status-passed', 'status-failed');
             
             if (status === 'passed') {
                 item.classList.add('status-passed');
-            } else {
+            } else if (status === 'failed') {
                 item.classList.add('status-failed');
             }
         }
+
 
         // GSL MANTIĞI
         function addSpeaker() {
