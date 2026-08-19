@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGORA MUN - Chair Portal</title>
+    <title>AGOMUN - Chair Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
     <div id="login-overlay">
         <div class="login-card">
             <div class="brand-logo">🏛️</div>
-            <h2>AGORA MUN</h2>
+            <h2>AGOMUN</h2>
             <p>Chair Portal Access</p>
             
             <form onsubmit="handleLogin(event)">
@@ -32,8 +32,11 @@
         <header class="main-header">
             <!-- Sol Üst Logo ve İsim -->
             <div class="brand-container">
-                <div class="brand-icon">🌿🏛️🌿</div>
-                <div class="brand-title">AGORA MUN</div>
+                <div class="brand-logo-text">🏛️</div>
+                <div class="brand-text">
+                    <span class="brand-title">AGOMUN</span>
+                    <span class="brand-subtitle">AGORA MODEL UNITED NATIONS</span>
+                </div>
             </div>
             
             <button onclick="logout()" class="logout-btn">Logout</button>
@@ -93,7 +96,6 @@
     </div>
 
     <script>
-        // KULLANICI ADI VE ŞİFRE
         const CHAIR_USER = "chair1";
         const CHAIR_PASS = "mun2026";
         const ADMIN_USER = "admin";
@@ -241,3 +243,4 @@
     </script>
 </body>
 </html>
+
