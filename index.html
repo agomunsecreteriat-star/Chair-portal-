@@ -45,29 +45,41 @@
             </section>
         </div>
     </div>
-<script>
-    // Kullanıcı adı ve şifre listesi (Tamamı küçük harf)
-    const chairCredentials = {
-        "chair1": "mun2026",
-        "disec_chair": "disecpass",
-        "sochum_chair": "sochumpass",
-        "admin": "chairportal123"
-    };
+    <script>
+    // Kullanıcı adları ve şifreleri tek tek ayrı diziler halinde tanımlıyoruz
+    const validUsers = [
+        { user: "chair1", pass: "mun2026" },
+        { user: "disec_chair", pass: "disecpass" },
+        { user: "sochum_chair", pass: "sochumpass" },
+        { user: "admin", pass: "chairportal123" }
+    ];
 
-    // Sayfa yüklendiğinde oturum durumunu kontrol et
-    window.addEventListener("DOMContentLoaded", function() {
+    // Sayfa açıldığında daha önce giriş yapılmış mı kontrol et
+    window.addEventListener("load", function() {
         if (sessionStorage.getItem("isLoggedIn") === "true") {
             showPortal();
         }
     });
 
-    function login() {
-        // Kullanıcı adını otomatik olarak küçük harfe çevirip boşlukları temizler
-        const user = document.getElementById("username").value.trim().toLowerCase();
-        const pass = document.getElementById("password").value.trim();
+    function login(e) {
+        if (e) e.preventDefault(); // Sayfanın yenilenmesini engeller
+
+        // Inputlardan gelen değerleri al ve temizle
+        const userInput = document.getElementById("username").value.trim().toLowerCase();
+        const passInput = document.getElementById("password").value.trim();
         const errorMsg = document.getElementById("error-msg");
 
-        if (chairCredentials[user] && chairCredentials[user] === pass) {
+        // Kullanıcı adı ve şifreyi listede eşleştir
+        let isAuthenticated = false;
+
+        for (let i = 0; i < validUsers.length; i++) {
+            if (validUsers[i].user === userInput && validUsers[i].pass === passInput) {
+                isAuthenticated = true;
+                break;
+            }
+        }
+
+        if (isAuthenticated) {
             sessionStorage.setItem("isLoggedIn", "true");
             errorMsg.style.display = "none";
             showPortal();
@@ -86,7 +98,7 @@
         document.getElementById("portal-content").style.display = "block";
     }
 
-    // Enter tuşuna basıldığında giriş yapmayı sağlar
+    // Enter tuşu ile giriş yapılmasını sağlama
     document.addEventListener("keydown", function(event) {
         if (event.key === "Enter") {
             const overlay = document.getElementById("login-overlay");
@@ -96,7 +108,9 @@
         }
     });
 
-    // Timer İşlemleri
+    // --------------------------------------------------
+    // TIMER LOGIC
+    // --------------------------------------------------
     let timer;
     let timeLeft = 0;
 
@@ -127,7 +141,9 @@
         document.getElementById('timer-display').innerText = `${mins}:${secs}`;
     }
 
-    // GSL İşlemleri
+    // --------------------------------------------------
+    // GSL LOGIC
+    // --------------------------------------------------
     function addSpeaker() {
         const input = document.getElementById('delegateInput');
         if (input.value.trim() !== '') {
@@ -137,7 +153,8 @@
             input.value = '';
         }
     }
-</script>
+    </script>
+    
 </body>
 </html>
 
