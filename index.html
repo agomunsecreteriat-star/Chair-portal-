@@ -6,18 +6,58 @@
     <title>AGOMUN - Chair Portal</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Logo Görseli İçin İki Farklı Boyut Boyutlandırması */
-        .login-logo-img {
-            max-width: 140px;
-            height: auto;
-            margin-bottom: 15px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        /* Navigasyon & Tablo Stilleri */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .header-logo-img {
-            height: 50px;
-            width: auto;
+        .nav-btn {
+            background: var(--accent-green);
+            color: var(--warm-cream);
+            border: 1px solid var(--accent-orange);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .nav-btn.active {
+            background: var(--accent-orange);
+            color: var(--dark-green);
+        }
+        .eval-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        .eval-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .eval-form label {
+            font-size: 0.85rem;
+            color: var(--accent-orange);
+            font-weight: bold;
+        }
+        .score-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .eval-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        .eval-table th, .eval-table td {
+            border: 1px solid rgba(224, 122, 95, 0.3);
+            padding: 8px;
+            text-align: left;
+        }
+        .eval-table th {
+            background: var(--dark-green);
+            color: var(--accent-orange);
         }
     </style>
 </head>
@@ -26,9 +66,8 @@
     <!-- GİRİŞ EKRANI -->
     <div id="login-overlay">
         <div class="login-card">
-            <!-- Doğrudan koda gömülü SVG/Visual Logo Yapısı -->
             <div style="text-align:center; margin-bottom: 10px;">
-                <svg width="100" height="100" viewBox="0 0 200 200" style="filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));">
+                <svg width="80" height="80" viewBox="0 0 200 200">
                     <circle cx="100" cy="100" r="90" fill="none" stroke="#e07a5f" stroke-width="4"/>
                     <path d="M 100 20 L 130 50 L 120 50 L 120 120 L 80 120 L 80 50 L 70 50 Z" fill="#e07a5f"/>
                     <text x="100" y="150" font-family="Arial" font-size="22" fill="#f4ece1" font-weight="bold" text-anchor="middle">AGOMUN</text>
@@ -52,7 +91,6 @@
     <!-- PORTAL İÇERİĞİ -->
     <div id="portal-content" style="display: none;">
         <header class="main-header">
-            <!-- Sol Üst Logo ve İsim -->
             <div class="brand-container" style="display: flex; align-items: center; gap: 12px;">
                 <svg width="45" height="45" viewBox="0 0 200 200">
                     <circle cx="100" cy="100" r="85" fill="none" stroke="#e07a5f" stroke-width="8"/>
@@ -67,13 +105,15 @@
             <button onclick="logout()" class="logout-btn">Logout</button>
         </header>
 
-        <!-- GRID DÜZENİ -->
-        <div class="portal-grid">
-            
-            <!-- SOL KOLON (Timer + Motion) -->
+        <!-- SEKMELER (SAYFA GEÇİŞİ) -->
+        <div class="nav-tabs">
+            <button id="tab-dash" class="nav-btn active" onclick="switchTab('dashboard')">📌 Chair Dashboard</button>
+            <button id="tab-eval" class="nav-btn" onclick="switchTab('evaluation')">⭐ Delegate Evaluation</button>
+        </div>
+
+        <!-- SAYFA 1: DASHBOARD -->
+        <div id="page-dashboard" class="portal-grid">
             <div class="left-column">
-                
-                <!-- TIMER -->
                 <section class="card">
                     <h2>⏱️ Committee Timer</h2>
                     <div id="timer-display">00:00</div>
@@ -93,7 +133,6 @@
                     </div>
                 </section>
 
-                <!-- MOTION LOG (Zamanlayıcının Altında) -->
                 <section class="card">
                     <h2>📜 Motion Log</h2>
                     <div class="motion-input-group">
@@ -102,10 +141,8 @@
                     </div>
                     <ul id="motionList" class="motion-list"></ul>
                 </section>
-
             </div>
 
-            <!-- SAĞ KOLON (GSL - Timer'ın Yanında) -->
             <div class="right-column">
                 <section class="card gsl-card">
                     <h2>📜 General Speakers List (GSL)</h2>
@@ -116,8 +153,69 @@
                     <ol id="speakerList"></ol>
                 </section>
             </div>
-
         </div>
+
+        <!-- SAYFA 2: EVALUATION (DELEGE PUANLAMA) -->
+        <div id="page-evaluation" style="display: none;">
+            <div class="eval-grid">
+                
+                <!-- PUAN GİRİŞ FORMU -->
+                <section class="card">
+                    <h2>📝 Score Delegate</h2>
+                    <form onsubmit="saveEvaluation(event)" class="eval-form">
+                        <label>Delegate Name & Country</label>
+                        <input type="text" id="eval-name" placeholder="e.g. John Doe (Canada)" required>
+
+                        <div class="score-inputs">
+                            <div>
+                                <label>GSL / Speech (1-10)</label>
+                                <input type="number" id="score-speech" min="1" max="10" required>
+                            </div>
+                            <div>
+                                <label>Position Paper (1-10)</label>
+                                <input type="number" id="score-paper" min="1" max="10" required>
+                            </div>
+                            <div>
+                                <label>Lobbying & Debate (1-10)</label>
+                                <input type="number" id="score-lobby" min="1" max="10" required>
+                            </div>
+                            <div>
+                                <label>Resolution / Draft (1-10)</label>
+                                <input type="number" id="score-draft" min="1" max="10" required>
+                            </div>
+                        </div>
+
+                        <label>Chair Notes</label>
+                        <input type="text" id="eval-notes" placeholder="Optional comments...">
+
+                        <button type="submit" style="margin-top: 10px;">Save Score</button>
+                    </form>
+                </section>
+
+                <!-- SKOR TABLOSU -->
+                <section class="card">
+                    <h2>📊 Evaluation Board</h2>
+                    <table class="eval-table">
+                        <thead>
+                            <tr>
+                                <th>Delegate</th>
+                                <th>Speech</th>
+                                <th>Paper</th>
+                                <th>Lobby</th>
+                                <th>Draft</th>
+                                <th>Avg Score</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="evalTableBody">
+                            <!-- Puanlar Buraya Eklenecek -->
+                        </tbody>
+                    </table>
+                </section>
+
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -156,6 +254,57 @@
         function showPortal() {
             document.getElementById("login-overlay").style.display = "none";
             document.getElementById("portal-content").style.display = "block";
+        }
+
+        // SEKMELER ARASI GEÇİŞ
+        function switchTab(tabName) {
+            const dashPage = document.getElementById("page-dashboard");
+            const evalPage = document.getElementById("page-evaluation");
+            const dashBtn = document.getElementById("tab-dash");
+            const evalBtn = document.getElementById("tab-eval");
+
+            if (tabName === 'dashboard') {
+                dashPage.style.display = "grid";
+                evalPage.style.display = "none";
+                dashBtn.classList.add("active");
+                evalBtn.classList.remove("active");
+            } else {
+                dashPage.style.display = "none";
+                evalPage.style.display = "block";
+                dashBtn.classList.remove("active");
+                evalBtn.classList.add("active");
+            }
+        }
+
+        // DELEGE PUANLAMA MANTIĞI
+        function saveEvaluation(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("eval-name").value;
+            const sSpeech = parseFloat(document.getElementById("score-speech").value) || 0;
+            const sPaper = parseFloat(document.getElementById("score-paper").value) || 0;
+            const sLobby = parseFloat(document.getElementById("score-lobby").value) || 0;
+            const sDraft = parseFloat(document.getElementById("score-draft").value) || 0;
+
+            const avg = ((sSpeech + sPaper + sLobby + sDraft) / 4).toFixed(1);
+
+            const tbody = document.getElementById("evalTableBody");
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td><strong>${name}</strong></td>
+                <td>${sSpeech}</td>
+                <td>${sPaper}</td>
+                <td>${sLobby}</td>
+                <td>${sDraft}</td>
+                <td><strong style="color: var(--accent-orange);">${avg} / 10</strong></td>
+                <td><button onclick="this.parentElement.parentElement.remove()" class="remove-btn">✕</button></td>
+            `;
+
+            tbody.appendChild(tr);
+
+            // Formu Temizle
+            event.target.reset();
         }
 
         // TIMER MANTIĞI
