@@ -4,36 +4,37 @@ const chairs = {
   "CHAIR003": "MUN789"
 };
 
+const loginButton = document.getElementById("loginButton");
+const logoutButton = document.getElementById("logoutButton");
 
-const loginButton =
-  document.getElementById("loginButton");
+const loginPage = document.getElementById("loginPage");
+const dashboard = document.getElementById("dashboard");
 
-const logoutButton =
-  document.getElementById("logoutButton");
+const loginMessage = document.getElementById("loginMessage");
+const chairName = document.getElementById("chairName");
 
-const loginPage =
-  document.getElementById("loginPage");
+const delegatesButton =
+  document.getElementById("delegatesButton");
 
-const dashboard =
-  document.getElementById("dashboard");
+const delegatesPage =
+  document.getElementById("delegatesPage");
 
-const loginMessage =
-  document.getElementById("loginMessage");
+const addDelegateButton =
+  document.getElementById("addDelegateButton");
 
-const chairName =
-  document.getElementById("chairName");
+const delegateList =
+  document.getElementById("delegateList");
 
 
 /* LOGIN */
 
-loginButton.addEventListener("click", function() {
+loginButton.addEventListener("click", function () {
 
   const id =
     document.getElementById("chairID").value.trim();
 
   const password =
     document.getElementById("chairPassword").value;
-
 
   if (chairs[id] === password) {
 
@@ -45,9 +46,7 @@ loginButton.addEventListener("click", function() {
 
     loginMessage.textContent = "";
 
-  }
-
-  else {
+  } else {
 
     loginMessage.textContent =
       "Invalid Chair ID or password.";
@@ -59,7 +58,7 @@ loginButton.addEventListener("click", function() {
 
 /* LOGOUT */
 
-logoutButton.addEventListener("click", function() {
+logoutButton.addEventListener("click", function () {
 
   dashboard.style.display = "none";
 
@@ -72,16 +71,11 @@ logoutButton.addEventListener("click", function() {
   loginMessage.textContent = "";
 
 });
-/* DELEGATES PAGE */
-
-const delegatesButton =
-  document.getElementById("delegatesButton");
-
-const delegatesPage =
-  document.getElementById("delegatesPage");
 
 
-delegatesButton.addEventListener("click", function() {
+/* DELEGATES */
+
+delegatesButton.addEventListener("click", function () {
 
   document.querySelector(".header").style.display = "none";
 
@@ -92,41 +86,29 @@ delegatesButton.addEventListener("click", function() {
   delegatesPage.style.display = "block";
 
 });
+
+
 /* ADD DELEGATE */
-
-const addDelegateButton =
-  document.getElementById("addDelegateButton");
-
-const delegateList =
-  document.getElementById("delegateList");
 
 let delegateNumber = 0;
 
+addDelegateButton.addEventListener("click", function () {
 
-addDelegateButton.addEventListener("click", function() {
+  const country = prompt("Enter country:");
 
-  const country =
-    prompt("Enter the country:");
+  if (!country) return;
 
-  if (!country) {
-    return;
-  }
+  const delegate = prompt("Enter delegate name:");
 
-
-  const delegate =
-    prompt("Enter the delegate name:");
-
-  if (!delegate) {
-    return;
-  }
-
+  if (!delegate) return;
 
   delegateNumber++;
 
+  if (delegateNumber === 1) {
+    delegateList.innerHTML = "";
+  }
 
-  const row =
-    document.createElement("tr");
-
+  const row = document.createElement("tr");
 
   row.innerHTML = `
     <td>${delegateNumber}</td>
@@ -135,12 +117,6 @@ addDelegateButton.addEventListener("click", function() {
     <td>Present</td>
     <td>0</td>
   `;
-
-
-  if (delegateNumber === 1) {
-    delegateList.innerHTML = "";
-  }
-
 
   delegateList.appendChild(row);
 
