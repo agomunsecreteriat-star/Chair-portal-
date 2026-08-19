@@ -36,19 +36,20 @@
 
         <div class="container">
             
-            <!-- MANUEL ZAMANLAYICI -->
+            <!-- TIMER -->
             <section class="card">
                 <h2>⏱️ Committee Timer</h2>
                 <div id="timer-display">00:00</div>
                 
-                <div class="custom-timer-inputs">
-                    <input type="number" id="custom-min" placeholder="Min" min="0" max="180">
+                <!-- Manuel Süre Girişi -->
+                <div class="timer-custom-row">
+                    <input type="number" id="manual-min" placeholder="Min" min="0">
                     <span>:</span>
-                    <input type="number" id="custom-sec" placeholder="Sec" min="0" max="59">
-                    <button onclick="startCustomTimer()">Set & Start</button>
+                    <input type="number" id="manual-sec" placeholder="Sec" min="0" max="59">
+                    <button onclick="startManualTimer()">Start Custom</button>
                 </div>
 
-                <div style="margin-top: 10px;">
+                <div class="timer-btn-row">
                     <button onclick="startTimer(60)">1 Min</button>
                     <button onclick="startTimer(90)">90 Sec</button>
                     <button onclick="pauseTimer()">Pause</button>
@@ -56,32 +57,17 @@
                 </div>
             </section>
 
-            <!-- MOTION (ÖNERGE) TAKİP MODÜLÜ -->
-            <section class="card motion-card">
+            <!-- MOTION LOG -->
+            <section class="card">
                 <h2>📜 Motion Log</h2>
-                <div class="motion-form">
-                    <input type="text" id="motion-delegate" placeholder="Proposing Country (e.g. Canada)">
-                    <select id="motion-type">
-                        <option value="Moderated Caucus">Moderated Caucus</option>
-                        <option value="Unmoderated Caucus">Unmoderated Caucus</option>
-                        <option value="Consultation of Whole">Consultation of Whole</option>
-                        <option value="Closure of Debate">Closure of Debate</option>
-                    </select>
-                    <div class="motion-times">
-                        <input type="text" id="motion-total" placeholder="Total Time (e.g. 10m)">
-                        <input type="text" id="motion-speaking" placeholder="Speaking Time (e.g. 60s)">
-                    </div>
-                    <input type="text" id="motion-topic" placeholder="Topic / Purpose">
+                <div class="motion-input-group">
+                    <input type="text" id="motion-text" placeholder="Type motion here (e.g. 10 min Mod Caucus on...)">
                     <button onclick="addMotion()">Add Motion</button>
                 </div>
-
-                <div class="motion-list-container">
-                    <h3>Raised Motions</h3>
-                    <ul id="motionList" class="motion-list"></ul>
-                </div>
+                <ul id="motionList" class="motion-list"></ul>
             </section>
 
-            <!-- GENERAL SPEAKERS LIST (GSL) -->
+            <!-- GSL -->
             <section class="card">
                 <h2>📜 General Speakers List (GSL)</h2>
                 <div class="input-group">
@@ -95,32 +81,26 @@
     </div>
 
     <script>
-        // 1. KULLANICI ADI VE ŞİFRE TANIMLARI
+        // KULLANICI ADI VE ŞİFRE
         const CHAIR_USER = "chair1";
         const CHAIR_PASS = "mun2026";
-
         const ADMIN_USER = "admin";
         const ADMIN_PASS = "chairportal123";
 
-        // Sayfa yüklendiğinde oturum açık mı kontrol et
         document.addEventListener("DOMContentLoaded", function() {
             if (sessionStorage.getItem("isLoggedIn") === "true") {
                 showPortal();
             }
         });
 
-        // Giriş Mantığı
         function handleLogin(event) {
             event.preventDefault();
-
             const userEntered = document.getElementById("username").value.trim().toLowerCase();
             const passEntered = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("error-msg");
 
-            const isChair = (userEntered === CHAIR_USER && passEntered === CHAIR_PASS);
-            const isAdmin = (userEntered === ADMIN_USER && passEntered === ADMIN_PASS);
-
-            if (isChair || isAdmin) {
+            if ((userEntered === CHAIR_USER && passEntered === CHAIR_PASS) || 
+                (userEntered === ADMIN_USER && passEntered === ADMIN_PASS)) {
                 sessionStorage.setItem("isLoggedIn", "true");
                 errorMsg.style.display = "none";
                 showPortal();
@@ -139,9 +119,7 @@
             document.getElementById("portal-content").style.display = "block";
         }
 
-        // --------------------------------------------------
-        // ZAMANLAYICI MANTIĞI
-        // --------------------------------------------------
+        // TIMER MANTIĞI
         let timer;
         let timeLeft = 0;
         let isPaused = false;
@@ -153,15 +131,13 @@
             runTimer();
         }
 
-        function startCustomTimer() {
-            const minInput = parseInt(document.getElementById('custom-min').value) || 0;
-            const secInput = parseInt(document.getElementById('custom-sec').value) || 0;
-            
-            const totalSeconds = (minInput * 60) + secInput;
-            if (totalSeconds > 0) {
-                startTimer(totalSeconds);
-                document.getElementById('custom-min').value = '';
-                document.getElementById('custom-sec').value = '';
+        function startManualTimer() {
+            const mins = parseInt(document.getElementById('manual-min').value) || 0;
+            const secs = parseInt(document.getElementById('manual-sec').value) || 0;
+            const total = (mins * 60) + secs;
+
+            if (total > 0) {
+                startTimer(total);
             } else {
                 alert("Please enter a valid time!");
             }
@@ -203,61 +179,42 @@
             document.getElementById('timer-display').innerText = `${mins}:${secs}`;
         }
 
-        // --------------------------------------------------
-        // MOTION (ÖNERGE) MANTIĞI
-        // --------------------------------------------------
+        // MOTION MANTIĞI
         function addMotion() {
-            const delegate = document.getElementById('motion-delegate').value.trim();
-            const type = document.getElementById('motion-type').value;
-            const total = document.getElementById('motion-total').value.trim();
-            const speaking = document.getElementById('motion-speaking').value.trim();
-            const topic = document.getElementById('motion-topic').value.trim();
+            const input = document.getElementById('motion-text');
+            const text = input.value.trim();
 
-            if (!delegate || !topic) {
-                alert("Please fill in at least the Country and Topic fields!");
-                return;
-            }
+            if (text === '') return;
 
-            const motionList = document.getElementById('motionList');
+            const ul = document.getElementById('motionList');
             const li = document.createElement('li');
             li.className = 'motion-item';
 
-            let timeDetails = total ? ` (${total}${speaking ? ' - ' + speaking + '/sp' : ''})` : '';
-
             li.innerHTML = `
-                <div class="motion-info">
-                    <strong>${delegate}</strong>: ${type}${timeDetails}
-                    <br><small><em>"${topic}"</em></small>
-                </div>
-                <div class="motion-actions">
-                    <button onclick="markStatus(this, 'passed')" class="pass-btn">Pass</button>
-                    <button onclick="markStatus(this, 'failed')" class="fail-btn">Fail</button>
+                <span class="motion-title">${text}</span>
+                <div class="motion-btn-group">
+                    <button onclick="setStatus(this, 'passed')" class="status-btn pass">Passed</button>
+                    <button onclick="setStatus(this, 'failed')" class="status-btn fail">Failed</button>
                     <button onclick="this.parentElement.parentElement.remove()" class="remove-btn">✕</button>
                 </div>
             `;
 
-            motionList.appendChild(li);
-
-            // Form alanlarını temizle
-            document.getElementById('motion-delegate').value = '';
-            document.getElementById('motion-total').value = '';
-            document.getElementById('motion-speaking').value = '';
-            document.getElementById('motion-topic').value = '';
+            ul.appendChild(li);
+            input.value = '';
         }
 
-        function markStatus(btn, status) {
+        function setStatus(btn, status) {
             const item = btn.parentElement.parentElement;
             item.classList.remove('status-passed', 'status-failed');
+            
             if (status === 'passed') {
                 item.classList.add('status-passed');
-            } else if (status === 'failed') {
+            } else {
                 item.classList.add('status-failed');
             }
         }
 
-        // --------------------------------------------------
         // GSL MANTIĞI
-        // --------------------------------------------------
         function addSpeaker() {
             const input = document.getElementById('delegateInput');
             if (input.value.trim() !== '') {
