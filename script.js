@@ -102,6 +102,28 @@ addDelegateButton.addEventListener("click", function () {
 
   if (!delegate) return;
 
+  const attendance = prompt(
+    "Attendance status:\n\n1 = Present\n2 = Absent\n3 = Late"
+  );
+
+  if (!attendance) return;
+
+  let attendanceStatus;
+
+  if (attendance === "1") {
+    attendanceStatus = "Present";
+  } 
+  else if (attendance === "2") {
+    attendanceStatus = "Absent";
+  } 
+  else if (attendance === "3") {
+    attendanceStatus = "Late";
+  } 
+  else {
+    alert("Please enter 1, 2 or 3.");
+    return;
+  }
+
   delegateNumber++;
 
   if (delegateNumber === 1) {
@@ -114,10 +136,44 @@ addDelegateButton.addEventListener("click", function () {
     <td>${delegateNumber}</td>
     <td>${country}</td>
     <td>${delegate}</td>
-    <td>Present</td>
+    <td>${attendanceStatus}</td>
     <td>0</td>
+    <td>
+      <button class="deleteDelegate">
+        Delete
+      </button>
+    </td>
   `;
 
   delegateList.appendChild(row);
+
+});
+
+
+/* DELETE DELEGATE */
+
+delegateList.addEventListener("click", function (event) {
+
+  if (!event.target.classList.contains("deleteDelegate")) {
+    return;
+  }
+
+  const row = event.target.closest("tr");
+
+  const country =
+    row.children[1].textContent;
+
+  const delegate =
+    row.children[2].textContent;
+
+  const confirmDelete = confirm(
+    `Delete ${delegate} (${country})?`
+  );
+
+  if (!confirmDelete) {
+    return;
+  }
+
+  row.remove();
 
 });
