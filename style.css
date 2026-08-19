@@ -456,3 +456,29 @@ td {
   }
 
 }
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+#logoutButton {
+  width: 100%;
+  padding: 13px 15px;
+
+  border: 1px solid #ff5c5c;
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #ff6b6b;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+#logoutButton:hover {
+  background: #ff5c5c;
+  color: white;
+}
