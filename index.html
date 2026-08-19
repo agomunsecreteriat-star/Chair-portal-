@@ -12,6 +12,8 @@
 
 <body>
 
+  <!-- LOGIN -->
+
   <div id="loginPage">
 
     <div class="login-card">
@@ -49,6 +51,8 @@
   </div>
 
 
+  <!-- DASHBOARD -->
+
   <div id="dashboard">
 
     <aside class="sidebar">
@@ -61,12 +65,9 @@
         CHAIR PORTAL
       </div>
 
-      <button class="menu active">
-        Dashboard
-      </button>
 
-      <button class="menu">
-        Committee
+      <button class="menu active" id="dashboardButton">
+        Dashboard
       </button>
 
       <button class="menu" id="delegatesButton">
@@ -89,6 +90,7 @@
         Documents
       </button>
 
+
       <button id="logoutButton" class="logout">
         LOGOUT
       </button>
@@ -98,167 +100,149 @@
 
     <main>
 
-      <div class="header">
 
-        <div>
+      <!-- DASHBOARD PAGE -->
 
-          <h1>
-            Chair Dashboard
-          </h1>
+      <section id="dashboardPage">
+
+        <div class="header">
+
+          <div>
+
+            <h1>
+              Chair Dashboard
+            </h1>
+
+            <p>
+              Welcome back,
+              <strong id="chairName"></strong>
+            </p>
+
+          </div>
+
+          <span class="online">
+            ● ONLINE
+          </span>
+
+        </div>
+
+
+        <div class="cards">
+
+          <div class="card">
+            <span class="icon">👥</span>
+            <h3>Delegates</h3>
+            <b id="delegateCount">0</b>
+            <small>Registered delegates</small>
+          </div>
+
+
+          <div class="card">
+            <span class="icon">🎤</span>
+            <h3>Speakers</h3>
+            <b>0</b>
+            <small>Speakers list</small>
+          </div>
+
+
+          <div class="card">
+            <span class="icon">📊</span>
+            <h3>Scores</h3>
+            <b>0</b>
+            <small>Scores submitted</small>
+          </div>
+
+
+          <div class="card">
+            <span class="icon">📋</span>
+            <h3>Attendance</h3>
+            <b>0%</b>
+            <small>Current attendance</small>
+          </div>
+
+        </div>
+
+
+        <div class="welcome-box">
+
+          <h2>
+            Committee Overview
+          </h2>
 
           <p>
-            Welcome back,
-            <strong id="chairName"></strong>
+            Welcome to the AGOMUN Chair Portal.
+            Your committee management tools will appear here.
           </p>
 
         </div>
 
-        <span class="online">
-          ● ONLINE
-        </span>
-
-      </div>
+      </section>
 
 
-      <div class="cards">
+      <!-- DELEGATES PAGE -->
 
-        <div class="card">
+      <section id="delegatesPage">
 
-          <span class="icon">👥</span>
+        <div class="delegates-header">
 
-          <h3>
-            Delegates
-          </h3>
+          <div>
 
-          <b>
-            0
-          </b>
+            <h1>
+              Delegates
+            </h1>
 
-          <small>
-            Registered delegates
-          </small>
+            <p>
+              Manage your committee delegates.
+            </p>
 
-        </div>
+          </div>
 
 
-        <div class="card">
-
-          <span class="icon">🎤</span>
-
-          <h3>
-            Speakers
-          </h3>
-
-          <b>
-            0
-          </b>
-
-          <small>
-            Speakers list
-          </small>
+          <button id="addDelegateButton">
+            + Add Delegate
+          </button>
 
         </div>
 
 
-        <div class="card">
+        <div class="delegates-box">
 
-          <span class="icon">📊</span>
+          <table>
 
-          <h3>
-            Scores
-          </h3>
+            <thead>
 
-          <b>
-            0
-          </b>
+              <tr>
 
-          <small>
-            Scores submitted
-          </small>
+                <th>#</th>
 
-        </div>
+                <th>Country</th>
+
+                <th>Delegate</th>
+
+                <th>Attendance</th>
+
+                <th>Score</th>
+
+                <th>Action</th>
+
+              </tr>
+
+            </thead>
 
 
-        <div class="card">
+            <tbody id="delegateList">
 
-          <span class="icon">📋</span>
+              <!-- Delegates appear here -->
 
-          <h3>
-            Attendance
-          </h3>
+            </tbody>
 
-          <b>
-            0%
-          </b>
-
-          <small>
-            Current attendance
-          </small>
+          </table>
 
         </div>
 
-      </div>
+      </section>
 
 
-      <div class="welcome-box">
-
-        <h2>
-          Committee Overview
-        </h2>
-
-        <p>
-          Welcome to the AGOMUN Chair Portal.
-          Your committee management tools will appear here.
-        </p>
-
-      </div>
-      <div id="delegatesPage" class="delegates-page">
-
-  <div class="delegates-header">
-
-    <div>
-      <h1>Delegates</h1>
-      <p>Manage your committee delegates.</p>
-    </div>
-
-    <button id="addDelegateButton">
-      + Add Delegate
-    </button>
-
-  </div>
-
-  <div class="delegates-box">
-
-    <table>
-
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Country</th>
-          <th>Delegate</th>
-          <th>Attendance</th>
-          <th>Score</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-
-      <tbody id="delegateList">
-
-        <tr>
-          <td colspan="6">
-            No delegates added yet.
-          </td>
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-      </div>
-
-      </div>
     </main>
 
   </div>
