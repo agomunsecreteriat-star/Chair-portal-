@@ -1,3 +1,8 @@
+let delegates =
+  JSON.parse(localStorage.getItem("agomunDelegates")) || [];
+
+let loggedInChair =
+  localStorage.getItem("agomunChair") || null;
 const chairs = {
   "CHAIR001": "Agomun123",
   "CHAIR002": "Chair456",
