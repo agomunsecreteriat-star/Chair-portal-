@@ -94,3 +94,43 @@ li { margin-bottom: 8px; }
 .remove-btn:hover {
     background: #822424;
 }
+/* Giriş Ekranı Stilleri */
+#login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-green);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.login-card {
+    background: var(--accent-green);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--accent-orange);
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.login-card input {
+    width: 90%;
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--accent-orange);
+    background: var(--dark-green);
+    color: var(--warm-cream);
+}
+
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #a83232;
+}
