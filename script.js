@@ -100,61 +100,64 @@ delegatesButton.addEventListener("click", function () {
 
 let delegateNumber = 0;
 
-addDelegateButton.addEventListener("click", function () {
+addDelegateButton.onclick = function () {
 
+  // COUNTRY
   const country = prompt("Enter country:");
 
-  if (!country || country.trim() === "") return;
+  if (!country) {
+    return;
+  }
 
 
+  // DELEGATE NAME
   const delegate = prompt("Enter delegate name:");
 
-  if (!delegate || delegate.trim() === "") return;
+  if (!delegate) {
+    return;
+  }
 
 
+  // ATTENDANCE
   const attendance = prompt(
-    "Attendance:\n\n1 - Present\n2 - Absent\n3 - Late"
+    "Enter attendance:\n\n1 = Present\n2 = Absent\n3 = Late"
   );
-  const score = prompt("Enter delegate score:");
 
-if (score === null || score.trim() === "") {
-  return;
-}
-
-const numericScore = Number(score);
-
-if (
-  isNaN(numericScore) ||
-  numericScore < 0 ||
-  numericScore > 100
-) {
-  alert("Score must be between 0 and 100.");
-  return;
-}
-
-  if (!attendance) return;
+  if (!attendance) {
+    return;
+  }
 
 
   let attendanceStatus;
 
   if (attendance === "1") {
+
     attendanceStatus = "Present";
-  } 
-  else if (attendance === "2") {
+
+  } else if (attendance === "2") {
+
     attendanceStatus = "Absent";
-  } 
-  else if (attendance === "3") {
+
+  } else if (attendance === "3") {
+
     attendanceStatus = "Late";
-  } 
-  else {
+
+  } else {
+
     alert("Please enter 1, 2 or 3.");
+
     return;
   }
 
 
-  const score = prompt("Enter delegate score:");
+  // SCORE
+  const score = prompt(
+    "Enter starting score (0-100):"
+  );
 
-  if (!score || score.trim() === "") return;
+  if (score === null) {
+    return;
+  }
 
 
   const numericScore = Number(score);
@@ -164,27 +167,40 @@ if (
     numericScore < 0 ||
     numericScore > 100
   ) {
-    alert("Score must be between 0 and 100.");
+
+    alert("Score must be a number between 0 and 100.");
+
     return;
   }
 
 
+  // NUMBER
   delegateNumber++;
 
 
+  // REMOVE EMPTY MESSAGE
   if (delegateNumber === 1) {
+
     delegateList.innerHTML = "";
+
   }
 
 
+  // CREATE ROW
   const row = document.createElement("tr");
+
 
   row.innerHTML = `
     <td>${delegateNumber}</td>
-    <td>${country.trim()}</td>
-    <td>${delegate.trim()}</td>
+
+    <td>${country}</td>
+
+    <td>${delegate}</td>
+
     <td>${attendanceStatus}</td>
+
     <td>${numericScore}</td>
+
     <td>
       <button
         class="deleteDelegate"
@@ -197,9 +213,8 @@ if (
 
   delegateList.appendChild(row);
 
-});
-
-
+};
+  
 /* =========================
    DELETE DELEGATE
 ========================= */
