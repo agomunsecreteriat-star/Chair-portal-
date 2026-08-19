@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUN Chair Portal</title>
+    <title>AGORA MUN - Chair Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,8 +11,9 @@
     <!-- GİRİŞ EKRANI -->
     <div id="login-overlay">
         <div class="login-card">
-            <h2>🔐 Chair Access Only</h2>
-            <p>Please enter your credentials</p>
+            <div class="brand-logo">🏛️</div>
+            <h2>AGORA MUN</h2>
+            <p>Chair Portal Access</p>
             
             <form onsubmit="handleLogin(event)">
                 <input type="text" id="username" placeholder="Username" required autocomplete="off"><br>
@@ -28,54 +29,65 @@
 
     <!-- PORTAL İÇERİĞİ -->
     <div id="portal-content" style="display: none;">
-        <header>
-            <h1>🏛️ MUN Chair Portal</h1>
-            <p>Committee Dashboard & Desk Tools</p>
+        <header class="main-header">
+            <!-- Sol Üst Logo ve İsim -->
+            <div class="brand-container">
+                <div class="brand-icon">🌿🏛️🌿</div>
+                <div class="brand-title">AGORA MUN</div>
+            </div>
+            
             <button onclick="logout()" class="logout-btn">Logout</button>
         </header>
 
-        <div class="container">
+        <!-- GRID DÜZENİ -->
+        <div class="portal-grid">
             
-            <!-- TIMER -->
-            <section class="card">
-                <h2>⏱️ Committee Timer</h2>
-                <div id="timer-display">00:00</div>
+            <!-- SOL KOLON (Timer + Motion) -->
+            <div class="left-column">
                 
-                <!-- Manuel Süre Girişi -->
-                <div class="timer-custom-row">
-                    <input type="number" id="manual-min" placeholder="Min" min="0">
-                    <span>:</span>
-                    <input type="number" id="manual-sec" placeholder="Sec" min="0" max="59">
-                    <button onclick="startManualTimer()">Start Custom</button>
-                </div>
+                <!-- TIMER -->
+                <section class="card">
+                    <h2>⏱️ Committee Timer</h2>
+                    <div id="timer-display">00:00</div>
+                    
+                    <div class="timer-custom-row">
+                        <input type="number" id="manual-min" placeholder="Min" min="0">
+                        <span>:</span>
+                        <input type="number" id="manual-sec" placeholder="Sec" min="0" max="59">
+                        <button onclick="startManualTimer()">Start Custom</button>
+                    </div>
 
-                <div class="timer-btn-row">
-                    <button onclick="startTimer(60)">1 Min</button>
-                    <button onclick="startTimer(90)">90 Sec</button>
-                    <button onclick="pauseTimer()">Pause</button>
-                    <button onclick="resetTimer()">Reset</button>
-                </div>
-            </section>
+                    <div class="timer-btn-row">
+                        <button onclick="startTimer(60)">1 Min</button>
+                        <button onclick="startTimer(90)">90 Sec</button>
+                        <button onclick="pauseTimer()">Pause</button>
+                        <button onclick="resetTimer()">Reset</button>
+                    </div>
+                </section>
 
-            <!-- MOTION LOG -->
-            <section class="card">
-                <h2>📜 Motion Log</h2>
-                <div class="motion-input-group">
-                    <input type="text" id="motion-text" placeholder="Type motion here (e.g. 10 min Mod Caucus on...)">
-                    <button onclick="addMotion()">Add Motion</button>
-                </div>
-                <ul id="motionList" class="motion-list"></ul>
-            </section>
+                <!-- MOTION LOG (Zamanlayıcının Altında) -->
+                <section class="card">
+                    <h2>📜 Motion Log</h2>
+                    <div class="motion-input-group">
+                        <input type="text" id="motion-text" placeholder="Type motion here (e.g. 10 min Mod Caucus on...)">
+                        <button onclick="addMotion()">Add Motion</button>
+                    </div>
+                    <ul id="motionList" class="motion-list"></ul>
+                </section>
 
-            <!-- GSL -->
-            <section class="card">
-                <h2>📜 General Speakers List (GSL)</h2>
-                <div class="input-group">
-                    <input type="text" id="delegateInput" placeholder="Delegate name / Country...">
-                    <button onclick="addSpeaker()">Add</button>
-                </div>
-                <ol id="speakerList"></ol>
-            </section>
+            </div>
+
+            <!-- SAĞ KOLON (GSL - Timer'ın Yanında) -->
+            <div class="right-column">
+                <section class="card gsl-card">
+                    <h2>📜 General Speakers List (GSL)</h2>
+                    <div class="input-group">
+                        <input type="text" id="delegateInput" placeholder="Delegate name / Country...">
+                        <button onclick="addSpeaker()">Add</button>
+                    </div>
+                    <ol id="speakerList"></ol>
+                </section>
+            </div>
 
         </div>
     </div>
@@ -203,7 +215,7 @@
             input.value = '';
         }
 
-                function setStatus(btn, status) {
+        function setStatus(btn, status) {
             const item = btn.closest('.motion-item');
             if (!item) return;
 
@@ -215,7 +227,6 @@
                 item.classList.add('status-failed');
             }
         }
-
 
         // GSL MANTIĞI
         function addSpeaker() {
