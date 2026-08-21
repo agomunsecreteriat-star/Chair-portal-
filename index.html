@@ -4,14 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGOMUN - Chair Portal</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        /* Navigasyon & Ekran Düzeni */
+        /* ==========================================
+           1. TEMEL VE GENEL TEMA STİLLERİ
+           ========================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1d3557;
+            color: #f4ece1;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* ==========================================
+           2. GİRİŞ (LOGIN) EKRANI
+           ========================================== */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1d3557;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background: #264653;
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid #e07a5f;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 340px;
+        }
+
+        .login-card h2 {
+            color: #e07a5f;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        .login-card p {
+            font-size: 0.85rem;
+            color: #d1cfc7;
+            margin-bottom: 20px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #e07a5f;
+            border-radius: 6px;
+            background: #1d3557;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            background: #e07a5f;
+            color: #1d3557;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .login-card button:hover {
+            background: #f4a261;
+        }
+
+        /* ==========================================
+           3. HEADER VE NAVİGASYON (SEKMELER)
+           ========================================== */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #264653;
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid #e07a5f;
+            margin-bottom: 20px;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #e07a5f;
+        }
+
+        .logout-btn {
+            background: #e76f51;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         .nav-tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
+
         .nav-btn {
             background: #2a9d8f;
             color: #f4ece1;
@@ -23,47 +136,122 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
+
         .nav-btn.active {
             background: #e07a5f;
             color: #264653;
         }
+
+        /* ==========================================
+           4. DÜZEN VE KARTLAR
+           ========================================== */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #264653;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(224, 122, 95, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            color: #e07a5f;
+            margin-bottom: 15px;
+        }
+
+        /* ==========================================
+           5. TIMER & FORMLAR
+           ========================================== */
+        #timer-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #e07a5f;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
+        .timer-btn-row, .timer-custom-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        input[type="number"], input[type="text"], select {
+            background: #1d3557;
+            border: 1px solid #e07a5f;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        button {
+            background: #2a9d8f;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* ==========================================
+           6. ROLL CALL & EVALUATION TABLOLARI
+           ========================================== */
         .eval-grid {
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 20px;
         }
+
         .eval-form {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
+
         .eval-form label {
             font-size: 0.85rem;
             color: #e07a5f;
             font-weight: bold;
         }
+
         .score-inputs {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
+
         .eval-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
             font-size: 0.85rem;
         }
+
         .eval-table th, .eval-table td {
             border: 1px solid rgba(224, 122, 95, 0.3);
             padding: 10px;
             text-align: left;
         }
+
         .eval-table th {
-            background: #264653;
+            background: #1d3557;
             color: #e07a5f;
         }
 
-        /* Roll Call Stilleri */
         .rollcall-stats {
             display: flex;
             gap: 15px;
@@ -73,29 +261,44 @@
             border-radius: 8px;
             border: 1px solid #e07a5f;
         }
+
         .stat-box {
             flex: 1;
             text-align: center;
         }
+
         .stat-box span {
             display: block;
             font-size: 0.75rem;
             color: #d1cfc7;
             text-transform: uppercase;
         }
+
         .stat-box strong {
             font-size: 1.4rem;
             color: #e07a5f;
         }
-        .status-select {
-            background: #264653;
-            color: #f4ece1;
-            border: 1px solid #e07a5f;
-            padding: 6px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
+
+        .remove-btn {
+            background: #e76f51;
+            color: white;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            border-radius: 3px;
         }
+
+        .motion-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-passed { border-left: 4px solid #2a9d8f; }
+        .status-failed { border-left: 4px solid #e76f51; }
     </style>
 </head>
 <body>
@@ -104,10 +307,10 @@
     <div id="login-overlay">
         <div class="login-card">
             <div style="text-align:center; margin-bottom: 10px;">
-                <svg width="80" height="80" viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="#e07a5f" stroke-width="4"/>
+                <svg width="70" height="70" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#e07a5f" stroke-width="6"/>
                     <path d="M 100 20 L 130 50 L 120 50 L 120 120 L 80 120 L 80 50 L 70 50 Z" fill="#e07a5f"/>
-                    <text x="100" y="150" font-family="Arial" font-size="22" fill="#f4ece1" font-weight="bold" text-anchor="middle">AGOMUN</text>
+                    <text x="100" y="155" font-family="Arial" font-size="22" fill="#f4ece1" font-weight="bold" text-anchor="middle">AGOMUN</text>
                 </svg>
             </div>
             <h2>AGOMUN</h2>
@@ -119,7 +322,7 @@
                 <button type="submit">Login</button>
             </form>
 
-            <p id="error-msg" style="color: #ff6b6b; display: none; margin-top: 15px; font-weight: bold;">
+            <p id="error-msg" style="color: #ff6b6b; display: none; margin-top: 15px; font-weight: bold; font-size: 0.85rem;">
                 Invalid username or password!
             </p>
         </div>
@@ -128,28 +331,20 @@
     <!-- PORTAL İÇERİĞİ -->
     <div id="portal-content" style="display: none;">
         <header class="main-header">
-            <div class="brand-container" style="display: flex; align-items: center; gap: 12px;">
-                <svg width="45" height="45" viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="85" fill="none" stroke="#e07a5f" stroke-width="8"/>
-                    <text x="100" y="115" font-family="Arial" font-size="45" fill="#e07a5f" font-weight="bold" text-anchor="middle">🏛️</text>
-                </svg>
-                <div class="brand-text">
-                    <span class="brand-title" style="font-size: 1.4rem; font-weight: bold; color: #e07a5f; display: block;">AGOMUN</span>
-                    <span class="brand-subtitle" style="font-size: 0.65rem; color: #f4ece1; letter-spacing: 1px; opacity: 0.8;">AGORA MODEL UNITED NATIONS</span>
-                </div>
+            <div>
+                <span class="brand-title">🏛️ AGOMUN Chair Portal</span>
             </div>
-            
             <button onclick="logout()" class="logout-btn">Logout</button>
         </header>
 
-        <!-- SEKMELER (NAVIGASYON) -->
+        <!-- NAVİGASYON MENÜSÜ -->
         <div class="nav-tabs">
             <button id="tab-dash" class="nav-btn active" onclick="switchTab('dashboard')">📌 Chair Dashboard</button>
             <button id="tab-rollcall" class="nav-btn" onclick="switchTab('rollcall')">📋 Roll Call Panel</button>
             <button id="tab-eval" class="nav-btn" onclick="switchTab('evaluation')">⭐ Delegate Evaluation</button>
         </div>
 
-        <!-- SAYFA 1: DASHBOARD -->
+        <!-- 1. SEKME: CHAIR DASHBOARD -->
         <div id="page-dashboard" class="portal-grid">
             <div class="left-column">
                 <section class="card">
@@ -157,9 +352,8 @@
                     <div id="timer-display">00:00</div>
                     
                     <div class="timer-custom-row">
-                        <input type="number" id="manual-min" placeholder="Min" min="0">
-                        <span>:</span>
-                        <input type="number" id="manual-sec" placeholder="Sec" min="0" max="59">
+                        <input type="number" id="manual-min" placeholder="Min" min="0" style="width: 70px;">
+                        <input type="number" id="manual-sec" placeholder="Sec" min="0" max="59" style="width: 70px;">
                         <button onclick="startManualTimer()">Start Custom</button>
                     </div>
 
@@ -173,37 +367,37 @@
 
                 <section class="card">
                     <h2>📜 Motion Log</h2>
-                    <div class="motion-input-group">
-                        <input type="text" id="motion-text" placeholder="Type motion here (e.g. 10 min Mod Caucus on...)">
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <input type="text" id="motion-text" placeholder="e.g. 10 min Mod Caucus on..." style="flex: 1;">
                         <button onclick="addMotion()">Add Motion</button>
                     </div>
-                    <ul id="motionList" class="motion-list"></ul>
+                    <div id="motionList"></div>
                 </section>
             </div>
 
             <div class="right-column">
-                <section class="card gsl-card">
+                <section class="card">
                     <h2>📜 General Speakers List (GSL)</h2>
-                    <div class="input-group">
-                        <input type="text" id="delegateInput" placeholder="Delegate name / Country...">
-                        <button onclick="addSpeaker()">Add</button>
+                    <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                        <input type="text" id="delegateInput" placeholder="Delegate name / Country..." style="flex:1;">
+                        <button onclick="addSpeaker()">Add Speaker</button>
                     </div>
-                    <ol id="speakerList"></ol>
+                    <ol id="speakerList" style="padding-left: 20px; line-height: 2;"></ol>
                 </section>
             </div>
         </div>
 
-        <!-- SAYFA 2: ROLL CALL (YOKLAMA PANELI) -->
+        <!-- 2. SEKME: ROLL CALL PANELİ -->
         <div id="page-rollcall" style="display: none;">
             <div class="eval-grid">
                 <section class="card">
-                    <h2>📋 Roll Call Registration</h2>
+                    <h2>📋 Add Delegate</h2>
                     <form onsubmit="addRollCallDelegate(event)" class="eval-form">
                         <label>Delegate / Country Name</label>
                         <input type="text" id="rc-name" placeholder="e.g. Delegate of Germany" required>
                         
                         <label>Initial Status</label>
-                        <select id="rc-status" class="status-select">
+                        <select id="rc-status">
                             <option value="Present">Present</option>
                             <option value="Present & Voting">Present & Voting</option>
                             <option value="Absent">Absent</option>
@@ -215,7 +409,6 @@
 
                 <section class="card">
                     <h2>📊 Roll Call Board</h2>
-                    
                     <div class="rollcall-stats">
                         <div class="stat-box">
                             <span>Total Delegates</span>
@@ -236,18 +429,16 @@
                             <tr>
                                 <th>Delegate / Country</th>
                                 <th style="width: 200px;">Status</th>
-                                <th style="width: 50px;">Action</th>
+                                <th style="width: 60px;">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="rollcallTableBody">
-                            <!-- Yoklama Verileri -->
-                        </tbody>
+                        <tbody id="rollcallTableBody"></tbody>
                     </table>
                 </section>
             </div>
         </div>
 
-        <!-- SAYFA 3: EVALUATION (DELEGE PUANLAMA) -->
+        <!-- 3. SEKME: DELEGE PUANLAMA (EVALUATION) -->
         <div id="page-evaluation" style="display: none;">
             <div class="eval-grid">
                 <section class="card">
@@ -258,32 +449,29 @@
 
                         <div class="score-inputs">
                             <div>
-                                <label>GSL / Speech (1-10)</label>
+                                <label>Speech (1-10)</label>
                                 <input type="number" id="score-speech" min="1" max="10" required>
                             </div>
                             <div>
-                                <label>Position Paper (1-10)</label>
+                                <label>Paper (1-10)</label>
                                 <input type="number" id="score-paper" min="1" max="10" required>
                             </div>
                             <div>
-                                <label>Lobbying & Debate (1-10)</label>
+                                <label>Lobbying (1-10)</label>
                                 <input type="number" id="score-lobby" min="1" max="10" required>
                             </div>
                             <div>
-                                <label>Resolution / Draft (1-10)</label>
+                                <label>Resolution (1-10)</label>
                                 <input type="number" id="score-draft" min="1" max="10" required>
                             </div>
                         </div>
 
-                        <label>Chair Notes</label>
-                        <input type="text" id="eval-notes" placeholder="Optional comments...">
-
-                        <button type="submit" style="margin-top: 10px;">Save Score</button>
+                        <button type="submit" style="margin-top: 15px;">Save Score</button>
                     </form>
                 </section>
 
                 <section class="card">
-                    <h2>📊 Evaluation Board</h2>
+                    <h2>📊 Scoreboard</h2>
                     <table class="eval-table">
                         <thead>
                             <tr>
@@ -292,13 +480,11 @@
                                 <th>Paper</th>
                                 <th>Lobby</th>
                                 <th>Draft</th>
-                                <th>Avg Score</th>
+                                <th>Avg</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="evalTableBody">
-                            <!-- Puanlar -->
-                        </tbody>
+                        <tbody id="evalTableBody"></tbody>
                     </table>
                 </section>
             </div>
@@ -306,18 +492,17 @@
 
     </div>
 
+    <!-- ==========================================
+       7. JAVASCRIPT MANTIĞI
+       ========================================== -->
     <script>
+        // Giriş Bilgileri
         const CHAIR_USER = "chair1";
         const CHAIR_PASS = "mun2026";
         const ADMIN_USER = "admin";
         const ADMIN_PASS = "chairportal123";
 
-        document.addEventListener("DOMContentLoaded", function() {
-            if (sessionStorage.getItem("isLoggedIn") === "true") {
-                showPortal();
-            }
-        });
-
+        // Giriş İşlemi
         function handleLogin(event) {
             event.preventDefault();
             const userEntered = document.getElementById("username").value.trim().toLowerCase();
@@ -326,7 +511,6 @@
 
             if ((userEntered === CHAIR_USER && passEntered === CHAIR_PASS) || 
                 (userEntered === ADMIN_USER && passEntered === ADMIN_PASS)) {
-                sessionStorage.setItem("isLoggedIn", "true");
                 errorMsg.style.display = "none";
                 showPortal();
             } else {
@@ -335,7 +519,6 @@
         }
 
         function logout() {
-            sessionStorage.removeItem("isLoggedIn");
             location.reload();
         }
 
@@ -344,40 +527,29 @@
             document.getElementById("portal-content").style.display = "block";
         }
 
-        // SEKMELER ARASI GEÇİŞ MANTIĞI
+        // Sekme Değiştirme Mantığı
         function switchTab(tabName) {
-            const dashPage = document.getElementById("page-dashboard");
-            const rollPage = document.getElementById("page-rollcall");
-            const evalPage = document.getElementById("page-evaluation");
+            document.getElementById("page-dashboard").style.display = "none";
+            document.getElementById("page-rollcall").style.display = "none";
+            document.getElementById("page-evaluation").style.display = "none";
 
-            const dashBtn = document.getElementById("tab-dash");
-            const rollBtn = document.getElementById("tab-rollcall");
-            const evalBtn = document.getElementById("tab-eval");
+            document.getElementById("tab-dash").classList.remove("active");
+            document.getElementById("tab-rollcall").classList.remove("active");
+            document.getElementById("tab-eval").classList.remove("active");
 
-            // Tüm sayfaları gizle
-            dashPage.style.display = "none";
-            rollPage.style.display = "none";
-            evalPage.style.display = "none";
-
-            // Tüm butonların aktifliğini kaldır
-            dashBtn.classList.remove("active");
-            rollBtn.classList.remove("active");
-            evalBtn.classList.remove("active");
-
-            // Seçilen sayfayı göster ve butonunu renklendir
             if (tabName === 'dashboard') {
-                dashPage.style.display = "grid";
-                dashBtn.classList.add("active");
+                document.getElementById("page-dashboard").style.display = "grid";
+                document.getElementById("tab-dash").classList.add("active");
             } else if (tabName === 'rollcall') {
-                rollPage.style.display = "block";
-                rollBtn.classList.add("active");
+                document.getElementById("page-rollcall").style.display = "block";
+                document.getElementById("tab-rollcall").classList.add("active");
             } else if (tabName === 'evaluation') {
-                evalPage.style.display = "block";
-                evalBtn.classList.add("active");
+                document.getElementById("page-evaluation").style.display = "block";
+                document.getElementById("tab-eval").classList.add("active");
             }
         }
 
-        // ROLL CALL MANTIĞI
+        // ROLL CALL (YOKLAMA) MANTIĞI
         function addRollCallDelegate(event) {
             event.preventDefault();
             const nameInput = document.getElementById("rc-name");
@@ -389,120 +561,8 @@
             tr.innerHTML = `
                 <td><strong>${nameInput.value}</strong></td>
                 <td>
-                    <select class="status-select" onchange="updateRollCallStats()">
+                    <select onchange="updateRollCallStats()" style="width:100%;">
                         <option value="Present" ${statusSelect.value === 'Present' ? 'selected' : ''}>Present</option>
                         <option value="Present & Voting" ${statusSelect.value === 'Present & Voting' ? 'selected' : ''}>Present & Voting</option>
                         <option value="Absent" ${statusSelect.value === 'Absent' ? 'selected' : ''}>Absent</option>
-                    </select>
-                </td>
-                <td><button onclick="this.parentElement.parentElement.remove(); updateRollCallStats();" class="remove-btn">✕</button></td>
-            `;
-
-            tbody.appendChild(tr);
-            nameInput.value = '';
-            updateRollCallStats();
-        }
-
-        function updateRollCallStats() {
-            const tbody = document.getElementById("rollcallTableBody");
-            const selects = tbody.querySelectorAll("select");
-
-            let total = selects.length;
-            let presentCount = 0;
-            let pvCount = 0;
-
-            selects.forEach(select => {
-                if (select.value === "Present") presentCount++;
-                if (select.value === "Present & Voting") pvCount++;
-            });
-
-            document.getElementById("stat-total").innerText = total;
-            document.getElementById("stat-present").innerText = presentCount;
-            document.getElementById("stat-pv").innerText = pvCount;
-        }
-
-        // DELEGE PUANLAMA MANTIĞI
-        function saveEvaluation(event) {
-            event.preventDefault();
-
-            const name = document.getElementById("eval-name").value;
-            const sSpeech = parseFloat(document.getElementById("score-speech").value) || 0;
-            const sPaper = parseFloat(document.getElementById("score-paper").value) || 0;
-            const sLobby = parseFloat(document.getElementById("score-lobby").value) || 0;
-            const sDraft = parseFloat(document.getElementById("score-draft").value) || 0;
-
-            const avg = ((sSpeech + sPaper + sLobby + sDraft) / 4).toFixed(1);
-
-            const tbody = document.getElementById("evalTableBody");
-            const tr = document.createElement("tr");
-
-            tr.innerHTML = `
-                <td><strong>${name}</strong></td>
-                <td>${sSpeech}</td>
-                <td>${sPaper}</td>
-                <td>${sLobby}</td>
-                <td>${sDraft}</td>
-                <td><strong style="color: #e07a5f;">${avg} / 10</strong></td>
-                <td><button onclick="this.parentElement.parentElement.remove()" class="remove-btn">✕</button></td>
-            `;
-
-            tbody.appendChild(tr);
-            event.target.reset();
-        }
-
-        // TIMER MANTIĞI
-        let timer;
-        let timeLeft = 0;
-        let isPaused = false;
-
-        function startTimer(seconds) {
-            clearInterval(timer);
-            timeLeft = seconds;
-            isPaused = false;
-            runTimer();
-        }
-
-        function startManualTimer() {
-            const mins = parseInt(document.getElementById('manual-min').value) || 0;
-            const secs = parseInt(document.getElementById('manual-sec').value) || 0;
-            const total = (mins * 60) + secs;
-
-            if (total > 0) {
-                startTimer(total);
-            } else {
-                alert("Please enter a valid time!");
-            }
-        }
-
-        function runTimer() {
-            updateDisplay();
-            timer = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateDisplay();
-                } else {
-                    clearInterval(timer);
-                    alert("Time is up!");
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            if (!isPaused && timeLeft > 0) {
-                clearInterval(timer);
-                isPaused = true;
-            } else if (isPaused && timeLeft > 0) {
-                isPaused = false;
-                runTimer();
-            }
-        }
-
-        function resetTimer() {
-            clearInterval(timer);
-            timeLeft = 0;
-            isPaused = false;
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-          
+             
