@@ -149,4 +149,1026 @@ body {
     font-weight: 700;
 }
 
-.logout-button
+.logout-button:hover {
+    background: #f2ca4d;
+    color: #173b2d;
+}
+
+.main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+.heading {
+    margin-bottom: 25px;
+}
+
+.heading h1 {
+    margin: 0;
+    color: #173b2d;
+    font-size: 32px;
+}
+
+.heading p {
+    margin-top: 8px;
+    color: #64736a;
+}
+
+/* STATS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: white;
+    border-radius: 15px;
+    padding: 22px;
+    border-left: 5px solid #f2ca4d;
+    box-shadow: 0 5px 18px rgba(0,0,0,.08);
+}
+
+.stat-title {
+    color: #64736a;
+    font-size: 14px;
+}
+
+.stat-number {
+    color: #173b2d;
+    font-size: 32px;
+    font-weight: 800;
+    margin-top: 8px;
+}
+
+/* SECTIONS */
+
+.section {
+    background: white;
+    padding: 23px;
+    border-radius: 15px;
+    margin-bottom: 22px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.07);
+}
+
+.section h2 {
+    margin: 0 0 18px;
+    color: #173b2d;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.form-grid .input,
+.form-grid select {
+    margin: 0;
+}
+
+select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #c5cec8;
+    border-radius: 10px;
+    background: white;
+    color: #173b2d;
+    font-size: 15px;
+}
+
+.add-button {
+    padding: 13px 18px;
+    border: none;
+    border-radius: 9px;
+    background: #173b2d;
+    color: #f2ca4d;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background: #22523f;
+}
+
+/* TABLE */
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 18px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #173b2d;
+    color: #f2ca4d;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e4e4e4;
+    color: #26382f;
+}
+
+.delete {
+    border: none;
+    background: #a84040;
+    color: white;
+    padding: 7px 11px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+/* GSL */
+
+.gsl-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.gsl-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f5e8d0;
+    padding: 13px 15px;
+    border-radius: 9px;
+}
+
+/* NOTES */
+
+.notes {
+    width: 100%;
+    min-height: 140px;
+    padding: 14px;
+    border: 1px solid #c5cec8;
+    border-radius: 10px;
+    resize: vertical;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* MOBILE */
+
+@media(max-width: 750px) {
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .brand {
+        font-size: 16px;
+    }
+
+    .main {
+        padding: 20px 12px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- ======================================
+     LOGIN PAGE
+======================================= -->
+
+<div id="loginPage">
+
+    <div class="login-card">
+
+        <div class="logo">
+            AG
+        </div>
+
+        <div class="login-title">
+            AGORA MUN
+        </div>
+
+        <div class="login-subtitle">
+            Chair Portal
+        </div>
+
+        <input
+            id="username"
+            class="input"
+            type="text"
+            placeholder="Username"
+            autocomplete="username"
+        >
+
+        <input
+            id="password"
+            class="input"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+        >
+
+        <button
+            class="login-button"
+            onclick="login()"
+        >
+            LOGIN
+        </button>
+
+        <div id="error">
+            Incorrect username or password.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================
+     DASHBOARD
+======================================= -->
+
+<div id="dashboard">
+
+    <div class="topbar">
+
+        <div class="brand">
+            AGORA MUN — CHAIR PORTAL
+        </div>
+
+        <button
+            class="logout-button"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <main class="main">
+
+        <div class="heading">
+
+            <h1>
+                Committee Dashboard
+            </h1>
+
+            <p>
+                Manage your committee during the conference.
+            </p>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-title">
+                    Delegates
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="delegateCount"
+                >
+                    0
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-title">
+                    Motions
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="motionCount"
+                >
+                    0
+                </div>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-title">
+                    GSL Speakers
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="gslCount"
+                >
+                    0
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- DELEGATES -->
+
+        <section class="section">
+
+            <h2>
+                Delegate Management
+            </h2>
+
+            <div class="form-grid">
+
+                <input
+                    id="delegateName"
+                    class="input"
+                    placeholder="Delegate Name"
+                >
+
+                <input
+                    id="delegateCountry"
+                    class="input"
+                    placeholder="Country / Entity"
+                >
+
+                <button
+                    class="add-button"
+                    onclick="addDelegate()"
+                >
+                    + Add Delegate
+                </button>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Delegate</th>
+                            <th>Country / Entity</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="delegateTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- MOTIONS -->
+
+        <section class="section">
+
+            <h2>
+                Motion Control
+            </h2>
+
+            <div class="form-grid">
+
+                <select id="motionType">
+
+                    <option>
+                        Open GSL
+                    </option>
+
+                    <option>
+                        Moderated Caucus
+                    </option>
+
+                    <option>
+                        Unmoderated Caucus
+                    </option>
+
+                    <option>
+                        Motion to Introduce
+                    </option>
+
+                    <option>
+                        Motion to Suspend
+                    </option>
+
+                    <option>
+                        Motion to Adjourn
+                    </option>
+
+                </select>
+
+
+                <input
+                    id="motionTime"
+                    class="input"
+                    placeholder="Duration / Time"
+                >
+
+
+                <input
+                    id="motionTopic"
+                    class="input"
+                    placeholder="Topic / Purpose"
+                >
+
+            </div>
+
+            <br>
+
+            <button
+                class="add-button"
+                onclick="addMotion()"
+            >
+                + Save Motion
+            </button>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Type</th>
+                            <th>Time</th>
+                            <th>Topic</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="motionTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- GSL -->
+
+        <section class="section">
+
+            <h2>
+                General Speakers List
+            </h2>
+
+            <div class="form-grid">
+
+                <input
+                    id="gslSpeaker"
+                    class="input"
+                    placeholder="Country / Delegate"
+                >
+
+                <input
+                    id="gslTime"
+                    class="input"
+                    placeholder="Speaking Time"
+                >
+
+                <button
+                    class="add-button"
+                    onclick="addGSL()"
+                >
+                    + Add Speaker
+                </button>
+
+            </div>
+
+
+            <div
+                id="gslList"
+                class="gsl-list"
+            ></div>
+
+        </section>
+
+
+        <!-- NOTES -->
+
+        <section class="section">
+
+            <h2>
+                Chair Notes
+            </h2>
+
+            <textarea
+                id="notes"
+                class="notes"
+                placeholder="Write your committee notes here..."
+            ></textarea>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/* ======================================
+   LOGIN
+======================================= */
+
+const USERNAME = "chair";
+const PASSWORD = "agora123";
+
+
+function login() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const error =
+        document.getElementById("error");
+
+
+    if (
+        username === USERNAME &&
+        password === PASSWORD
+    ) {
+
+        localStorage.setItem(
+            "agoraChairLogin",
+            "true"
+        );
+
+        error.style.display = "none";
+
+        showDashboard();
+
+    } else {
+
+        error.style.display = "block";
+
+    }
+
+}
+
+
+function showDashboard() {
+
+    document.getElementById("loginPage").style.display =
+        "none";
+
+    document.getElementById("dashboard").style.display =
+        "block";
+
+    loadData();
+
+}
+
+
+function logout() {
+
+    localStorage.removeItem(
+        "agoraChairLogin"
+    );
+
+    document.getElementById("dashboard").style.display =
+        "none";
+
+    document.getElementById("loginPage").style.display =
+        "flex";
+
+    document.getElementById("username").value = "";
+
+    document.getElementById("password").value = "";
+
+}
+
+
+/* ======================================
+   DATA
+======================================= */
+
+let delegates =
+    JSON.parse(
+        localStorage.getItem("agoraDelegates")
+    ) || [];
+
+let motions =
+    JSON.parse(
+        localStorage.getItem("agoraMotions")
+    ) || [];
+
+let gsl =
+    JSON.parse(
+        localStorage.getItem("agoraGSL")
+    ) || [];
+
+
+/* ======================================
+   DELEGATES
+======================================= */
+
+function addDelegate() {
+
+    const name =
+        document.getElementById("delegateName")
+        .value
+        .trim();
+
+    const country =
+        document.getElementById("delegateCountry")
+        .value
+        .trim();
+
+
+    if (!name || !country) {
+        return;
+    }
+
+
+    delegates.push({
+        name: name,
+        country: country
+    });
+
+
+    saveData();
+
+    document.getElementById("delegateName").value = "";
+
+    document.getElementById("delegateCountry").value = "";
+
+    renderDelegates();
+
+}
+
+
+function deleteDelegate(index) {
+
+    delegates.splice(index, 1);
+
+    saveData();
+
+    renderDelegates();
+
+}
+
+
+function renderDelegates() {
+
+    const table =
+        document.getElementById("delegateTable");
+
+    table.innerHTML = "";
+
+
+    delegates.forEach(function(delegate, index) {
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML =
+            "<td>" + (index + 1) + "</td>" +
+            "<td>" + safe(delegate.name) + "</td>" +
+            "<td>" + safe(delegate.country) + "</td>" +
+            "<td>" +
+            "<button class='delete' onclick='deleteDelegate(" +
+            index +
+            ")'>Delete</button>" +
+            "</td>";
+
+
+        table.appendChild(row);
+
+    });
+
+
+    document.getElementById("delegateCount").textContent =
+        delegates.length;
+
+}
+
+
+/* ======================================
+   MOTIONS
+======================================= */
+
+function addMotion() {
+
+    const type =
+        document.getElementById("motionType").value;
+
+    const time =
+        document.getElementById("motionTime")
+        .value
+        .trim();
+
+    const topic =
+        document.getElementById("motionTopic")
+        .value
+        .trim();
+
+
+    motions.push({
+        type: type,
+        time: time,
+        topic: topic
+    });
+
+
+    saveData();
+
+    document.getElementById("motionTime").value = "";
+
+    document.getElementById("motionTopic").value = "";
+
+    renderMotions();
+
+}
+
+
+function deleteMotion(index) {
+
+    motions.splice(index, 1);
+
+    saveData();
+
+    renderMotions();
+
+}
+
+
+function renderMotions() {
+
+    const table =
+        document.getElementById("motionTable");
+
+    table.innerHTML = "";
+
+
+    motions.forEach(function(motion, index) {
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML =
+            "<td>" + safe(motion.type) + "</td>" +
+            "<td>" + safe(motion.time) + "</td>" +
+            "<td>" + safe(motion.topic) + "</td>" +
+            "<td>" +
+            "<button class='delete' onclick='deleteMotion(" +
+            index +
+            ")'>Delete</button>" +
+            "</td>";
+
+
+        table.appendChild(row);
+
+    });
+
+
+    document.getElementById("motionCount").textContent =
+        motions.length;
+
+}
+
+
+/* ======================================
+   GSL
+======================================= */
+
+function addGSL() {
+
+    const speaker =
+        document.getElementById("gslSpeaker")
+        .value
+        .trim();
+
+    const time =
+        document.getElementById("gslTime")
+        .value
+        .trim();
+
+
+    if (!speaker) {
+        return;
+    }
+
+
+    gsl.push({
+        speaker: speaker,
+        time: time
+    });
+
+
+    saveData();
+
+    document.getElementById("gslSpeaker").value = "";
+
+    document.getElementById("gslTime").value = "";
+
+    renderGSL();
+
+}
+
+
+function deleteGSL(index) {
+
+    gsl.splice(index, 1);
+
+    saveData();
+
+    renderGSL();
+
+}
+
+
+function renderGSL() {
+
+    const list =
+        document.getElementById("gslList");
+
+    list.innerHTML = "";
+
+
+    gsl.forEach(function(item, index) {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "gsl-item";
+
+
+        div.innerHTML =
+            "<span>" +
+            "<strong>" +
+            (index + 1) +
+            ".</strong> " +
+            safe(item.speaker) +
+            " — " +
+            safe(item.time) +
+            "</span>" +
+
+            "<button class='delete' onclick='deleteGSL(" +
+            index +
+            ")'>Remove</button>";
+
+
+        list.appendChild(div);
+
+    });
+
+
+    document.getElementById("gslCount").textContent =
+        gsl.length;
+
+}
+
+
+/* ======================================
+   SAVE
+======================================= */
+
+function saveData() {
+
+    localStorage.setItem(
+        "agoraDelegates",
+        JSON.stringify(delegates)
+    );
+
+    localStorage.setItem(
+        "agoraMotions",
+        JSON.stringify(motions)
+    );
+
+    localStorage.setItem(
+        "agoraGSL",
+        JSON.stringify(gsl)
+    );
+
+}
+
+
+/* ======================================
+   LOAD
+======================================= */
+
+function loadData() {
+
+    delegates =
+        JSON.parse(
+            localStorage.getItem("agoraDelegates")
+        ) || [];
+
+    motions =
+        JSON.parse(
+            localStorage.getItem("agoraMotions")
+        ) || [];
+
+    gsl =
+        JSON.parse(
+            localStorage.getItem("agoraGSL")
+        ) || [];
+
+
+    renderDelegates();
+
+    renderMotions();
+
+    renderGSL();
+
+
+    const savedNotes =
+        localStorage.getItem("agoraChairNotes");
+
+
+    if (savedNotes !== null) {
+
+        document.getElementById("notes").value =
+            savedNotes;
+
+    }
+
+}
+
+
+/* ======================================
+   NOTES
+======================================= */
+
+document
+.getElementById("notes")
+.addEventListener("input", function() {
+
+    localStorage.setItem(
+        "agoraChairNotes",
+        this.value
+    );
+
+});
+
+
+/* ======================================
+   SAFE TEXT
+======================================= */
+
+function safe(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ======================================
+   ENTER TO LOGIN
+======================================= */
+
+document
+.getElementById("password")
+.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        login();
+    }
+
+});
+
+
+/* ======================================
+   START
+======================================= */
+
+window.addEventListener("load", function() {
+
+    const loggedIn =
+        localStorage.getItem(
+            "agoraChairLogin"
+    
