@@ -1,640 +1,2542 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agora MUN (AGOMUN) - Chair Portal</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0a1f16;
-            --bg-card: #133827;
-            --bg-card-hover: #1b4d37;
-            --accent-orange: #f97316;
-            --accent-orange-hover: #ea580c;
-            --text-light: #f3f4f6;
-            --text-muted: #9ca3af;
-            --border-color: #225a41;
-            --green-success: #10b981;
-            --red-fail: #ef4444;
-            --yellow-warn: #f59e0b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- LOGIN SCREEN --- */
-        #loginScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--bg-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .login-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-
-        .login-logo {
-            font-size: 2.8rem;
-            color: var(--accent-orange);
-            margin-bottom: 0.5rem;
-        }
-
-        .login-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 0.2rem;
-            letter-spacing: 1px;
-        }
-
-        .login-subtitle {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-
-        .login-field {
-            margin-bottom: 1.2rem;
-            text-align: left;
-        }
-
-        .login-field label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        .login-error {
-            color: var(--red-fail);
-            font-size: 0.85rem;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        /* --- HEADER NAVIGATION --- */
-        header {
-            background-color: var(--bg-card);
-            border-bottom: 2px solid var(--border-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-area i {
-            color: var(--accent-orange);
-            font-size: 1.8rem;
-        }
-
-        .logo-area h1 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .logo-area span {
-            color: var(--accent-orange);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .chair-badge {
-            background-color: rgba(249, 115, 22, 0.15);
-            color: var(--accent-orange);
-            border: 1px solid var(--accent-orange);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        nav {
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav-btn {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-btn:hover {
-            background-color: var(--bg-card-hover);
-            border-color: var(--accent-orange);
-        }
-
-        .nav-btn.active {
-            background-color: var(--accent-orange);
-            color: white;
-            border-color: var(--accent-orange);
-        }
-
-        /* --- MAIN LAYOUT --- */
-        main {
-            flex: 1;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- CARDS & GRID --- */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-        .grid-4 {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-        }
-
-        .card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 1.5rem;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--accent-orange);
-        }
-
-        /* Stat Cards */
-        .stat-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1.2rem;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-orange);
-            margin-top: 5px;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Controls */
-        input, select, button {
-            outline: none;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1rem;
-        }
-
-        input[type="text"], input[type="password"], input[type="number"], select {
-            background-color: var(--bg-dark);
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            width: 100%;
-        }
-
-        input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, select:focus {
-            border-color: var(--accent-orange);
-        }
-
-        .btn {
-            background-color: var(--accent-orange);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background-color: var(--accent-orange-hover);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--bg-card-hover);
-        }
-
-        .btn-danger {
-            background-color: var(--red-fail);
-        }
-        .btn-danger:hover {
-            background-color: #dc2626;
-        }
-
-        .btn-success {
-            background-color: var(--green-success);
-        }
-        .btn-success:hover {
-            background-color: #059669;
-        }
-
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            background-color: rgba(0,0,0,0.2);
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        tr:hover {
-            background-color: var(--bg-card-hover);
-        }
-
-        /* Badges */
-        .badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .badge-passed {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: var(--green-success);
-            border: 1px solid var(--green-success);
-        }
-
-        .badge-failed {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: var(--red-fail);
-            border: 1px solid var(--red-fail);
-        }
-
-        /* Dashboard Components */
-        .timer-display {
-            font-size: 4rem;
-            font-family: monospace;
-            font-weight: 700;
-            text-align: center;
-            color: var(--accent-orange);
-            margin: 1rem 0;
-            letter-spacing: 2px;
-            background: var(--bg-dark);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .timer-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-        }
-
-        .timer-manual {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .timer-manual input {
-            width: 80px;
-            text-align: center;
-        }
-
-        /* Roll Call Components */
-        .status-btn-group {
-            display: flex;
-            gap: 5px;
-        }
-
-        .status-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            border: 1px solid var(--border-color);
-            background: var(--bg-dark);
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-
-        .status-btn.active-p {
-            background: var(--green-success);
-            color: white;
-            border-color: var(--green-success);
-        }
-
-        .status-btn.active-pv {
-            background: var(--accent-orange);
-            color: white;
-            border-color: var(--accent-orange);
-        }
-
-        .status-btn.active-a {
-            background: var(--red-fail);
-            color: white;
-            border-color: var(--red-fail);
-        }
-
-        /* Voting Results */
-        .vote-result-box {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 12px;
-            background: var(--bg-dark);
-            border: 2px dashed var(--border-color);
-            margin-top: 1.5rem;
-        }
-
-        .vote-result-text {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-top: 0.5rem;
-        }
-
-        @media (max-width: 900px) {
-            .grid-2, .grid-3, .grid-4 {
-                grid-template-columns: 1fr;
-            }
-            header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGORA MUN — Chair Portal</title>
+
+<style>
+:root{
+    --green:#173B32;
+    --green2:#245448;
+    --green3:#31695A;
+    --cream:#F4E5CF;
+    --cream2:#FFF8ED;
+    --orange:#D98B52;
+    --orange2:#C8753E;
+    --text:#17231F;
+    --muted:#718078;
+    --white:#FFFFFF;
+    --danger:#B84A45;
+    --success:#4C8566;
+    --border:#E3D5C2;
+    --shadow:0 10px 30px rgba(23,59,50,.10);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:var(--cream);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,input,select,textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+/* ================= LOGIN ================= */
+
+#loginScreen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+    background:
+        radial-gradient(circle at top right,rgba(217,139,82,.25),transparent 35%),
+        var(--green);
+}
+
+.login-box{
+    width:100%;
+    max-width:430px;
+    background:var(--cream2);
+    border-radius:24px;
+    padding:42px;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo-mark{
+    width:72px;
+    height:72px;
+    margin:0 auto 15px;
+    border-radius:50%;
+    background:var(--orange);
+    color:var(--green);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    font-weight:900;
+}
+
+.logo h1{
+    color:var(--green);
+    font-size:28px;
+    letter-spacing:2px;
+}
+
+.logo p{
+    color:var(--muted);
+    margin-top:5px;
+    font-size:13px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.form-control{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid var(--border);
+    background:white;
+    border-radius:10px;
+    outline:none;
+    transition:.2s;
+}
+
+.form-control:focus{
+    border-color:var(--orange);
+    box-shadow:0 0 0 3px rgba(217,139,82,.15);
+}
+
+.login-btn{
+    width:100%;
+    border:none;
+    padding:14px;
+    border-radius:11px;
+    background:var(--green);
+    color:white;
+    font-weight:800;
+    margin-top:5px;
+}
+
+.login-btn:hover{
+    background:var(--green2);
+}
+
+.login-error{
+    color:var(--danger);
+    font-size:13px;
+    margin-top:12px;
+    text-align:center;
+    display:none;
+}
+
+/* ================= APP ================= */
+
+#app{
+    display:none;
+    min-height:100vh;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:245px;
+    background:var(--green);
+    color:white;
+    padding:25px 15px;
+    z-index:20;
+}
+
+.side-logo{
+    padding:5px 12px 25px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    margin-bottom:18px;
+}
+
+.side-logo strong{
+    font-size:21px;
+    letter-spacing:1.5px;
+}
+
+.side-logo small{
+    display:block;
+    color:#BFD2C9;
+    margin-top:4px;
+}
+
+.nav-btn{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:#D7E2DD;
+    text-align:left;
+    padding:12px 13px;
+    border-radius:9px;
+    margin-bottom:5px;
+    font-weight:600;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:var(--green2);
+    color:white;
+}
+
+.nav-btn span{
+    margin-right:9px;
+}
+
+.sidebar-bottom{
+    position:absolute;
+    bottom:20px;
+    left:15px;
+    right:15px;
+}
+
+.logout{
+    width:100%;
+    border:1px solid rgba(255,255,255,.2);
+    background:transparent;
+    color:white;
+    padding:11px;
+    border-radius:9px;
+}
+
+.main{
+    margin-left:245px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:75px;
+    background:var(--cream2);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+}
+
+.top-title{
+    font-size:20px;
+    font-weight:800;
+    color:var(--green);
+}
+
+.chair-info{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:var(--orange);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    color:var(--green);
+}
+
+.content{
+    padding:30px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-heading{
+    margin-bottom:24px;
+}
+
+.page-heading h2{
+    color:var(--green);
+    font-size:27px;
+}
+
+.page-heading p{
+    color:var(--muted);
+    margin-top:5px;
+}
+
+/* ================= CARDS ================= */
+
+.grid{
+    display:grid;
+    gap:18px;
+}
+
+.grid-4{
+    grid-template-columns:repeat(4,1fr);
+}
+
+.grid-3{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.grid-2{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.card{
+    background:var(--cream2);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+
+.stat-title{
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
+}
+
+.stat-number{
+    font-size:30px;
+    color:var(--green);
+    font-weight:900;
+    margin-top:7px;
+}
+
+.stat-icon{
+    float:right;
+    font-size:24px;
+}
+
+.section-title{
+    color:var(--green);
+    font-size:17px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    background:#F1E1CA;
+    color:var(--green);
+    font-size:12px;
+    padding:12px;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+
+tr:last-child td{
+    border-bottom:none;
+}
+
+.status{
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:800;
+    display:inline-block;
+}
+
+.present{
+    background:#DDEBDD;
+    color:#326143;
+}
+
+.voting{
+    background:#D7E9E2;
+    color:#245448;
+}
+
+.absent{
+    background:#F1DAD6;
+    color:#8A3F3B;
+}
+
+.waiting{
+    background:#F1E1CA;
+    color:#8A633F;
+}
+
+.speaking{
+    background:#D7E9E2;
+    color:#245448;
+}
+
+.done{
+    background:#E3E3E3;
+    color:#555;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn{
+    border:none;
+    border-radius:8px;
+    padding:9px 13px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.btn-primary{
+    background:var(--green);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:var(--green2);
+}
+
+.btn-orange{
+    background:var(--orange);
+    color:var(--green);
+}
+
+.btn-danger{
+    background:#F0D4D1;
+    color:#8A3F3B;
+}
+
+.btn-light{
+    background:#F1E1CA;
+    color:var(--green);
+}
+
+.btn-small{
+    padding:6px 9px;
+    font-size:11px;
+}
+
+.button-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+/* ================= TIMER ================= */
+
+.timer-card{
+    text-align:center;
+    padding:35px;
+}
+
+.timer-display{
+    font-size:72px;
+    font-weight:900;
+    color:var(--green);
+    letter-spacing:3px;
+    margin:20px 0;
+    font-variant-numeric:tabular-nums;
+}
+
+.timer-display.warning{
+    color:var(--orange2);
+}
+
+.timer-display.finished{
+    color:var(--danger);
+}
+
+.timer-settings{
+    max-width:650px;
+    margin:auto;
+}
+
+.timer-presets{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin:15px 0;
+}
+
+.timer-status{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(23,35,31,.55);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:600px;
+    max-height:90vh;
+    overflow:auto;
+    background:var(--cream2);
+    border-radius:18px;
+    padding:25px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.modal-header h3{
+    color:var(--green);
+}
+
+.close{
+    border:none;
+    background:transparent;
+    font-size:25px;
+    color:var(--muted);
+}
+
+/* ================= EVALUATION ================= */
+
+.score-grid{
+    display:grid;
+    grid-template-columns:1fr 100px;
+    gap:9px;
+    align-items:center;
+}
+
+.score-input{
+    width:100%;
+    padding:9px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    text-align:center;
+}
+
+.total-score{
+    margin-top:18px;
+    background:#F1E1CA;
+    padding:15px;
+    border-radius:10px;
+    font-weight:800;
+    color:var(--green);
+}
+
+/* ================= RESPONSIVE ================= */
+
+.mobile-menu{
+    display:none;
+    border:none;
+    background:var(--green);
+    color:white;
+    padding:8px 10px;
+    border-radius:7px;
+}
+
+@media(max-width:1000px){
+    .grid-4{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+}
+
+@media(max-width:650px){
+    .grid-4,
+    .grid-3,
+    .grid-2{
+        grid-template-columns:1fr;
+    }
+
+    .content{
+        padding:18px;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .timer-display{
+        font-size:48px;
+    }
+
+    .login-box{
+        padding:28px 22px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen">
-        <div class="login-card">
-            <div class="login-logo"><i class="fa-solid fa-gavel"></i></div>
-            <div class="login-title">AGORA MUN</div>
-            <div class="login-subtitle">Chair Portal Login</div>
-            
-            <form onsubmit="handleLogin(event)">
-                <div class="login-field">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="login-field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
-                </div>
-                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; padding: 12px;">
-                    <i class="fa-solid fa-right-to-bracket"></i> Login
-                </button>
-                <div class="login-error" id="loginError">
-                    <i class="fa-solid fa-circle-exclamation"></i> Invalid username or password!
-                </div>
-            </form>
+<!-- ================= LOGIN ================= -->
+
+<div id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="logo">
+            <div class="logo-mark">A</div>
+            <h1>AGORA MUN</h1>
+            <p>Chair Portal</p>
         </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label>Username</label>
+                <input
+                    id="username"
+                    class="form-control"
+                    type="text"
+                    placeholder="Chair username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input
+                    id="password"
+                    class="form-control"
+                    type="password"
+                    placeholder="Password"
+                    required
+                >
+            </div>
+
+            <button class="login-btn" type="submit">
+                Sign In
+            </button>
+
+            <div id="loginError" class="login-error">
+                Invalid username or password.
+            </div>
+
+        </form>
+
     </div>
 
-    <!-- MAIN APP HEADER -->
-    <header>
-        <div class="logo-area">
-            <i class="fa-solid fa-gavel"></i>
-            <h1>AGORA MUN <span>(AGOMUN)</span></h1>
+</div>
+
+
+<!-- ================= APP ================= -->
+
+<div id="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="side-logo">
+            <strong>AGORA MUN</strong>
+            <small>Chair Portal</small>
         </div>
 
-        <nav>
-            <button class="nav-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard</button>
-            <button class="nav-btn" onclick="switchTab('rollcall')"><i class="fa-solid fa-clipboard-user"></i> Roll Call</button>
-            <button class="nav-btn" onclick="switchTab('voting')"><i class="fa-solid fa-check-to-slot"></i> Voting</button>
-            <button class="nav-btn" onclick="switchTab('evaluation')"><i class="fa-solid fa-star"></i> Evaluation</button>
-        </nav>
+        <button class="nav-btn active" data-page="dashboard">
+            <span>⌂</span> Dashboard
+        </button>
 
-        <div class="user-info">
-            <span class="chair-badge" id="activeChairBadge"><i class="fa-solid fa-user-shield"></i> Chair</span>
-            <button class="btn btn-secondary" onclick="logout()" style="padding: 6px 12px; font-size: 0.85rem;">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
+        <button class="nav-btn" data-page="rollcall">
+            <span>✓</span> Roll Call
+        </button>
+
+        <button class="nav-btn" data-page="motions">
+            <span>⚑</span> Motions
+        </button>
+
+        <button class="nav-btn" data-page="gsl">
+            <span>🎤</span> GSL Speakers
+        </button>
+
+        <button class="nav-btn" data-page="timer">
+            <span>⏱</span> Timer
+        </button>
+
+        <button class="nav-btn" data-page="evaluation">
+            <span>★</span> Evaluation
+        </button>
+
+        <div class="sidebar-bottom">
+            <button class="logout" id="logoutBtn">
+                Log Out
             </button>
         </div>
-    </header>
 
-    <main>
-        <!-- DASHBOARD TAB -->
-        <div id="dashboard" class="tab-content active">
-            <div class="grid-2">
-                <!-- TIMER CARD -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fa-solid fa-stopwatch"></i> Speech Timer</div>
-                    </div>
-                    <div class="timer-display" id="timerDisplay">01:00</div>
-                    <div class="timer-controls">
-                        <button class="btn" id="startBtn" onclick="startTimer()"><i class="fa-solid fa-play"></i> Start</button>
-                        <button class="btn btn-secondary" onclick="pauseTimer()"><i class="fa-solid fa-pause"></i> Pause</button>
-                        <button class="btn btn-secondary" onclick="resetTimer()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
-                    </div>
-                    <div class="timer-manual">
-                        <input type="number" id="manualMin" min="0" max="60" value="1">
-                        <span>:</span>
-                        <input type="number" id="manualSec" min="0" max="59" value="0">
-                        <button class="btn btn-secondary" onclick="setManualTime()">Set</button>
-                    </div>
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div style="display:flex;align-items:center;gap:12px;">
+                <button class="mobile-menu" id="mobileMenu">☰</button>
+                <div class="top-title" id="topTitle">
+                    Dashboard
+                </div>
+            </div>
+
+            <div class="chair-info">
+                <div>
+                    <strong id="chairName">Chair</strong>
+                    <small style="display:block;color:var(--muted);">
+                        Chair
+                    </small>
                 </div>
 
-                <!-- MOTIONS CARD -->
+                <div class="avatar">C</div>
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+            <!-- ================= DASHBOARD ================= -->
+
+            <section class="page active" id="dashboard">
+
+                <div class="page-heading">
+                    <h2>Committee Dashboard</h2>
+                    <p>Manage your committee session from one place.</p>
+                </div>
+
+                <div class="grid grid-4">
+
+                    <div class="card">
+                        <span class="stat-icon">👥</span>
+                        <div class="stat-title">Delegates</div>
+                        <div class="stat-number" id="statDelegates">0</div>
+                    </div>
+
+                    <div class="card">
+                        <span class="stat-icon">✓</span>
+                        <div class="stat-title">Present</div>
+                        <div class="stat-number" id="statPresent">0</div>
+                    </div>
+
+                    <div class="card">
+                        <span class="stat-icon">🎤</span>
+                        <div class="stat-title">GSL Speakers</div>
+                        <div class="stat-number" id="statSpeakers">0</div>
+                    </div>
+
+                    <div class="card">
+                        <span class="stat-icon">⚑</span>
+                        <div class="stat-title">Motions</div>
+                        <div class="stat-number" id="statMotions">0</div>
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="grid grid-2">
+
+                    <div class="card">
+                        <div class="section-title">Committee Information</div>
+
+                        <div class="form-group">
+                            <label>Committee</label>
+                            <input
+                                class="form-control"
+                                id="committeeName"
+                                value="General Assembly"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Session</label>
+                            <input
+                                class="form-control"
+                                id="sessionName"
+                                value="Session I"
+                            >
+                        </div>
+
+                        <button class="btn btn-primary" onclick="saveCommitteeInfo()">
+                            Save Information
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title">Quick Actions</div>
+
+                        <div class="button-row">
+
+                            <button
+                                class="btn btn-primary"
+                                onclick="openPage('rollcall')">
+                                Roll Call
+                            </button>
+
+                            <button
+                                class="btn btn-orange"
+                                onclick="openPage('gsl')">
+                                GSL
+                            </button>
+
+                            <button
+                                class="btn btn-light"
+                                onclick="openPage('timer')">
+                                Start Timer
+                            </button>
+
+                            <button
+                                class="btn btn-light"
+                                onclick="openPage('motions')">
+                                New Motion
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= ROLL CALL ================= -->
+
+            <section class="page" id="rollcall">
+
+                <div class="page-heading">
+                    <h2>Roll Call</h2>
+                    <p>Manage delegate attendance and voting status.</p>
+                </div>
+
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title"><i class="fa-solid fa-scroll"></i> Motions Log</div>
+
+                    <div class="button-row" style="margin-bottom:18px;">
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="addDelegate()">
+                            + Add Delegate
+                        </button>
+
+                        <button
+                            class="btn btn-orange"
+                            onclick="markAll('Present')">
+                            Mark All Present
+                        </button>
+
+                        <button
+                            class="btn btn-light"
+                            onclick="markAll('Present & Voting')">
+                            All Present & Voting
+                        </button>
+
                     </div>
-                    <div class="input-group">
-                        <input type="text" id="motionTopic">
-                        <input type="text" id="motionProposer" style="width: 40%;">
-                    </div>
-                    <div class="input-group">
-                        <button class="btn btn-success" style="width: 50%;" onclick="addMotion('Passed')"><i class="fa-solid fa-check"></i> Passed</button>
-                        <button class="btn btn-danger" style="width: 50%;" onclick="addMotion('Failed')"><i class="fa-solid fa-xmark"></i> Failed</button>
-                    </div>
-                    <div style="max-height: 180px; overflow-y: auto;">
+
+                    <div class="table-wrap">
+
                         <table>
+
                             <thead>
                                 <tr>
-                                    <th>Topic</th>
-                                    <th>Country</th>
+                                    <th>#</th>
+                                    <th>Delegation</th>
                                     <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="motionTableBody">
-                                <!-- Dynamic Content -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
-            <!-- GSL CARD -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title"><i class="fa-solid fa-list-ol"></i> General Speakers List (GSL)</div>
+                            <tbody id="delegateTable"></tbody>
+
+                        </table>
+
+                    </div>
+
                 </div>
-                <div class="input-group">
-                    <input type="text" id="gslDelegateName">
-                    <select id="gslYield" style="width: 30%;">
-                        <option value="None">None</option>
-                        <option value="Chair">To the Chair</option>
-                        <option value="Delegate">To another Delegate</option>
-                        <option value="Questions">To Questions</option>
-                    </select>
-                    <button class="btn" onclick="addGSLDelegate()"><i class="fa-solid fa-plus"></i> Add</button>
+
+            </section>
+
+
+            <!-- ================= MOTIONS ================= -->
+
+            <section class="page" id="motions">
+
+                <div class="page-heading">
+                    <h2>Motion Manager</h2>
+                    <p>Record and manage committee motions.</p>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Delegate / Country</th>
-                            <th>Yield Preference</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="gslTableBody">
-                        <!-- Dynamic Content -->
-                    </tbody>
-                </table>
-            </div>
+
+                <div class="card">
+
+                    <div class="button-row" style="margin-bottom:18px;">
+                        <button
+                            class="btn btn-primary"
+                            onclick="openMotionModal()">
+                            + Add Motion
+                        </button>
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Motion</th>
+                                    <th>Submitted By</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="motionTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= GSL ================= -->
+
+            <section class="page" id="gsl">
+
+                <div class="page-heading">
+                    <h2>GSL Speakers</h2>
+                    <p>Manage the General Speakers List.</p>
+                </div>
+
+                <div class="card">
+
+                    <div class="button-row" style="margin-bottom:18px;">
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="addSpeaker()">
+                            + Add Speaker
+                        </button>
+
+                        <button
+                            class="btn btn-orange"
+                            onclick="startNextSpeaker()">
+                            Start Next Speaker
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Delegation</th>
+                                    <th>Status</th>
+                                    <th>Speaking Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="speakerTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= TIMER ================= -->
+
+            <section class="page" id="timer">
+
+                <div class="page-heading">
+                    <h2>Committee Timer</h2>
+                    <p>Use manual or automatic timing.</p>
+                </div>
+
+                <div class="card timer-card">
+
+                    <div class="timer-settings">
+
+                        <div class="form-group">
+
+                            <label>Timer Mode</label>
+
+                            <select
+                                id="timerMode"
+                                class="form-control"
+                                onchange="changeTimerMode()">
+
+                                <option value="automatic">
+                                    Automatic
+                                </option>
+
+                                <option value="manual">
+                                    Manual
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div id="automaticSettings">
+
+                            <div class="form-group">
+
+                                <label>Timer Type</label>
+
+                                <select
+                                    id="timerType"
+                                    class="form-control"
+                                    onchange="setPresetTimer()">
+
+                                    <option value="gsl">
+                                        GSL — 90 seconds
+                                    </option>
+
+                                    <option value="mod">
+                                        Moderated Caucus — 60 seconds
+                                    </option>
+
+                                    <option value="unmod">
+                                        Unmoderated Caucus — 10 minutes
+                                    </option>
+
+                                    <option value="custom">
+                                        Custom
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div id="manualSettings" style="display:none;">
+
+                            <div class="grid grid-2">
+
+                                <div class="form-group">
+                                    <label>Minutes</label>
+                                    <input
+                                        id="manualMinutes"
+                                        class="form-control"
+                                        type="number"
+                                        min="0"
+                                        value="1"
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Seconds</label>
+                                    <input
+                                        id="manualSeconds"
+                                        class="form-control"
+                                        type="number"
+                                        min="0"
+                                        max="59"
+                                        value="30"
+                                    >
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="timer-display" id="timerDisplay">
+                        01:30
+                    </div>
+
+                    <div class="timer-status" id="timerStatus">
+                        Ready
+                    </div>
+
+                    <br>
+
+                    <div class="button-row" style="justify-content:center;">
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="startTimer()">
+                            ▶ Start
+                        </button>
+
+                        <button
+                            class="btn btn-light"
+                            onclick="pauseTimer()">
+                            ⏸ Pause
+                        </button>
+
+                        <button
+                            class="btn btn-orange"
+                            onclick="resetTimer()">
+                            ↻ Reset
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= EVALUATION ================= -->
+
+            <section class="page" id="evaluation">
+
+                <div class="page-heading">
+                    <h2>Delegate Evaluation</h2>
+                    <p>Evaluate delegates based on committee performance.</p>
+                </div>
+
+                <div class="card">
+
+                    <div class="grid grid-2">
+
+                        <div class="form-group">
+
+                            <label>Delegation</label>
+
+                            <select
+                                id="evaluationDelegate"
+                                class="form-control"
+                                onchange="loadEvaluation()">
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <div class="section-title">
+                        Evaluation Criteria
+                    </div>
+
+                    <div class="score-grid">
+
+                        <label>Research</label>
+                        <input class="score-input score" type="number" min="0" max="10" value="0">
+
+                        <label>Public Speaking</label>
+                        <input class="score-input score" type="number" min="0" max="10" value="0">
+
+                        <label>Diplomacy</label>
+                        <input class="score-input score" type="number" min="0" max="10" value="0">
+
+                        <label>Negotiation</label>
+                        <input class="score-input score" type="number" min="0" max="10" value="0">
+
+                        <label>Resolution Writing</label>
+                        <input class="score-input score" type="number" min="0" max="10" value="0">
+
+                        <label>Participation</label>
+                        <input class="score-input score" type="number" min="0" max="10" value="0">
+
+                    </div>
+
+                    <br>
+
+                    <div class="form-group">
+                        <label>Chair Notes</label>
+
+                        <textarea
+                            id="evaluationNotes"
+                            class="form-control"
+                            rows="5"
+                            placeholder="Write your observations...">
+                        </textarea>
+
+                    </div>
+
+                    <div class="total-score">
+                        Total:
+                        <span id="totalScore">0 / 60</span>
+                        &nbsp; | &nbsp;
+                        Average:
+                        <span id="averageScore">0.00 / 10</span>
+                    </div>
+
+                    <br>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="saveEvaluation()">
+                        Save Evaluation
+                    </button>
+
+                </div>
+
+            </section>
+
         </div>
 
-        <!-- ROLL CALL TAB -->
-        <div id="rollcall" class="tab-content">
-            <div class="grid-4" style="margin-bottom: 1.5rem;">
-                <div class="stat-card">
-                    <div class="stat-label">Total Delegates</div>
-                    <div class="stat-value" id="statTotal">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Present</div>
-                    <div class="stat-value" style="color: var(--green-success);" id="statPresent">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Present & Voting</div>
-                    <div class="stat-value" style="color: var(--accent-orange);" id="statPV">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Absent</div>
-                    <div class="stat-value" style="color: var(--red-fail);" id="statAbsent">0</div>
-                </div>
+    </main>
+
+</div>
+
+
+<!-- ================= MOTION MODAL ================= -->
+
+<div class="modal" id="motionModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+            <h3>Add Motion</h3>
+
+            <button
+                class="close"
+                onclick="closeModal('motionModal')">
+                ×
+            </button>
+        </div>
+
+        <div class="form-group">
+
+            <label>Motion Type</label>
+
+            <select id="motionType" class="form-control">
+
+                <option>Moderated Caucus</option>
+                <option>Unmoderated Caucus</option>
+                <option>Motion to Open Debate</option>
+                <option>Motion to Close Debate</option>
+                <option>Motion to Suspend the Meeting</option>
+                <option>Other</option>
+
+            </select>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Submitted By</label>
+
+            <input
+                id="motionSubmitter"
+                class="form-control"
+                placeholder="Delegation">
+
+        </div>
+
+        <div class="grid grid-2">
+
+            <div class="form-group">
+
+                <label>Duration (minutes)</label>
+
+                <input
+                    id="motionDuration"
+                    class="form-control"
+                    type="number"
+                    min="0"
+                    value="10">
+
             </div>
 
-            <div class="card">
-   
+            <div class="form-group">
+
+                <label>Speaking Time (seconds)</label>
+
+                <input
+                    id="motionSpeaking"
+                    class="form-control"
+                    type="number"
+                    min="0"
+                    value="60">
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Description</label>
+
+            <textarea
+                id="motionDescription"
+                class="form-control"
+                rows="4"
+                placeholder="Motion details...">
+            </textarea>
+
+        </div>
+
+        <div class="button-row">
+
+            <button
+                class="btn btn-primary"
+                onclick="saveMotion()">
+                Save Motion
+            </button>
+
+            <button
+                class="btn btn-light"
+                onclick="closeModal('motionModal')">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+/* ================= STORAGE ================= */
+
+const defaultData = {
+    delegates: [],
+    motions: [],
+    speakers: [],
+    evaluations: {},
+    committee: "General Assembly",
+    session: "Session I"
+};
+
+let data =
+    JSON.parse(localStorage.getItem("agoraChairData"))
+    || defaultData;
+
+function saveData(){
+    localStorage.setItem(
+        "agoraChairData",
+        JSON.stringify(data)
+    );
+}
+
+
+/* ================= LOGIN ================= */
+
+const loginForm =
+    document.getElementById("loginForm");
+
+loginForm.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if(
+        username === "chair" &&
+        password === "agora2026"
+    ){
+
+        localStorage.setItem(
+            "agoraChairLoggedIn",
+            "true"
+        );
+
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("app").style.display="block";
+
+        initialize();
+
+    }else{
+
+        document.getElementById("loginError").style.display="block";
+
+    }
+
+});
+
+
+function checkLogin(){
+
+    if(
+        localStorage.getItem("agoraChairLoggedIn")
+        === "true"
+    ){
+
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("app").style.display="block";
+
+        initialize();
+
+    }
+
+}
+
+
+document.getElementById("logoutBtn")
+.addEventListener("click",function(){
+
+    localStorage.removeItem("agoraChairLoggedIn");
+
+    location.reload();
+
+});
+
+
+/* ================= NAVIGATION ================= */
+
+const navButtons =
+    document.querySelectorAll(".nav-btn");
+
+navButtons.forEach(button => {
+
+    button.addEventListener("click",function(){
+
+        openPage(
+            this.dataset.page
+        );
+
+    });
+
+});
+
+
+function openPage(page){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(p =>
+            p.classList.remove("active")
+        );
+
+    document
+        .getElementById(page)
+        .classList.add("active");
+
+    navButtons.forEach(btn =>
+        btn.classList.remove("active")
+    );
+
+    const active =
+        document.querySelector(
+            `.nav-btn[data-page="${page}"]`
+        );
+
+    if(active)
+        active.classList.add("active");
+
+    const titles = {
+
+        dashboard:"Dashboard",
+        rollcall:"Roll Call",
+        motions:"Motion Manager",
+        gsl:"GSL Speakers",
+        timer:"Committee Timer",
+        evaluation:"Delegate Evaluation"
+
+    };
+
+    document.getElementById("topTitle")
+        .textContent = titles[page];
+
+    document
+        .getElementById("sidebar")
+        .classList.remove("open");
+
+    updateStats();
+
+}
+
+
+/* ================= MOBILE ================= */
+
+document
+    .getElementById("mobileMenu")
+    .addEventListener("click",function(){
+
+        document
+            .getElementById("sidebar")
+            .classList.toggle("open");
+
+    });
+
+
+/* ================= INITIALIZE ================= */
+
+function initialize(){
+
+    document.getElementById("committeeName").value =
+        data.committee;
+
+    document.getElementById("sessionName").value =
+        data.session;
+
+    renderDelegates();
+    renderMotions();
+    renderSpeakers();
+    populateEvaluationDelegates();
+    updateStats();
+    updateTimerDisplay();
+
+}
+
+
+/* ================= COMMITTEE ================= */
+
+function saveCommitteeInfo(){
+
+    data.committee =
+        document.getElementById("committeeName").value;
+
+    data.session =
+        document.getElementById("sessionName").value;
+
+    saveData();
+
+    alert("Committee information saved.");
+
+}
+
+
+/* ================= ROLL CALL ================= */
+
+function addDelegate(){
+
+    const name =
+        prompt("Enter delegation name:");
+
+    if(!name) return;
+
+    data.delegates.push({
+
+        id:Date.now(),
+        name:name,
+        status:"Present"
+
+    });
+
+    saveData();
+
+    renderDelegates();
+    updateStats();
+    populateEvaluationDelegates();
+
+}
+
+
+function renderDelegates(){
+
+    const table =
+        document.getElementById("delegateTable");
+
+    table.innerHTML="";
+
+    data.delegates.forEach((delegate,index)=>{
+
+        let statusClass="present";
+
+        if(delegate.status==="Present & Voting")
+            statusClass="voting";
+
+        if(delegate.status==="Absent")
+            statusClass="absent";
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${index+1}</td>
+
+                <td>
+                    <strong>${escapeHTML(delegate.name)}</strong>
+                </td>
+
+                <td>
+                    <span class="status ${statusClass}">
+                        ${delegate.status}
+                    </span>
+                </td>
+
+                <td>
+
+                    <div class="button-row">
+
+                        <button
+                            class="btn btn-small btn-primary"
+                            onclick="setStatus(${delegate.id},'Present')">
+                            Present
+                        </button>
+
+                        <button
+                            class="btn btn-small btn-orange"
+                            onclick="setStatus(${delegate.id},'Present & Voting')">
+                            P&V
+                        </button>
+
+                        <button
+                            class="btn btn-small btn-light"
+                            onclick="setStatus(${delegate.id},'Absent')">
+                            Absent
+                        </button>
+
+                        <button
+                            class="btn btn-small btn-danger"
+                            onclick="deleteDelegate(${delegate.id})">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+function setStatus(id,status){
+
+    const delegate =
+        data.delegates.find(d=>d.id===id);
+
+    if(!delegate) return;
+
+    delegate.status=status;
+
+    saveData();
+
+    renderDelegates();
+    updateStats();
+
+}
+
+
+function markAll(status){
+
+    data.delegates.forEach(d=>{
+        d.status=status;
+    });
+
+    saveData();
+
+    renderDelegates();
+    updateStats();
+
+}
+
+
+function deleteDelegate(id){
+
+    if(!confirm("Delete this delegation?"))
+        return;
+
+    data.delegates =
+        data.delegates.filter(d=>d.id!==id);
+
+    saveData();
+
+    renderDelegates();
+    updateStats();
+    populateEvaluationDelegates();
+
+}
+
+
+/* ================= MOTIONS ================= */
+
+function openMotionModal(){
+
+    document
+        .getElementById("motionModal")
+        .classList.add("show");
+
+}
+
+
+function closeModal(id){
+
+    document
+        .getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+function saveMotion(){
+
+    const motion = {
+
+        id:Date.now(),
+
+        type:
+            document.getElementById("motionType").value,
+
+        submitter:
+            document.getElementById("motionSubmitter").value
+            || "Unknown",
+
+        duration:
+            document.getElementById("motionDuration").value,
+
+        speaking:
+            document.getElementById("motionSpeaking").value,
+
+        description:
+            document.getElementById("motionDescription").value,
+
+        status:"Pending"
+
+    };
+
+    data.motions.push(motion);
+
+    saveData();
+
+    renderMotions();
+    updateStats();
+
+    closeModal("motionModal");
+
+    document.getElementById("motionSubmitter").value="";
+    document.getElementById("motionDescription").value="";
+
+}
+
+
+function renderMotions(){
+
+    const table =
+        document.getElementById("motionTable");
+
+    table.innerHTML="";
+
+    data.motions.forEach((motion,index)=>{
+
+        let statusClass="waiting";
+
+        if(motion.status==="Approved")
+            statusClass="present";
+
+        if(motion.status==="Rejected")
+            statusClass="absent";
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${index+1}</td>
+
+                <td>
+                    <strong>${escapeHTML(motion.type)}</strong>
+                    <br>
+                    <small style="color:var(--muted)">
+                        ${escapeHTML(motion.description || "")}
+                    </small>
+                </td>
+
+                <td>${escapeHTML(motion.submitter)}</td>
+
+                <td>
+                    ${motion.duration} min
+                    <br>
+                    <small>${motion.speaking}s speaking</small>
+                </td>
+
+                <td>
+                    <span class="status ${statusClass}">
+                        ${motion.status}
+                    </span>
+                </td>
+
+                <td>
+
+                    <div class="button-row">
+
+                        <button
+                            class="btn btn-small btn-primary"
+                            onclick="setMotionStatus(${motion.id},'Approved')">
+                            Approve
+                        </button>
+
+                        <button
+                            class="btn btn-small btn-danger"
+                            onclick="setMotionStatus(${motion.id},'Rejected')">
+                            Reject
+                        </button>
+
+                        <button
+                            class="btn btn-small btn-light"
+                            onclick="deleteMotion(${motion.id})">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+function setMotionStatus(id,status){
+
+    const motion =
+        data.motions.find(m=>m.id===id);
+
+    if(!motion) return;
+
+    motion.status=status;
+
+    saveData();
+    renderMotions();
+
+}
+
+
+function deleteMotion(id){
+
+    data.motions =
+        data.motions.filter(m=>m.id!==id);
+
+    saveData();
+
+    renderMotions();
+    updateStats();
+
+}
+
+
+/* ================= GSL ================= */
+
+function addSpeaker(){
+
+    const name =
+        prompt("Enter delegation name:");
+
+    if(!name) return;
+
+    const time =
+        prompt(
+            "Speaking time in seconds:",
+            "90"
+        );
+
+    data.speakers.push({
+
+        id:Date.now(),
+        name:name,
+        time:Number(time)||90,
+        status:"Waiting"
+
+    });
+
+    saveData();
+
+    renderSpeakers();
+    updateStats();
+
+}
+
+
+function renderSpeakers(){
+
+    const table =
+        document.getElementById("speakerTable");
+
+    table.innerHTML="";
+
+    data.speakers.forEach((speaker,index)=>{
+
+        let statusClass="waiting";
+
+        if(speaker.status==="Speaking")
+            statusClass="speaking";
+
+        if(speaker.status==="Done")
+            statusClass="done";
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${index+1}</td>
+
+                <td>
+                    <strong>${escapeHTML(speaker.name)}</strong>
+                </td>
+
+                <td>
+                    <span class="status ${statusClass}">
+                        ${speaker.status}
+                    </span>
+                </td>
+
+                <td>
+                    ${formatTime(speaker.time)}
+                </td>
+
+                <td>
+
+                    <div class="button-row">
+
+                        <button
+                            class="btn btn-small btn-primary"
+                            onclick="startSpeaker(${speaker.id})">
+                            Start
+                        </button>
+
+                        <button
+                            class="btn btn-small btn-light"
+                            onclick="markSpeakerDone(${speaker.id})">
+                            Done
+                        </button>
+
+                        <button
+                            class="btn btn-small btn-danger"
+                            onclick="deleteSpeaker(${speaker.id})">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+function startSpeaker(id){
+
+    data.speakers.forEach(s=>{
+
+        if(s.status==="Speaking")
+            s.status="Done";
+
+    });
+
+    const speaker =
+        data.speakers.find(s=>s.id===id);
+
+    if(!speaker) return;
+
+    speaker.status="Speaking";
+
+    saveData();
+
+    renderSpeakers();
+
+    setTimerSeconds(speaker.time);
+
+    openPage("timer");
+
+    startTimer();
+
+}
+
+
+function startNextSpeaker(){
+
+    const next =
+        data.speakers.find(
+            s=>s.status==="Waiting"
+        );
+
+    if(!next){
+
+        alert("There are no waiting speakers.");
+
+        return;
+
+    }
+
+    startSpeaker(next.id);
+
+}
+
+
+function markSpeakerDone(id){
+
+    const speaker =
+        data.speakers.find(s=>s.id===id);
+
+    if(!speaker) return;
+
+    speaker.status="Done";
+
+    saveData();
+
+    renderSpeakers();
+
+}
+
+
+function deleteSpeaker(id){
+
+    data.speakers =
+        data.speakers.filter(s=>s.id!==id);
+
+    saveData();
+
+    renderSpeakers();
+    updateStats();
+
+}
+
+
+/* ================= TIMER ================= */
+
+let timerSeconds = 90;
+let timerInterval = null;
+let timerRunning = false;
+
+
+function formatTime(seconds){
+
+    const min =
+        Math.floor(seconds/60)
+        .toString()
+        .padStart(2,"0");
+
+    const sec =
+        (seconds%60)
+        .toString()
+        .padStart(2,"0");
+
+    return `${min}:${sec}`;
+
+}
+
+
+function updateTimerDisplay(){
+
+    const display =
+        document.getElementById("timerDisplay");
+
+    display.textContent =
+        formatTime(timerSeconds);
+
+    display.classList.remove(
+        "warning",
+        "finished"
+    );
+
+    if(timerSeconds<=10 && timerSeconds>0)
+        display.classList.add("warning");
+
+    if(timerSeconds===0)
+        display.classList.add("finished");
+
+}
+
+
+function setTimerSeconds(seconds){
+
+    pauseTimer();
+
+    timerSeconds=Number(seconds)||0;
+
+    updateTimerDisplay();
+
+    document.getElementById("timerStatus")
+        .textContent="Ready";
+
+}
+
+
+function setPresetTimer(){
+
+    const type =
+        document.getElementById("timerType").value;
+
+    if(type==="gsl")
+        setTimerSeconds(90);
+
+    if(type==="mod")
+        setTimerSeconds(60);
+
+    if(type==="unmod")
+        setTimerSeconds(600);
+
+    if(type==="custom"){
+
+        const custom =
+            prompt(
+                "Enter timer duration in seconds:",
+                "120"
+            );
+
+        setTimerSeconds(
+            Number(custom)||0
+        );
+
+    }
+
+}
+
+
+function changeTimerMode(){
+
+    const mode =
+        document.getElementById("timerMode").value;
+
+    if(mode==="manual"){
+
+        document
+            .getElementById("manualSettings")
+            .style.display="block";
+
+        document
+            .getElementById("automaticSettings")
+            .style.display="none";
+
+    }else{
+
+        document
+            .getElementById("manualSettings")
+            .style.display="none";
+
+        document
+            .getElementById("automaticSettings")
+            .style.display="block";
+
+        setPresetTimer();
+
+    }
+
+}
+
+
+function startTimer(){
+
+    if(timerRunning)
+        return;
+
+    if(
+        document.getElementById("timerMode").value
+        ==="manual"
+        &&
+        timerSeconds===0
+    ){
+
+        const min =
+            Number(
+                document.getElementById("manualMinutes").value
+            )||0;
+
+        const sec =
+            Number(
+                document.getElementById("manualSeconds").value
+            )||0;
+
+        timerSeconds =
+            min*60+sec;
+
+    }
+
+    if(timerSeconds<=0)
+        return;
+
+    timerRunning=true;
+
+    document.getElementById("timerStatus")
+        .textContent="Running";
+
+    timerInterval =
+        setInterval(()=>{
+
+            timerSeconds--;
+
+            updateTimerDisplay();
+
+            if(timerSeconds<=0){
+
+                pauseTimer();
+
+                document.getElementById("timerStatus")
+                    .textContent="Time's Up!";
+
+                playAlarm();
+
+            }
+
+        },1000);
+
+}
+
+
+function pauseTimer(){
+
+    clearInterval(timerInterval);
+
+    timerInterval=null;
+    timerRunning=false;
+
+    if(
+        document.getElementById("timerStatus")
+    )
+        document.getElementById("timerStatus")
+            .textContent="Paused";
+
+}
+
+
+function resetTimer(){
+
+    pauseTimer();
+
+    const mode =
+        document.getElementById("timerMode").value;
+
+    if(mode==="manual"){
+
+        const min =
+            Number(
+                document.getElementById("manualMinutes").value
+            )||0;
+
+        const sec =
+            Number(
+                document.getElementById("manualSeconds").value
+            )||0;
+
+        timerSeconds=min*60+sec;
+
+    }else{
+
+        setPresetTimer();
+        return;
+
+    }
+
+    updateTimerDisplay();
+
+    document.getElementById("timerStatus")
+        .textContent="Ready";
+
+}
+
+
+function playAlarm(){
+
+    try{
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        const ctx =
+            new AudioContext();
+
+        const oscillator =
+            ctx.createOscillator();
+
+        const gain =
+            ctx.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        oscillator.frequency.value=880;
+
+        gain.gain.setValueAtTime(
+            .25,
+            ctx.currentTime
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            ctx.currentTime+.6
+        );
+
+    }catch(e){}
+
+}
+
+
+/* ================= EVALUATION ================= */
+
+function populateEvaluationDelegates(){
+
+    const select =
+        document.getElementById(
+            "evaluationDelegate"
+        );
+
+    const current=select.value;
+
+    select.innerHTML="";
+
+    data.delegates.forEach(delegate=>{
+
+        select.innerHTML += `
+
+            <option value="${delegate.id}">
+                ${escapeHTML(delegate.name)}
+            </option>
+
+        `;
+
+    });
+
+    if(current)
+        select.value=current;
+
+    calculateScore();
+
+}
+
+
+function loadEvaluation(){
+
+    const id =
+        document.getElementById(
+            "evaluationDelegate"
+        ).value;
+
+    if(!id)
+        return;
+
+    const evaluation =
+        data.evaluations[id];
+
+    const inputs =
+        document.querySelectorAll(".score");
+
+    inputs.forEach((input,index)=>{
+
+        input.value =
+            evaluation?.scores?.[index] ?? 0;
+
+    });
+
+    document.getElementById("evaluationNotes")
+        .value =
+        evaluation?.notes || "";
+
+    calculateScore();
+
+}
+
+
+function saveEvaluation(){
+
+    const id =
+        document.getElementById(
+            "evaluationDelegate"
+        ).value;
+
+    if(!id){
+
+        alert("Select a delegation first.");
+
+        return;
+
+    }
+
+    const scores =
+        [...document.querySelectorAll(".score")]
+        .map(input=>{
+
+            let value=Number(input.value)||0;
+
+            if(value<0) value=0;
+            if(value>10) value=10;
+
+            input.value=value;
+
+            return value;
+
+        });
+
+    data.evaluations[id]={
+
+        scores:scores,
+
+        notes:
+            document.getElementById(
+                "evaluationNotes"
+            ).value,
+
+        updated:
+            new Date().toISOString()
+
+    };
+
+    saveData();
+
+    calculateScore();
+
+    alert("Evaluation saved.");
+
+}
+
+
+function calculateScore(){
+
+    const inputs =
+        document.querySelectorAll(".score");
+
+    let total=0;
+
+    inputs.forEach(input=>{
+
+        total+=
+            Math.min(
+                10,
+                Math.max(
+                    0,
+                    Number(input.value)||0
+                )
+            );
+
+    });
+
+    const average =
+        inputs.length
+        ? total/inputs.length
+        : 0;
+
+    document.getElementById("totalScore")
+        .textContent=
+        `${total} / 60`;
+
+    document.getElementById("averageScore")
+        .textContent=
+        `${average.toFixed(2)} / 10`;
+
+}
+
+
+document
+    .querySelectorAll(".score")
+    .forEach(input=>{
+
+        input.addEventListener(
+            "input",
+            calculateScore
+        );
+
+    });
+
+
+/* ================= STATISTICS ================= */
+
+function updateStats(){
+
+    document.getElementById("statDelegates")
+        .textContent=data.delegates.length;
+
+    document.getElementById("statPresent")
+        .textContent=
+        data.delegates.filter(
+            d=>d.status!=="Absent"
+        ).length;
+
+    document.getElementById("statSpeakers")
+        .textContent=data.speakers.length;
+
+    document.getElementById("statMotions")
+        .textContent=data.motions.length;
+
+}
+
+
+/* ================= SECURITY HELPER ================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= START ================= */
+
+checkLogin();
+
+</script>
+
+</body>
+    </html>
