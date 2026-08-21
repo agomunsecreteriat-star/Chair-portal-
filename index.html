@@ -1,94 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGORA MUN — Chair Portal</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGORA MUN — Chair Portal</title>
+<style>
+:root{
+  --green:#173b32;
+  --green2:#28584b;
+  --cream:#f7e8d3;
+  --cream2:#fffaf2;
+  --orange:#d98b55;
+  --orange2:#c97742;
+  --text:#24312d;
+  --muted:#718078;
+  --border:#dfd1bd;
+  --red:#b94d47;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  min-height:100vh;
+}
+
+/* ================= LOGIN ================= */
+
+#loginScreen{
+  position:fixed;
+  inset:0;
+  background:var(--green);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:99999;
+}
+
+.loginBox{
+  width:100%;
+  max-width:400px;
+  background:var(--cream2);
+  padding:35px;
+  border-radius:20px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.3);
+}
+
+.logo{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.logoCircle{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:var(--orange);
+  color:var(--green);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:auto auto 15px;
+  font-size:30px;
+  font-weight:900;
+}
+
+.logo h1{
+  color:var(--green);
+  letter-spacing:2px;
+}
+
+.logo p{
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.formGroup{
+  margin-bottom:16px;
+}
+
+.formGroupInline{
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:white;
+  outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--orange);
+}
+
+.loginButton, .btn{
+  width:100%;
+  padding:12px;
+  background:var(--orange);
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+.btn-inline{
+  width:auto;
+  padding:0 15px;
+}
+
+.loginButton:hover, .btn:hover{
+  background:var(--orange2);
+}
+
+/* ================= DASHBOARD ================= */
+
+#app{
+  display:none;
+  padding:20px;
+  max-width:1200px;
+  margin:auto;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:var(--green);
+  color:var(--cream);
+  padding:15px 25px;
+  border-radius:15px;
+  margin-bottom:20px;
+}
+
+.headerTitle{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.logoutBtn{
+  background:var(--red);
+  color:white;
+  border:none;
+  padding:8px 15px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap:20px;
+}
+
+.card{
+  background:var(--cream2);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:20px;
+}
+
+.card h2{
+  font-size:18px;
+  color:var(--green);
+  margin-bottom:15px;
+  border-bottom:2px solid var(--border);
+  padding-bottom:8px;
+}
+
+/* Timer */
+.timerDisplay{
+  font-size:48px;
+  font-weight:bold;
+  text-align:center;
+  color:var(--green);
+  margin:15px 0;
+  font-family:monospace;
+}
+
+.timerControls{
+  display:flex;
+  gap:10px;
+}
+
+.timerControls button{
+  flex:1;
+}
+
+.btn-secondary{ background:var(--green2); }
+.btn-danger{ background:var(--red); }
+
+/* Lists */
+.list{
+  list-style:none;
+  max-height:200px;
+  overflow-y:auto;
+  margin-bottom:15px;
+}
+
+.list li{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 12px;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:6px;
+}
+
+.list li button{
+  background:var(--red);
+  color:white;
+  border:none;
+  padding:4px 8px;
+  border-radius:4px;
+  cursor:pointer;
+}
+</style>
 </head>
 <body>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen">
-        <div class="loginBox">
-            <div class="logo">
-                <div class="logoCircle">A</div>
-                <h1>AGORA MUN</h1>
-                <p>Chairperson Portal</p>
-            </div>
-            <form id="loginForm">
-                <div class="formGroup">
-                    <label for="committee">Committee</label>
-                    <select id="committee" required>
-                        <option value="">Select Committee...</option>
-                        <option value="DISEC">DISEC</option>
-                        <option value="UNHCR">UNHCR</option>
-                        <option value="ECOFIN">ECOFIN</option>
-                        <option value="SECURITY COUNCIL">UNSC</option>
-                    </select>
-                </div>
-                <div class="formGroup">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Username (chair)" required>
-                </div>
-                <div class="formGroup">
-                    <label for="passcode">Chair Passcode</label>
-                    <input type="password" id="passcode" placeholder="Passcode (agora2026)" required>
-                </div>
-                <button type="submit" class="loginButton">Enter Portal</button>
-            </form>
-        </div>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="loginBox">
+    <div class="logo">
+      <div class="logoCircle">A</div>
+      <h1>AGORA MUN</h1>
+      <p>Chairperson Portal</p>
+    </div>
+    <form id="loginForm">
+      <div class="formGroup">
+        <label for="committee">Committee</label>
+        <select id="committee" required>
+          <option value="">Select Committee...</option>
+          <option value="DISEC">DISEC</option>
+          <option value="UNHCR">UNHCR</option>
+          <option value="ECOFIN">ECOFIN</option>
+          <option value="SECURITY COUNCIL">UNSC</option>
+        </select>
+      </div>
+      <div class="formGroup">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Username (chair)" required>
+      </div>
+      <div class="formGroup">
+        <label for="passcode">Chair Passcode</label>
+        <input type="password" id="passcode" placeholder="Passcode (agora2026)" required>
+      </div>
+      <button type="submit" class="loginButton">Enter Portal</button>
+    </form>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div id="app">
+  <header>
+    <div class="headerTitle">AGORA MUN — <span id="displayCommittee">Committee</span></div>
+    <button class="logoutBtn" id="logoutBtn">Exit Portal</button>
+  </header>
+
+  <div class="grid">
+    <!-- TIMER CARD -->
+    <div class="card">
+      <h2>Session Timer</h2>
+      <div class="timerDisplay" id="timer">01:30</div>
+      <div class="timerControls">
+        <button class="btn" id="startTimerBtn">Start</button>
+        <button class="btn btn-secondary" id="pauseTimerBtn">Pause</button>
+        <button class="btn btn-danger" id="resetTimerBtn">Reset</button>
+      </div>
     </div>
 
-    <!-- MAIN DASHBOARD -->
-    <div id="app">
-        <header>
-            <div class="headerTitle">AGORA MUN — <span id="displayCommittee">Committee</span></div>
-            <button class="logoutBtn" id="logoutBtn">Exit Portal</button>
-        </header>
-
-        <div class="grid">
-            <!-- TIMER CARD -->
-            <div class="card">
-                <h2>Session Timer</h2>
-                <div class="timerDisplay" id="timer">01:30</div>
-                <div class="timerControls">
-                    <button class="btn" id="startTimerBtn">Start</button>
-                    <button class="btn btn-secondary" id="pauseTimerBtn">Pause</button>
-                    <button class="btn btn-danger" id="resetTimerBtn">Reset</button>
-                </div>
-            </div>
-
-            <!-- SPEAKERS LIST CARD -->
-            <div class="card">
-                <h2>General Speakers List (GSL)</h2>
-                <div class="formGroupInline">
-                    <input type="text" id="speakerInput" placeholder="Country name...">
-                    <button class="btn btn-inline" id="addSpeakerBtn">Add</button>
-                </div>
-                <ul class="list" id="speakersList"></ul>
-            </div>
-
-            <!-- VOTING CARD -->
-            <div class="card">
-                <h2>Voting Counter</h2>
-                <div class="formGroup">
-                    <label for="voteFavor">In Favor</label>
-                    <input type="number" id="voteFavor" value="0" min="0">
-                </div>
-                <div class="formGroup">
-                    <label for="voteAgainst">Against</label>
-                    <input type="number" id="voteAgainst" value="0" min="0">
-                </div>
-                <div class="formGroup">
-                    <label for="voteAbstain">Abstain</label>
-                    <input type="number" id="voteAbstain" value="0" min="0">
-                </div>
-                <button class="btn btn-secondary" id="resetVotesBtn">Reset Votes</button>
-            </div>
-        </div>
+    <!-- SPEAKERS LIST CARD -->
+    <div class="card">
+      <h2>General Speakers List (GSL)</h2>
+      <div class="formGroupInline">
+        <input type="text" id="speakerInput" placeholder="Country name...">
+        <button class="btn btn-inline" id="addSpeakerBtn">Add</button>
+      </div>
+      <ul class="list" id="speakersList"></ul>
     </div>
 
-    <script src="script.js"></script>
+    <!-- VOTING CARD -->
+    <div class="card">
+      <h2>Voting Counter</h2>
+      <div class="formGroup">
+        <label for="voteFavor">In Favor</label>
+        <input type="number" id="voteFavor" value="0" min="0">
+      </div>
+      <div class="formGroup">
+        <label for="voteAgainst">Against</label>
+        <input type="number" id="voteAgainst" value="0" min="0">
+      </div>
+      <div class="formGroup">
+        <label for="voteAbstain">Abstain</label>
+        <input type="number" id="voteAbstain" value="0" min="0">
+      </div>
+      <button class="btn btn-secondary" id="resetVotesBtn">Reset Votes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const VALID_USER = "chair";
+    const VALID_PASS = "agora2026";
+
+    const loginForm = document.getElementById('loginForm');
+    const loginScreen = document.getElementById('loginScreen');
+    const app = document.getElementById('app');
+    const displayCommittee = document.getElementById('displayCommittee');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    let timerInterval = null;
+    let timeLeft = 90;
+
+    // LOGIN
+    loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const user = document.getElementById('username').value.trim();
+        const pass = document.getElementById('passcode').value.trim();
+        const comm = document.getElementById('committee').value;
+
+        if (user === VALID_USER && pass === VALID_PASS) {
+            if (comm !== "") {
+                loginScreen.style.display = 'none';
+                app.style.display = 'block';
+                displayCommittee.innerText = comm;
+            } else {
+                alert("Please select a committee!");
+            }
+        } else {
+            alert("Invalid username or passcode!");
+        }
+    });
+
+    // LOGOUT
+    logoutBtn.addEventListener('click', function () {
+        location.reload();
+    });
+
+    // TIMER
+    const timerDisplay = document.getElementById('timer');
+    const startTimerBtn = document.getElementById('startTimerBtn');
+    const pauseTimerBtn = document.getElementById('pauseTimerBtn');
+    const resetTimerBtn = document.getElementById('resetTimerBtn');
+
+    function updateTimerDisplay() {
+        const min = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const sec = (timeLeft % 60).toString().padStart(2, '0');
+        timerDisplay.innerText = `${min}:${sec}`;
+    }
+
+    startTimerBtn.addEventListener('click', function () {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateTimerDisplay();
+            } else {
+                clearInterval(timerInterval);
+                alert("Time is up!");
+            }
+        }, 1000);
+    });
+
+    pauseTimerBtn.addEventListener('click', function () {
+        clearInterval(timerInterval);
+    });
+
+    resetTimerBtn.addEventListener('click', function () {
+        clearInterval(timerInterval);
+        timeLeft = 90;
+        updateTimerDisplay();
+    });
+
+    // SPEAKERS LIST
+    const addSpeakerBtn = document.getElementById('addSpeakerBtn');
+    const speakerInput = document.getElementById('speakerInput');
+    const speakersList = document.getElementById('speakersList');
+
+    addSpeakerBtn.addEventListener('click', function () {
+        const name = speakerInput.value.trim();
+        if (!name) return;
+
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${name}</span>`;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.innerText = "Remove";
+        removeBtn.addEventListener('click', function () {
+            li.remove();
+        });
+
+        li.appendChild(removeBtn);
+        speakersList.appendChild(li);
+        speakerInput.value = '';
+    });
+
+    // VOTING RESET
+    const resetVotesBtn = document.getElementById('resetVotesBtn');
+    resetVotesBtn.addEventListener('click', function () {
+        document.getElementById('voteFavor').value = 0;
+        document.getElementById('voteAgainst').value = 0;
+        document.getElementById('voteAbstain').value = 0;
+    });
+});
+</script>
 </body>
 </html>
