@@ -19,6 +19,7 @@
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
         }
         .nav-btn.active {
             background: var(--accent-orange);
@@ -58,6 +59,38 @@
         .eval-table th {
             background: var(--dark-green);
             color: var(--accent-orange);
+        }
+
+        /* Roll Call Stilleri */
+        .rollcall-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-orange);
+        }
+        .stat-box {
+            flex: 1;
+            text-align: center;
+        }
+        .stat-box span {
+            display: block;
+            font-size: 0.75rem;
+            color: #d1cfc7;
+        }
+        .stat-box strong {
+            font-size: 1.2rem;
+            color: var(--accent-orange);
+        }
+        .status-select {
+            background: var(--dark-green);
+            color: var(--warm-cream);
+            border: 1px solid var(--accent-orange);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -105,9 +138,10 @@
             <button onclick="logout()" class="logout-btn">Logout</button>
         </header>
 
-        <!-- SEKMELER (SAYFA GEÇİŞİ) -->
+        <!-- SEKMELER -->
         <div class="nav-tabs">
             <button id="tab-dash" class="nav-btn active" onclick="switchTab('dashboard')">📌 Chair Dashboard</button>
+            <button id="tab-rollcall" class="nav-btn" onclick="switchTab('rollcall')">📋 Roll Call</button>
             <button id="tab-eval" class="nav-btn" onclick="switchTab('evaluation')">⭐ Delegate Evaluation</button>
         </div>
 
@@ -155,11 +189,63 @@
             </div>
         </div>
 
-        <!-- SAYFA 2: EVALUATION (DELEGE PUANLAMA) -->
+        <!-- SAYFA 2: ROLL CALL (YOKLAMA) -->
+        <div id="page-rollcall" style="display: none;">
+            <div class="eval-grid">
+                <section class="card">
+                    <h2>📋 Add Delegate for Roll Call</h2>
+                    <form onsubmit="addRollCallDelegate(event)" class="eval-form">
+                        <label>Delegate / Country Name</label>
+                        <input type="text" id="rc-name" placeholder="e.g. Delegate of Canada" required>
+                        
+                        <label>Status</label>
+                        <select id="rc-status" class="status-select" style="padding: 8px;">
+                            <option value="Present">Present</option>
+                            <option value="Present & Voting">Present & Voting</option>
+                            <option value="Absent">Absent</option>
+                        </select>
+
+                        <button type="submit" style="margin-top: 15px;">Add Delegate</button>
+                    </form>
+                </section>
+
+                <section class="card">
+                    <h2>📊 Roll Call Board</h2>
+                    
+                    <div class="rollcall-stats">
+                        <div class="stat-box">
+                            <span>Total Delegates</span>
+                            <strong id="stat-total">0</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>Present</span>
+                            <strong id="stat-present">0</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>Present & Voting</span>
+                            <strong id="stat-pv">0</strong>
+                        </div>
+                    </div>
+
+                    <table class="eval-table">
+                        <thead>
+                            <tr>
+                                <th>Delegate / Country</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rollcallTableBody">
+                            <!-- Yoklama Verileri -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+
+        <!-- SAYFA 3: EVALUATION (DELEGE PUANLAMA) -->
         <div id="page-evaluation" style="display: none;">
             <div class="eval-grid">
-                
-                <!-- PUAN GİRİŞ FORMU -->
                 <section class="card">
                     <h2>📝 Score Delegate</h2>
                     <form onsubmit="saveEvaluation(event)" class="eval-form">
@@ -192,7 +278,6 @@
                     </form>
                 </section>
 
-                <!-- SKOR TABLOSU -->
                 <section class="card">
                     <h2>📊 Evaluation Board</h2>
                     <table class="eval-table">
@@ -208,11 +293,10 @@
                             </tr>
                         </thead>
                         <tbody id="evalTableBody">
-                            <!-- Puanlar Buraya Eklenecek -->
+                            <!-- Puanlar -->
                         </tbody>
                     </table>
                 </section>
-
             </div>
         </div>
 
@@ -259,21 +343,75 @@
         // SEKMELER ARASI GEÇİŞ
         function switchTab(tabName) {
             const dashPage = document.getElementById("page-dashboard");
+            const rollPage = document.getElementById("page-rollcall");
             const evalPage = document.getElementById("page-evaluation");
+
             const dashBtn = document.getElementById("tab-dash");
+            const rollBtn = document.getElementById("tab-rollcall");
             const evalBtn = document.getElementById("tab-eval");
+
+            dashPage.style.display = "none";
+            rollPage.style.display = "none";
+            evalPage.style.display = "none";
+
+            dashBtn.classList.remove("active");
+            rollBtn.classList.remove("active");
+            evalBtn.classList.remove("active");
 
             if (tabName === 'dashboard') {
                 dashPage.style.display = "grid";
-                evalPage.style.display = "none";
                 dashBtn.classList.add("active");
-                evalBtn.classList.remove("active");
-            } else {
-                dashPage.style.display = "none";
+            } else if (tabName === 'rollcall') {
+                rollPage.style.display = "block";
+                rollBtn.classList.add("active");
+            } else if (tabName === 'evaluation') {
                 evalPage.style.display = "block";
-                dashBtn.classList.remove("active");
                 evalBtn.classList.add("active");
             }
+        }
+
+        // ROLL CALL MANTIĞI
+        function addRollCallDelegate(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById("rc-name");
+            const statusSelect = document.getElementById("rc-status");
+
+            const tbody = document.getElementById("rollcallTableBody");
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td><strong>${nameInput.value}</strong></td>
+                <td>
+                    <select class="status-select" onchange="updateRollCallStats()">
+                        <option value="Present" ${statusSelect.value === 'Present' ? 'selected' : ''}>Present</option>
+                        <option value="Present & Voting" ${statusSelect.value === 'Present & Voting' ? 'selected' : ''}>Present & Voting</option>
+                        <option value="Absent" ${statusSelect.value === 'Absent' ? 'selected' : ''}>Absent</option>
+                    </select>
+                </td>
+                <td><button onclick="this.parentElement.parentElement.remove(); updateRollCallStats();" class="remove-btn">✕</button></td>
+            `;
+
+            tbody.appendChild(tr);
+            nameInput.value = '';
+            updateRollCallStats();
+        }
+
+        function updateRollCallStats() {
+            const tbody = document.getElementById("rollcallTableBody");
+            const selects = tbody.querySelectorAll("select");
+
+            let total = selects.length;
+            let presentCount = 0;
+            let pvCount = 0;
+
+            selects.forEach(select => {
+                if (select.value === "Present") presentCount++;
+                if (select.value === "Present & Voting") pvCount++;
+            });
+
+            document.getElementById("stat-total").innerText = total;
+            document.getElementById("stat-present").innerText = presentCount;
+            document.getElementById("stat-pv").innerText = pvCount;
         }
 
         // DELEGE PUANLAMA MANTIĞI
@@ -302,8 +440,6 @@
             `;
 
             tbody.appendChild(tr);
-
-            // Formu Temizle
             event.target.reset();
         }
 
@@ -364,56 +500,4 @@
         function updateDisplay() {
             const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
             const secs = (timeLeft % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${mins}:${secs}`;
-        }
-
-        // MOTION MANTIĞI
-        function addMotion() {
-            const input = document.getElementById('motion-text');
-            const text = input.value.trim();
-
-            if (text === '') return;
-
-            const ul = document.getElementById('motionList');
-            const li = document.createElement('li');
-            li.className = 'motion-item';
-
-            li.innerHTML = `
-                <span class="motion-title">${text}</span>
-                <div class="motion-btn-group">
-                    <button onclick="setStatus(this, 'passed')" class="status-btn pass">Passed</button>
-                    <button onclick="setStatus(this, 'failed')" class="status-btn fail">Failed</button>
-                    <button onclick="this.parentElement.parentElement.remove()" class="remove-btn">✕</button>
-                </div>
-            `;
-
-            ul.appendChild(li);
-            input.value = '';
-        }
-
-        function setStatus(btn, status) {
-            const item = btn.closest('.motion-item');
-            if (!item) return;
-
-            item.classList.remove('status-passed', 'status-failed');
-            
-            if (status === 'passed') {
-                item.classList.add('status-passed');
-            } else if (status === 'failed') {
-                item.classList.add('status-failed');
-            }
-        }
-
-        // GSL MANTIĞI
-        function addSpeaker() {
-            const input = document.getElementById('delegateInput');
-            if (input.value.trim() !== '') {
-                const li = document.createElement('li');
-                li.innerHTML = `${input.value} <button onclick="this.parentElement.remove()" class="remove-btn">✓ Done</button>`;
-                document.getElementById('speakerList').appendChild(li);
-                input.value = '';
-            }
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('ti
