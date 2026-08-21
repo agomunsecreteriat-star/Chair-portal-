@@ -3,22 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AGORA MUN | Chair Portal</title>
+
+<title>AGORA MUN — Chair Portal</title>
 
 <style>
+
 :root{
     --green:#173B32;
-    --green2:#245448;
-    --green3:#31695A;
-    --cream:#F5E6D0;
+    --green2:#245548;
+    --green3:#316B5A;
+
+    --cream:#F6E7D2;
     --cream2:#FFF9F0;
-    --orange:#D98B52;
+
+    --orange:#D98A52;
     --orange2:#C8753E;
-    --text:#17231F;
+
+    --text:#1D2925;
     --muted:#718078;
-    --border:#E2D4C0;
-    --danger:#B84A45;
-    --success:#4C8566;
+
+    --border:#E3D5C2;
+
+    --red:#B94A45;
     --shadow:0 8px 25px rgba(23,59,50,.10);
 }
 
@@ -34,96 +40,161 @@ body{
     color:var(--text);
 }
 
-button,input,select,textarea{
-    font:inherit;
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
 }
 
 button{
     cursor:pointer;
 }
 
-/* ================= LOGIN ================= */
+/* =========================
+LOGIN
+========================= */
 
 #loginScreen{
-    min-height:100vh;
+    position:fixed;
+    inset:0;
+
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
+
+    background:var(--green);
+
     padding:20px;
-    background:
-        radial-gradient(circle at top right,
-        rgba(217,139,82,.28),
-        transparent 35%),
-        var(--green);
+
+    z-index:9999;
 }
 
-.login-box{
+.login-container{
     width:100%;
-    max-width:420px;
+    max-width:430px;
+
     background:var(--cream2);
-    padding:42px;
-    border-radius:24px;
-    box-shadow:0 25px 70px rgba(0,0,0,.25);
+
+    padding:40px;
+
+    border-radius:22px;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.25);
 }
 
-.logo{
+.login-logo{
     text-align:center;
     margin-bottom:30px;
 }
 
-.logo-mark{
-    width:72px;
-    height:72px;
+.logo-circle{
+    width:78px;
+    height:78px;
+
     border-radius:50%;
+
     margin:auto;
     margin-bottom:15px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     background:var(--orange);
+
     color:var(--green);
-    font-size:30px;
+
+    font-size:32px;
     font-weight:900;
 }
 
-.logo h1{
+.login-logo h1{
     color:var(--green);
     letter-spacing:2px;
 }
 
-.logo p{
-    color:var(--muted);
+.login-logo p{
     margin-top:6px;
+    color:var(--muted);
 }
 
-.form-group{
+.input-group{
     margin-bottom:17px;
 }
 
-.form-group label{
+.input-group label{
     display:block;
+
     font-size:13px;
     font-weight:700;
+
     margin-bottom:7px;
 }
 
-.form-control{
+.input{
     width:100%;
-    padding:12px 13px;
+
+    padding:13px;
+
     border:1px solid var(--border);
     border-radius:9px;
+
     background:white;
+
     outline:none;
 }
 
-.form-control:focus{
+.input:focus{
     border-color:var(--orange);
-    box-shadow:0 0 0 3px rgba(217,139,82,.15);
+
+    box-shadow:
+        0 0 0 3px rgba(217,138,82,.15);
 }
 
-.login-btn{
+.login-button{
     width:100%;
-    padding:13px;
+
+    padding:14px;
+
     border:0;
     border-radius:10px;
-    background:
+
+    background:var(--green);
+
+    color:white;
+
+    font-weight:800;
+}
+
+.login-button:hover{
+    background:var(--green2);
+}
+
+.login-error{
+    display:none;
+
+    margin-top:12px;
+
+    text-align:center;
+
+    color:var(--red);
+
+    font-size:13px;
+}
+
+
+/* =========================
+APP
+========================= */
+
+#app{
+    display:none;
+
+    min-height:100vh;
+}
+
+
+/* =========================
+SIDEB
