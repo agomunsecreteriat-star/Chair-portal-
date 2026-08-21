@@ -31,8 +31,7 @@ body{
   min-height:100vh;
 }
 
-/* ================= LOGIN ================= */
-
+/* LOGIN SCREEN */
 #loginScreen{
   position:fixed;
   inset:0;
@@ -100,8 +99,7 @@ label{
 }
 
 input,
-select,
-textarea{
+select{
   width:100%;
   padding:11px;
   border:1px solid var(--border);
@@ -111,8 +109,7 @@ textarea{
 }
 
 input:focus,
-select:focus,
-textarea:focus{
+select:focus{
   border-color:var(--orange);
 }
 
@@ -138,8 +135,7 @@ textarea:focus{
   background:var(--orange2);
 }
 
-/* ================= DASHBOARD ================= */
-
+/* DASHBOARD */
 #app{
   display:none;
   padding:20px;
@@ -193,7 +189,7 @@ header{
   padding-bottom:8px;
 }
 
-/* Timer */
+/* TIMER */
 .timerDisplay{
   font-size:48px;
   font-weight:bold;
@@ -215,7 +211,7 @@ header{
 .btn-secondary{ background:var(--green2); }
 .btn-danger{ background:var(--red); }
 
-/* Lists */
+/* LISTS */
 .list{
   list-style:none;
   max-height:200px;
@@ -246,7 +242,7 @@ header{
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN EKRANI -->
 <div id="loginScreen">
   <div class="loginBox">
     <div class="logo">
@@ -278,7 +274,7 @@ header{
   </div>
 </div>
 
-<!-- MAIN DASHBOARD -->
+<!-- PANEL (DASHBOARD) -->
 <div id="app">
   <header>
     <div class="headerTitle">AGORA MUN — <span id="displayCommittee">Committee</span></div>
@@ -286,7 +282,7 @@ header{
   </header>
 
   <div class="grid">
-    <!-- TIMER CARD -->
+    <!-- TIMER -->
     <div class="card">
       <h2>Session Timer</h2>
       <div class="timerDisplay" id="timer">01:30</div>
@@ -297,7 +293,7 @@ header{
       </div>
     </div>
 
-    <!-- SPEAKERS LIST CARD -->
+    <!-- SPEAKERS LIST -->
     <div class="card">
       <h2>General Speakers List (GSL)</h2>
       <div class="formGroupInline">
@@ -307,7 +303,7 @@ header{
       <ul class="list" id="speakersList"></ul>
     </div>
 
-    <!-- VOTING CARD -->
+    <!-- VOTING COUNTER -->
     <div class="card">
       <h2>Voting Counter</h2>
       <div class="formGroup">
@@ -341,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let timerInterval = null;
     let timeLeft = 90;
 
-    // LOGIN
+    // LOGIN MANTIĞI
     loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -362,12 +358,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // LOGOUT
+    // LOGOUT MANTIĞI
     logoutBtn.addEventListener('click', function () {
         location.reload();
     });
 
-    // TIMER
+    // TIMER MANTIĞI
     const timerDisplay = document.getElementById('timer');
     const startTimerBtn = document.getElementById('startTimerBtn');
     const pauseTimerBtn = document.getElementById('pauseTimerBtn');
@@ -402,7 +398,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateTimerDisplay();
     });
 
-    // SPEAKERS LIST
+    // SPEAKERS LIST MANTIĞI
     const addSpeakerBtn = document.getElementById('addSpeakerBtn');
     const speakerInput = document.getElementById('speakerInput');
     const speakersList = document.getElementById('speakersList');
