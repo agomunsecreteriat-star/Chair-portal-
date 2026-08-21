@@ -98,8 +98,7 @@ label{
   margin-bottom:7px;
 }
 
-input,
-select{
+input{
   width:100%;
   padding:11px;
   border:1px solid var(--border);
@@ -108,8 +107,7 @@ select{
   outline:none;
 }
 
-input:focus,
-select:focus{
+input:focus{
   border-color:var(--orange);
 }
 
@@ -252,14 +250,8 @@ header{
     </div>
     <form id="loginForm">
       <div class="formGroup">
-        <label for="committee">Committee</label>
-        <select id="committee" required>
-          <option value="">Select Committee...</option>
-          <option value="DISEC">DISEC</option>
-          <option value="UNHCR">UNHCR</option>
-          <option value="ECOFIN">ECOFIN</option>
-          <option value="SECURITY COUNCIL">UNSC</option>
-        </select>
+        <label for="committee">Committee Name</label>
+        <input type="text" id="committee" placeholder="Enter committee name..." required>
       </div>
       <div class="formGroup">
         <label for="username">Username</label>
@@ -337,13 +329,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let timerInterval = null;
     let timeLeft = 90;
 
-    // LOGIN MANTIĞI
+    // LOGIN
     loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
         const user = document.getElementById('username').value.trim();
         const pass = document.getElementById('passcode').value.trim();
-        const comm = document.getElementById('committee').value;
+        const comm = document.getElementById('committee').value.trim();
 
         if (user === VALID_USER && pass === VALID_PASS) {
             if (comm !== "") {
@@ -351,19 +343,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 app.style.display = 'block';
                 displayCommittee.innerText = comm;
             } else {
-                alert("Please select a committee!");
+                alert("Please enter a committee name!");
             }
         } else {
             alert("Invalid username or passcode!");
         }
     });
 
-    // LOGOUT MANTIĞI
+    // LOGOUT
     logoutBtn.addEventListener('click', function () {
         location.reload();
     });
 
-    // TIMER MANTIĞI
+    // TIMER
     const timerDisplay = document.getElementById('timer');
     const startTimerBtn = document.getElementById('startTimerBtn');
     const pauseTimerBtn = document.getElementById('pauseTimerBtn');
@@ -398,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateTimerDisplay();
     });
 
-    // SPEAKERS LIST MANTIĞI
+    // SPEAKERS LIST
     const addSpeakerBtn = document.getElementById('addSpeakerBtn');
     const speakerInput = document.getElementById('speakerInput');
     const speakersList = document.getElementById('speakersList');
