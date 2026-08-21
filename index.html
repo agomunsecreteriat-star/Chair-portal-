@@ -6,24 +6,26 @@
     <title>AGOMUN - Chair Portal</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Navigasyon & Tablo Stilleri */
+        /* Navigasyon & Ekran Düzeni */
         .nav-tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
         .nav-btn {
-            background: var(--accent-green);
-            color: var(--warm-cream);
-            border: 1px solid var(--accent-orange);
-            padding: 8px 16px;
+            background: #2a9d8f;
+            color: #f4ece1;
+            border: 1px solid #e07a5f;
+            padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
         .nav-btn.active {
-            background: var(--accent-orange);
-            color: var(--dark-green);
+            background: #e07a5f;
+            color: #264653;
         }
         .eval-grid {
             display: grid;
@@ -37,7 +39,7 @@
         }
         .eval-form label {
             font-size: 0.85rem;
-            color: var(--accent-orange);
+            color: #e07a5f;
             font-weight: bold;
         }
         .score-inputs {
@@ -53,12 +55,12 @@
         }
         .eval-table th, .eval-table td {
             border: 1px solid rgba(224, 122, 95, 0.3);
-            padding: 8px;
+            padding: 10px;
             text-align: left;
         }
         .eval-table th {
-            background: var(--dark-green);
-            color: var(--accent-orange);
+            background: #264653;
+            color: #e07a5f;
         }
 
         /* Roll Call Stilleri */
@@ -66,10 +68,10 @@
             display: flex;
             gap: 15px;
             margin-bottom: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 12px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 15px;
             border-radius: 8px;
-            border: 1px solid var(--accent-orange);
+            border: 1px solid #e07a5f;
         }
         .stat-box {
             flex: 1;
@@ -79,18 +81,20 @@
             display: block;
             font-size: 0.75rem;
             color: #d1cfc7;
+            text-transform: uppercase;
         }
         .stat-box strong {
-            font-size: 1.2rem;
-            color: var(--accent-orange);
+            font-size: 1.4rem;
+            color: #e07a5f;
         }
         .status-select {
-            background: var(--dark-green);
-            color: var(--warm-cream);
-            border: 1px solid var(--accent-orange);
-            padding: 4px 8px;
+            background: #264653;
+            color: #f4ece1;
+            border: 1px solid #e07a5f;
+            padding: 6px 10px;
             border-radius: 4px;
             cursor: pointer;
+            width: 100%;
         }
     </style>
 </head>
@@ -138,10 +142,10 @@
             <button onclick="logout()" class="logout-btn">Logout</button>
         </header>
 
-        <!-- SEKMELER -->
+        <!-- SEKMELER (NAVIGASYON) -->
         <div class="nav-tabs">
             <button id="tab-dash" class="nav-btn active" onclick="switchTab('dashboard')">📌 Chair Dashboard</button>
-            <button id="tab-rollcall" class="nav-btn" onclick="switchTab('rollcall')">📋 Roll Call</button>
+            <button id="tab-rollcall" class="nav-btn" onclick="switchTab('rollcall')">📋 Roll Call Panel</button>
             <button id="tab-eval" class="nav-btn" onclick="switchTab('evaluation')">⭐ Delegate Evaluation</button>
         </div>
 
@@ -189,23 +193,23 @@
             </div>
         </div>
 
-        <!-- SAYFA 2: ROLL CALL (YOKLAMA) -->
+        <!-- SAYFA 2: ROLL CALL (YOKLAMA PANELI) -->
         <div id="page-rollcall" style="display: none;">
             <div class="eval-grid">
                 <section class="card">
-                    <h2>📋 Add Delegate for Roll Call</h2>
+                    <h2>📋 Roll Call Registration</h2>
                     <form onsubmit="addRollCallDelegate(event)" class="eval-form">
                         <label>Delegate / Country Name</label>
-                        <input type="text" id="rc-name" placeholder="e.g. Delegate of Canada" required>
+                        <input type="text" id="rc-name" placeholder="e.g. Delegate of Germany" required>
                         
-                        <label>Status</label>
-                        <select id="rc-status" class="status-select" style="padding: 8px;">
+                        <label>Initial Status</label>
+                        <select id="rc-status" class="status-select">
                             <option value="Present">Present</option>
                             <option value="Present & Voting">Present & Voting</option>
                             <option value="Absent">Absent</option>
                         </select>
 
-                        <button type="submit" style="margin-top: 15px;">Add Delegate</button>
+                        <button type="submit" style="margin-top: 15px;">Add to Roll Call</button>
                     </form>
                 </section>
 
@@ -231,8 +235,8 @@
                         <thead>
                             <tr>
                                 <th>Delegate / Country</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th style="width: 200px;">Status</th>
+                                <th style="width: 50px;">Action</th>
                             </tr>
                         </thead>
                         <tbody id="rollcallTableBody">
@@ -340,7 +344,7 @@
             document.getElementById("portal-content").style.display = "block";
         }
 
-        // SEKMELER ARASI GEÇİŞ
+        // SEKMELER ARASI GEÇİŞ MANTIĞI
         function switchTab(tabName) {
             const dashPage = document.getElementById("page-dashboard");
             const rollPage = document.getElementById("page-rollcall");
@@ -350,14 +354,17 @@
             const rollBtn = document.getElementById("tab-rollcall");
             const evalBtn = document.getElementById("tab-eval");
 
+            // Tüm sayfaları gizle
             dashPage.style.display = "none";
             rollPage.style.display = "none";
             evalPage.style.display = "none";
 
+            // Tüm butonların aktifliğini kaldır
             dashBtn.classList.remove("active");
             rollBtn.classList.remove("active");
             evalBtn.classList.remove("active");
 
+            // Seçilen sayfayı göster ve butonunu renklendir
             if (tabName === 'dashboard') {
                 dashPage.style.display = "grid";
                 dashBtn.classList.add("active");
@@ -435,7 +442,7 @@
                 <td>${sPaper}</td>
                 <td>${sLobby}</td>
                 <td>${sDraft}</td>
-                <td><strong style="color: var(--accent-orange);">${avg} / 10</strong></td>
+                <td><strong style="color: #e07a5f;">${avg} / 10</strong></td>
                 <td><button onclick="this.parentElement.parentElement.remove()" class="remove-btn">✕</button></td>
             `;
 
@@ -498,6 +505,4 @@
         }
 
         function updateDisplay() {
-            const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-            const secs = (timeLeft % 60).toString().padStart(2, '0');
-            document.getElementById('ti
+          
