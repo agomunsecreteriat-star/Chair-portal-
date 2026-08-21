@@ -3,109 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AGORA MUN — Chair Portal</title>
+
+<title>AGORA MUN | Chair Portal</title>
 
 <style>
 * {
     box-sizing: border-box;
+}
+
+html, body {
     margin: 0;
     padding: 0;
+    width: 100%;
+    min-height: 100%;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
-    background: #0b2119;
-    color: #f8f1d4;
-    min-height: 100vh;
+    background: #f5e8d0;
+    color: #173b2d;
 }
 
-/* ================= LOGIN ================= */
+/* =========================
+   LOGIN
+========================= */
 
 #loginPage {
     min-height: 100vh;
+    width: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background:
-        radial-gradient(circle at top, #173d2d, #081811 70%);
+    justify-content: center;
+    background: #f5e8d0;
 }
 
-.login-box {
-    width: 380px;
+.login-card {
+    width: 400px;
     max-width: 90%;
-    padding: 40px;
-    border-radius: 20px;
-    background: rgba(20, 55, 41, 0.95);
-    border: 1px solid #d8b84c;
-    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    background: #173b2d;
+    padding: 42px 35px;
+    border-radius: 22px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.20);
     text-align: center;
 }
 
 .logo {
-    font-size: 34px;
-    font-weight: bold;
-    color: #f2ce52;
-    margin-bottom: 8px;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #f2ca4d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #173b2d;
+    font-size: 20px;
+    font-weight: 900;
 }
 
-.subtitle {
-    color: #ddd6b8;
-    margin-bottom: 30px;
+.login-title {
+    color: #f2ca4d;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.login-subtitle {
+    color: #f5e8d0;
+    opacity: .8;
+    margin-bottom: 28px;
 }
 
 .input {
     width: 100%;
-    padding: 13px;
-    margin: 8px 0;
+    padding: 14px 15px;
+    margin-bottom: 13px;
+    border: 1px solid #557263;
     border-radius: 10px;
-    border: 1px solid #526d60;
-    background: #0c241a;
+    background: #0e2b20;
     color: white;
+    font-size: 15px;
     outline: none;
 }
 
 .input:focus {
-    border-color: #f2ce52;
+    border-color: #f2ca4d;
 }
 
-.btn {
+.login-button {
     width: 100%;
-    padding: 13px;
+    padding: 14px;
+    margin-top: 5px;
     border: none;
     border-radius: 10px;
-    background: #f2ce52;
-    color: #0b2119;
-    font-weight: bold;
+    background: #f2ca4d;
+    color: #173b2d;
+    font-size: 16px;
+    font-weight: 800;
     cursor: pointer;
-    margin-top: 12px;
 }
 
-.btn:hover {
-    background: #ffe37a;
+.login-button:hover {
+    background: #ffdc68;
 }
 
-.error {
-    color: #ff8b8b;
-    margin-top: 12px;
+#error {
     display: none;
+    margin-top: 15px;
+    color: #ff9c9c;
+    font-size: 14px;
 }
 
-/* ================= APP ================= */
+/* =========================
+   DASHBOARD
+========================= */
 
-#app {
+#dashboard {
     display: none;
     min-height: 100vh;
 }
 
-header {
-    height: 70px;
-    background: #102d21;
-    border-bottom: 1px solid #31523f;
+.topbar {
+    height: 72px;
+    padding: 0 28px;
+    background: #173b2d;
+    color: #f5e8d0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 25px;
 }
 
-.header-title {
-    color: #f2ce
+.brand {
+    color: #f2ca4d;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.logout-button {
+    background: transparent;
+    border: 1px solid #f2ca4d;
+    color: #f2ca4d;
+    border-radius: 8px;
+    padding: 9px 16px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.logout-button
