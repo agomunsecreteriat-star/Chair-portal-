@@ -259,7 +259,7 @@ header{
         <label for="passcode">Chair Passcode</label>
         <input type="password" id="passcode" placeholder="••••••••" required>
       </div>
-      <button type="submit" class="loginButton">Enter Portal</button>
+      <button type="submit" class="loginButton" id="submitBtn">Enter Portal</button>
     </form>
   </div>
 </div>
@@ -314,20 +314,27 @@ header{
 </div>
 
 <script>
-// Authentication Simple Logic
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const comm = document.getElementById('committee').value;
-  if(comm){
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    document.getElementById('displayCommittee').innerText = comm;
-  }
+document.addEventListener("DOMContentLoaded", function() {
+    const loginForm = document.getElementById('loginForm');
+    
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Sayfanın yenilenmesini engeller
+
+        const comm = document.getElementById('committee').value;
+        const pass = document.getElementById('passcode').value;
+
+        if (comm !== "") {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('displayCommittee').innerText = comm;
+        } else {
+            alert("Lütfen bir komite seçiniz.");
+        }
+    });
 });
 
-function logout(){
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
+function logout() {
+    location.reload(); // Çıkış yapınca sayfayı yeniler
 }
 
 // Timer Logic
