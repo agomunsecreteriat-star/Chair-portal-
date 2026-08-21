@@ -3,24 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AGORA MUN — Chair Portal</title>
+<title>AGORA MUN | Chair Portal</title>
 
 <style>
 :root{
     --green:#173B32;
     --green2:#245448;
     --green3:#31695A;
-    --cream:#F4E5CF;
-    --cream2:#FFF8ED;
+    --cream:#F5E6D0;
+    --cream2:#FFF9F0;
     --orange:#D98B52;
     --orange2:#C8753E;
     --text:#17231F;
     --muted:#718078;
-    --white:#FFFFFF;
+    --border:#E2D4C0;
     --danger:#B84A45;
     --success:#4C8566;
-    --border:#E3D5C2;
-    --shadow:0 10px 30px rgba(23,59,50,.10);
+    --shadow:0 8px 25px rgba(23,59,50,.10);
 }
 
 *{
@@ -33,13 +32,9 @@ body{
     font-family:Arial,Helvetica,sans-serif;
     background:var(--cream);
     color:var(--text);
-    min-height:100vh;
 }
 
-button,
-input,
-select,
-textarea{
+button,input,select,textarea{
     font:inherit;
 }
 
@@ -52,24 +47,22 @@ button{
 #loginScreen{
     min-height:100vh;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     padding:20px;
     background:
-        radial-gradient(
-            circle at top right,
-            rgba(217,139,82,.25),
-            transparent 35%
-        ),
+        radial-gradient(circle at top right,
+        rgba(217,139,82,.28),
+        transparent 35%),
         var(--green);
 }
 
 .login-box{
     width:100%;
-    max-width:430px;
+    max-width:420px;
     background:var(--cream2);
-    border-radius:24px;
     padding:42px;
+    border-radius:24px;
     box-shadow:0 25px 70px rgba(0,0,0,.25);
 }
 
@@ -81,48 +74,46 @@ button{
 .logo-mark{
     width:72px;
     height:72px;
-    margin:0 auto 15px;
     border-radius:50%;
-    background:var(--orange);
-    color:var(--green);
+    margin:auto;
+    margin-bottom:15px;
     display:flex;
     align-items:center;
     justify-content:center;
+    background:var(--orange);
+    color:var(--green);
     font-size:30px;
     font-weight:900;
 }
 
 .logo h1{
     color:var(--green);
-    font-size:28px;
     letter-spacing:2px;
 }
 
 .logo p{
     color:var(--muted);
     margin-top:6px;
-    font-size:13px;
 }
 
 .form-group{
-    margin-bottom:18px;
+    margin-bottom:17px;
 }
 
 .form-group label{
     display:block;
-    margin-bottom:7px;
     font-size:13px;
     font-weight:700;
+    margin-bottom:7px;
 }
 
 .form-control{
     width:100%;
-    padding:13px 14px;
+    padding:12px 13px;
     border:1px solid var(--border);
+    border-radius:9px;
     background:white;
-    border-radius:10px;
     outline:none;
-    transition:.2s;
 }
 
 .form-control:focus{
@@ -132,65 +123,7 @@ button{
 
 .login-btn{
     width:100%;
-    border:none;
-    padding:14px;
-    border-radius:11px;
-    background:var(--green);
-    color:white;
-    font-weight:800;
-}
-
-.login-btn:hover{
-    background:var(--green2);
-}
-
-.login-error{
-    color:var(--danger);
-    font-size:13px;
-    margin-top:12px;
-    text-align:center;
-    display:none;
-}
-
-/* ================= APP ================= */
-
-#app{
-    display:none;
-    min-height:100vh;
-}
-
-.sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:245px;
-    background:var(--green);
-    color:white;
-    padding:25px 15px;
-    z-index:50;
-}
-
-.side-logo{
-    padding:5px 12px 25px;
-    border-bottom:1px solid rgba(255,255,255,.12);
-    margin-bottom:18px;
-}
-
-.side-logo strong{
-    font-size:21px;
-    letter-spacing:1.5px;
-}
-
-.side-logo small{
-    display:block;
-    color:#BFD2C9;
-    margin-top:5px;
-}
-
-.nav-btn{
-    width:100%;
-    border:none;
-    background:transparent;
-    color:#D7E2DD;
-    text-align:left;
+    padding:13px;
+    border:0;
+    border-radius:10px;
+    background:
