@@ -488,22 +488,22 @@
         <div class="login-card">
             <div class="login-logo"><i class="fa-solid fa-gavel"></i></div>
             <div class="login-title">AGORA MUN</div>
-            <div class="login-subtitle">Chair Portal Giriş Paneli</div>
+            <div class="login-subtitle">Chair Portal Login</div>
             
             <form onsubmit="handleLogin(event)">
                 <div class="login-field">
-                    <label for="username">Kullanıcı Adı</label>
-                    <input type="text" id="username" placeholder="Örn: chair1" required>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="e.g. chair1" required>
                 </div>
                 <div class="login-field">
-                    <label for="password">Şifre</label>
+                    <label for="password">Password</label>
                     <input type="password" id="password" placeholder="••••••••" required>
                 </div>
                 <button type="submit" class="btn" style="width: 100%; margin-top: 1rem; padding: 12px;">
-                    <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
                 </button>
                 <div class="login-error" id="loginError">
-                    <i class="fa-solid fa-circle-exclamation"></i> Geçersiz kullanıcı adı veya şifre!
+                    <i class="fa-solid fa-circle-exclamation"></i> Invalid username or password!
                 </div>
             </form>
         </div>
@@ -519,14 +519,14 @@
         <nav>
             <button class="nav-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard</button>
             <button class="nav-btn" onclick="switchTab('rollcall')"><i class="fa-solid fa-clipboard-user"></i> Roll Call</button>
-            <button class="nav-btn" onclick="switchTab('voting')"><i class="fa-solid fa-check-to-slot"></i> Oylama</button>
+            <button class="nav-btn" onclick="switchTab('voting')"><i class="fa-solid fa-check-to-slot"></i> Voting</button>
             <button class="nav-btn" onclick="switchTab('evaluation')"><i class="fa-solid fa-star"></i> Evaluation</button>
         </nav>
 
         <div class="user-info">
             <span class="chair-badge" id="activeChairBadge"><i class="fa-solid fa-user-shield"></i> Chair</span>
             <button class="btn btn-secondary" onclick="logout()" style="padding: 6px 12px; font-size: 0.85rem;">
-                <i class="fa-solid fa-right-from-bracket"></i> Çıkış
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
             </button>
         </div>
     </header>
@@ -538,30 +538,30 @@
                 <!-- TIMER CARD -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title"><i class="fa-solid fa-stopwatch"></i> Konuşma Zamanlayıcısı</div>
+                        <div class="card-title"><i class="fa-solid fa-stopwatch"></i> Speech Timer</div>
                     </div>
                     <div class="timer-display" id="timerDisplay">01:00</div>
                     <div class="timer-controls">
-                        <button class="btn" id="startBtn" onclick="startTimer()"><i class="fa-solid fa-play"></i> Başlat</button>
-                        <button class="btn btn-secondary" onclick="pauseTimer()"><i class="fa-solid fa-pause"></i> Duraklat</button>
-                        <button class="btn btn-secondary" onclick="resetTimer()"><i class="fa-solid fa-rotate-left"></i> Sıfırla</button>
+                        <button class="btn" id="startBtn" onclick="startTimer()"><i class="fa-solid fa-play"></i> Start</button>
+                        <button class="btn btn-secondary" onclick="pauseTimer()"><i class="fa-solid fa-pause"></i> Pause</button>
+                        <button class="btn btn-secondary" onclick="resetTimer()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
                     </div>
                     <div class="timer-manual">
-                        <input type="number" id="manualMin" min="0" max="60" placeholder="Dakika" value="1">
+                        <input type="number" id="manualMin" min="0" max="60" placeholder="Min" value="1">
                         <span>:</span>
-                        <input type="number" id="manualSec" min="0" max="59" placeholder="Saniye" value="0">
-                        <button class="btn btn-secondary" onclick="setManualTime()">Ayarla</button>
+                        <input type="number" id="manualSec" min="0" max="59" placeholder="Sec" value="0">
+                        <button class="btn btn-secondary" onclick="setManualTime()">Set</button>
                     </div>
                 </div>
 
                 <!-- MOTIONS CARD -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title"><i class="fa-solid fa-scroll"></i> Önerge Kaydı (Motions)</div>
+                        <div class="card-title"><i class="fa-solid fa-scroll"></i> Motions Log</div>
                     </div>
                     <div class="input-group">
-                        <input type="text" id="motionTopic" placeholder="Önerge Konusu / Türü">
-                        <input type="text" id="motionProposer" placeholder="Öneren Ülke" style="width: 40%;">
+                        <input type="text" id="motionTopic" placeholder="Motion Topic / Type">
+                        <input type="text" id="motionProposer" placeholder="Proposing Country" style="width: 40%;">
                     </div>
                     <div class="input-group">
                         <button class="btn btn-success" style="width: 50%;" onclick="addMotion('Passed')"><i class="fa-solid fa-check"></i> Passed</button>
@@ -571,9 +571,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Konu</th>
-                                    <th>Ülke</th>
-                                    <th>Durum</th>
+                                    <th>Topic</th>
+                                    <th>Country</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody id="motionTableBody">
@@ -587,25 +587,25 @@
             <!-- GSL CARD -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><i class="fa-solid fa-list-ol"></i> Genel Konuşmacı Listesi (GSL)</div>
+                    <div class="card-title"><i class="fa-solid fa-list-ol"></i> General Speakers List (GSL)</div>
                 </div>
                 <div class="input-group">
-                    <input type="text" id="gslDelegateName" placeholder="Delege / Ülke Adı">
+                    <input type="text" id="gslDelegateName" placeholder="Delegate / Country Name">
                     <select id="gslYield" style="width: 30%;">
-                        <option value="None">Devir Yok (None)</option>
-                        <option value="Chair">Başkanlığa (Chair)</option>
-                        <option value="Delegate">Başka Delegeye (Delegate)</option>
-                        <option value="Questions">Sorulara (Questions)</option>
+                        <option value="None">None</option>
+                        <option value="Chair">To the Chair</option>
+                        <option value="Delegate">To another Delegate</option>
+                        <option value="Questions">To Questions</option>
                     </select>
-                    <button class="btn" onclick="addGSLDelegate()"><i class="fa-solid fa-plus"></i> Ekle</button>
+                    <button class="btn" onclick="addGSLDelegate()"><i class="fa-solid fa-plus"></i> Add</button>
                 </div>
                 <table>
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Delege / Ülke</th>
-                            <th>Devir Tercihi (Yield)</th>
-                            <th>İşlem</th>
+                            <th>Delegate / Country</th>
+                            <th>Yield Preference</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="gslTableBody">
@@ -619,7 +619,7 @@
         <div id="rollcall" class="tab-content">
             <div class="grid-4" style="margin-bottom: 1.5rem;">
                 <div class="stat-card">
-                    <div class="stat-label">Toplam Delege</div>
+                    <div class="stat-label">Total Delegates</div>
                     <div class="stat-value" id="statTotal">0</div>
                 </div>
                 <div class="stat-card">
@@ -630,4 +630,5 @@
                     <div class="stat-label">Present & Voting</div>
                     <div class="stat-value" style="color: var(--accent-orange);" id="statPV">0</div>
                 </div>
-                <
+                <div class="stat-card">
+                    <div class="stat-label">A
